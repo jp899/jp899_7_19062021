@@ -43,7 +43,8 @@ CREATE TABLE Likes (
     liked TINYINT DEFAULT 0,
     createdAt DATE NOT NULL,
     updatedAt DATE NOT NULL,
-    PRIMARY KEY (id)
+    PRIMARY KEY (id),
+    UNIQUE ind_uni_userId_articleId (userId, articleId)
 ) ENGINE = InnoDB ;
 
 

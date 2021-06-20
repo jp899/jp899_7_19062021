@@ -1,9 +1,6 @@
 // Importer le module EXPRESS
 const express = require('express');
 
-// Importer le module mongoose
-const mongoose = require('mongoose');
-
 // module pour protection contre les injections NOSQL
 const mongoSanitize = require('express-mongo-sanitize');
 
@@ -30,14 +27,13 @@ const app = express();
 // logger.warning('Voici un warning simple !');
 // logger.error('Voici une erreur simple !');
 
-// Connection à la BDD mongoDB atlas
-mongoose.connect(`mongodb+srv://${config.dbUser}:${config.dbPassword}@${config.dbCluster}.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`,
-    { useNewUrlParser: true,
-    useUnifiedTopology: true,
-    useCreateIndex:true })
-    .then(() => logger.info('Connected successfully to MongoDB !'))
-    .catch(() => logger.error('Failed connection to MongoDB !'));
+// Connection à la BDD
+const db = require('./database/models/');
+db.sequelize.authenticate()
+.then(() => logger.info('Connection has been established successfully.'))
+.catch(() => logger.error('Unable to connect to the database:', error));
 
+const test = require('./test');
 
 // Middleware GENERAL de gestion des headers pour le CORS
 app.use((req, res, next) => {
