@@ -43,17 +43,19 @@ module.exports = function(sequelize, DataTypes) {
         ]
       },
       {
-        name: "fk_likes_articles",
+        name: "ind_uni_userId_articleId",
+        unique: true,
         using: "BTREE",
         fields: [
+          { name: "userId" },
           { name: "articleId" },
         ]
       },
       {
-        name: "fk_likes_users",
+        name: "fk_likes_articles",
         using: "BTREE",
         fields: [
-          { name: "userId" },
+          { name: "articleId" },
         ]
       },
     ]
