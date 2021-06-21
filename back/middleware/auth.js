@@ -27,6 +27,9 @@ exports.generalAuth = (req, res, next) => {
   }
 };
 
+
+
+
 // Middleware spécifique aux routes de modification/suppression d'un élément par son propriétaire
 // Vérifie que le user courant est le proprietaire/créateur de cet élément
 exports.ownerAuth = (req, res, next) => {

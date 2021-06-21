@@ -1,9 +1,6 @@
 // Importer le module EXPRESS
 const express = require('express');
 
-// module pour protection contre les injections NOSQL
-const mongoSanitize = require('express-mongo-sanitize');
-
 // module pour protection contre failles dont XSS
 const helmet = require("helmet");
 
@@ -11,7 +8,8 @@ const helmet = require("helmet");
 const path = require('path');
 
 // Importer les routeurs
-const sauceRoutes = require('./routes/sauce');
+const articleRoutes = require('./routes/article');
+const authRoutes = require('./routes/auth');
 const userRoutes = require('./routes/user');
 
 const logger = require('./logger');
@@ -19,13 +17,8 @@ const logger = require('./logger');
 // Importer les paramètres d'environnement
 const config = require('./config');
 
-// Créer une application express
+// Créer l'application express
 const app = express();
-
-// test du logger
-// logger.info('Voici une info simple !');
-// logger.warning('Voici un warning simple !');
-// logger.error('Voici une erreur simple !');
 
 // Connection à la BDD
 const db = require('./database/models/');
@@ -52,18 +45,16 @@ app.use(helmet());
 // Middleware GENERAL pour parser le body des requettes POST
 app.use(express.json());
 
-// Middleware pour filtrer certains caractères spéciaux ($ et . nottament) pouvant être utilisés
-// dans le cadre d'injection NoSQL (remplacement des caractères interdits par '_')
-app.use(mongoSanitize({replaceWith: '_',}));
-
 // Indiquer que le dossier images est un dossier à gérer de manière statique
 // et donner l'url a suivre à chaque fois qu'une requette cherche à y acceder
 app.use('/images', express.static(path.join(__dirname, 'images')));
 
-// Utiliser le routeur pour toutes les requettes de format /api/sauces
-app.use('/api/sauces', sauceRoutes);
 // Utiliser le routeur pour toutes les requettes de format /api/auth
-app.use('/api/auth', userRoutes);
+app.use('/api/auth', authRoutes);
+// Utiliser le routeur pour toutes les requettes de format /api/user
+app.use('/api/user', articleRoutes);
+// Utiliser le routeur pour toutes les requettes de format /api/article
+app.use('/api/article', articleRoutes);
 
 
 // exporter l'application pour y acceder depuis les autres fichiers du projet
