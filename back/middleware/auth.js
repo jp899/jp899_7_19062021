@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const Sauce = require('../models/sauce');
+// const Sauce = require('../models/sauce');
 
 const config = require('../config');
 const logger = require('../logger');
@@ -14,7 +14,7 @@ exports.generalAuth = (req, res, next) => {
     const decodedToken = jwt.verify(token, config.sessionTokenSecret);
     const userId = decodedToken.userId;
     // On controle le user décrypté par rapport au userID fourni dans la requette
-    if (req.body.userId && req.body.userId !== userId) {
+    if (req.body.userId !== userId) {
       throw 'Invalid user ID';
     } else {
       next();
@@ -39,18 +39,20 @@ exports.ownerAuth = (req, res, next) => {
     const decodedToken = jwt.verify(token, config.sessionTokenSecret);
     const userId = decodedToken.userId;
 
-    // Recherche de la sauce à modifier en base de donnée
-    Sauce.findOne({ _id: req.params.id })
-    .then(sauce => {
-      // Comparer le user courant au user propriétaire de la sauce à modifier
-      if(sauce.userId !== userId){
-        logger.error(`Forbidden request : user is not the owner of the ressource {userId : ${userId}}`);
-        throw "Forbidden request : user is not the owner of the ressource";
-      }
-      else{
-        next();
-      }
-    }).catch( err => res.status(401).json({error: err}));
+    // // Recherche de la sauce à modifier en base de donnée
+    // Sauce.findOne({ _id: req.params.id })
+    // .then(sauce => {
+    //   // Comparer le user courant au user propriétaire de la sauce à modifier
+    //   if(sauce.userId !== userId){
+    //     logger.error(`Forbidden request : user is not the owner of the ressource {userId : ${userId}}`);
+    //     throw "Forbidden request : user is not the owner of the ressource";
+    //   }
+    //   else{
+    //     next();
+    //   }
+    // }).catch( err => res.status(401).json({error: err}));
+
+    next();
 
   } catch (err){
     res.status(403).json({

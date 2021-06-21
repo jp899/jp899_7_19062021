@@ -10,12 +10,12 @@ CREATE TABLE Users (
     -- Création d'un index avec unicité sur le username qui sera l'identifiant de connection
     userName VARCHAR(50) UNIQUE NOT NULL,
     -- Longueur maximale hash Bcrypt d'environ 72 caractères
-    passwordHash VARBINARY(100) NOT NULL,
+    passwordHash VARCHAR(100) NOT NULL,
     firstName VARCHAR(50) NOT NULL,
     lastName VARCHAR(50) NOT NULL,
     isAdmin BOOLEAN NOT NULL DEFAULT 0,
     -- Longeur cryptage AES 256-bits soit à priori 64 caractères
-    emailEncrypted VARBINARY(100) NOT NULL,
+    emailEncrypted VARCHAR(100) NOT NULL,
     -- Dates de création/MAJ sous le nom utilisé par Sequelize
     createdAt DATE NOT NULL,
     updatedAt DATE NOT NULL,
@@ -80,7 +80,7 @@ BEFORE INSERT ON Likes
 FOR EACH ROW
 BEGIN
     IF (NEW.liked NOT IN (-1, 0, 1) ) THEN
-        SIGNAL sqlstate '45000' SET MESSAGE_TEXT = 'INVALID VALUE FOR COLUMN Liked OF TABLE Likes';
+        SIGNAL sqlstate '45000' SET MESSAGE_TEXT = 'INVALID VALUE FOR COLUMN liked OF TABLE Likes';
     END IF;
 END//
 DELIMITER ;
@@ -91,7 +91,7 @@ BEFORE UPDATE ON Likes
 FOR EACH ROW
 BEGIN
     IF (NEW.liked NOT IN (-1, 0, 1) ) THEN
-        SIGNAL sqlstate '45000' SET MESSAGE_TEXT = 'INVALID VALUE FOR COLUMN Liked OF TABLE Likes';
+        SIGNAL sqlstate '45000' SET MESSAGE_TEXT = 'INVALID VALUE FOR COLUMN liked OF TABLE Likes';
     END IF;
 END//
 DELIMITER ;

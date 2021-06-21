@@ -13,7 +13,7 @@ module.exports = function(sequelize, DataTypes) {
       unique: "userName"
     },
     passwordHash: {
-      type: DataTypes.BLOB,
+      type: DataTypes.STRING(100),
       allowNull: false
     },
     firstName: {
@@ -30,7 +30,7 @@ module.exports = function(sequelize, DataTypes) {
       defaultValue: 0
     },
     emailEncrypted: {
-      type: DataTypes.BLOB,
+      type: DataTypes.STRING(100),
       allowNull: false
     }
   }, {

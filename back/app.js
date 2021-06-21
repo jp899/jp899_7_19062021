@@ -23,10 +23,10 @@ const app = express();
 // Connection à la BDD
 const db = require('./database/models/');
 db.sequelize.authenticate()
-.then(() => logger.info('Connection has been established successfully.'))
+.then(() => logger.info('Database connection has been established successfully.'))
 .catch(() => logger.error('Unable to connect to the database:', error));
 
-const test = require('./test');
+// const test = require('./testDB');
 
 // Middleware GENERAL de gestion des headers pour le CORS
 app.use((req, res, next) => {
@@ -52,7 +52,7 @@ app.use('/images', express.static(path.join(__dirname, 'images')));
 // Utiliser le routeur pour toutes les requettes de format /api/auth
 app.use('/api/auth', authRoutes);
 // Utiliser le routeur pour toutes les requettes de format /api/user
-app.use('/api/user', articleRoutes);
+app.use('/api/user', userRoutes);
 // Utiliser le routeur pour toutes les requettes de format /api/article
 app.use('/api/article', articleRoutes);
 
