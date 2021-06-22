@@ -5,7 +5,8 @@ const MIME_TYPES = {
   'image/jpg': 'jpg',
   'image/jpeg': 'jpg',
   'image/webp': 'webp',
-  'image/png': 'png'
+  'image/png': 'png',
+  'image/gif': 'gif'
 };
 
 // définir configuration de multer pour indiquer comment enregistrer les fichiers

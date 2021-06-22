@@ -24,7 +24,7 @@ const app = express();
 const db = require('./database/models/');
 db.sequelize.authenticate()
 .then(() => logger.info('Database connection has been established successfully.'))
-.catch(() => logger.error('Unable to connect to the database:', error));
+.catch((error) => logger.error('Unable to connect to the database:', error));
 
 // const test = require('./testDB');
 

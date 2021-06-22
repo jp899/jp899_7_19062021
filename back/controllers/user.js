@@ -1,6 +1,6 @@
 // const User = require('../models/user.js');
 const User = require('../database/models/').sequelize.models.Users;
-
+const fs = require('fs');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const cryptoJS = require('crypto-js');
@@ -21,6 +21,14 @@ const passwordRegex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[-+!*$@%#=_])([-+!*$@
 const passwordHashDifficulty = 10;
 
 
+function emailEncrypt(email) {
+  return cryptoJS.AES.encrypt(email,config.emailEncryptKey).toString();
+}
+
+function emailDecrypt(emailEncrypted) {
+  return cryptoJS.AES.decrypt(emailEncrypted, config.emailEncryptKey).toString(cryptoJS.enc.Utf8);
+}
+
 // Fonction de création d'un nouvel user
 exports.signup = (req, res, next) => {
 
@@ -37,17 +45,12 @@ exports.signup = (req, res, next) => {
     // Auto-génération d'un salt et hashage du password
     bcrypt.hash(config.passwordSaltData + req.body.password, passwordHashDifficulty)
     .then(hash => {
-      // Cryptage de l'email avant stockage en base
-      const keyWordArray = cryptoJS.enc.Hex.parse(config.emailEncryptKey);
-      // Utilisation mode ECB pour obtenir la même chaine chiffrée à chaque chiffrage pour un même email
-      const encryptedEmail = cryptoJS.AES.encrypt(req.body.email,config.emailEncryptKey).toString();
-
       // Création du nouvel user en BDD
       User.create({
         userName: req.body.userName,
         firstName: req.body.firstName,
         lastName: req.body.lastName,
-        emailEncrypted: encryptedEmail,
+        emailEncrypted: emailEncrypt(req.body.email),
         passwordHash: hash,
       })
       .then((addedUser) => {
@@ -107,7 +110,7 @@ exports.getOne = (req, res, next) => {
         userName: user.userName,
         firstName: user.firstName,
         lastName: user.lastName,
-        email: cryptoJS.AES.decrypt(user.emailEncrypted, config.emailEncryptKey).toString(cryptoJS.enc.Utf8)
+        email: emailDecrypt(user.emailEncrypted)
       }
       res.status(200).json(userLight);
     }
@@ -122,10 +125,15 @@ exports.getOne = (req, res, next) => {
 
 exports.modify = (req, res, next) => {
 
-    // Suppression de l'ancienne image si le fichier a été modifié par l'user
-    if(req.file){
-      User.findOne({ _id: req.params.id })
-      .then(user => {
+  if(! emailRegex.test(req.body.user.email)){
+    return res.status(400).json({ error: "Format de l'email incorrect !" });
+  }
+
+  // Suppression de l'ancienne image si le fichier a été modifié par l'user
+  if(req.file){
+    User.findOne({ where: { id: req.params.id } })
+    .then(user => {
+      if (user.imageUrl) {
         // Récuperer l'adresse du fichier lié à l'objet
         const filename = user.imageUrl.split('/images/')[1];
         // Supprimer ce fichier
@@ -133,40 +141,47 @@ exports.modify = (req, res, next) => {
           if (err) logger.warning(`Failed to delete file : images/${filename}`);
           else logger.info(`File deleted : ${filename}`);
         }));
-      })
-      .catch(error => res.status(500).json({ error }));
-    }
-
-    const userObject = req.file ?
-    // Si un fichier a été inclus dans la requette (fichier modifié par lutilisateur)
-    // Alors on traite l'image
-      {
-        ...JSON.parse(req.body.user),
-        imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
       }
-    // sinon ou traite simplement l'objet entrant 
-      : { ...req.body };
+    })
+    .catch(error => res.status(500).json({ error }));
+  }
 
-    // Ensuite on enregistre l'objet mis à jour
-    User.updateOne({ _id: req.params.id }, { ...userObject, _id: req.params.id })
-      .then(() => res.status(200).json({ message: 'Item modified !'}))
-      .catch(error => res.status(400).json({ error }));
-  };
+  const userObject = req.file ?
+  // Si un fichier a été inclus dans la requette (fichier modifié par lutilisateur)
+  // Alors on traite l'image
+    {
+      firstName: req.body.user.firstName,
+      lastName: req.body.user.lastName,
+      emailEncrypted: emailEncrypt(req.body.user.email),
+      imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
+    }
+  // sinon ou traite simplement l'objet entrant 
+    : {
+      firstName: req.body.user.firstName,
+      lastName: req.body.user.lastName,
+      emailEncrypted: emailEncrypt(req.body.user.email)
+    };
+
+  // Ensuite on enregistre l'objet mis à jour
+  User.update({ ...userObject}, { where: { id: req.params.id } })
+    .then(() => res.status(200).json({ message: 'User modified !'}))
+    .catch(error => res.status(400).json({ error }));
+};
 
 
-  exports.delete = (req, res, next) => {
-    // Trouver l'objet à supprimer
-    User.findOne({ _id: req.params.id })
-      .then(user => {
-        // Récuperer l'adresse du fichier lié à l'objet
-        const filename = user.imageUrl.split('/images/')[1];
-        // Supprimer ce fichier
-        fs.unlink(`images/${filename}`, () => {
-            // Supprimer l'objet lui-même
-          User.deleteOne({ _id: req.params.id })
-            .then(() => res.status(200).json({ message: 'Item deleted !'}))
-            .catch(error => res.status(400).json({ error }));
-        });
-      })
-      .catch(error => res.status(500).json({ error }));
-  };
+exports.delete = (req, res, next) => {
+  // Trouver l'objet à supprimer
+  User.findOne({ where: { id: req.params.id } })
+  .then(user => {
+    if (user.imageUrl) {
+      // Récuperer l'adresse du fichier lié à l'objet
+      const filename = user.imageUrl.split('/images/')[1];
+      // Supprimer ce fichier
+      fs.unlink(`images/${filename}`, () => {});
+    } 
+    User.destroy({ where: { id: req.params.id } })
+    .then(() => res.status(200).json({ message: 'User deleted !'}))
+    .catch(error => res.status(400).json({ error }));
+  })
+  .catch(error => res.status(500).json({ error }));
+};
