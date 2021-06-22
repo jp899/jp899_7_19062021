@@ -16,6 +16,7 @@ CREATE TABLE Users (
     isAdmin BOOLEAN NOT NULL DEFAULT 0,
     -- Longeur cryptage AES 256-bits soit à priori 64 caractères
     emailEncrypted VARCHAR(100) NOT NULL,
+    imageUrl VARCHAR(255),
     -- Dates de création/MAJ sous le nom utilisé par Sequelize
     createdAt DATE NOT NULL,
     updatedAt DATE NOT NULL,

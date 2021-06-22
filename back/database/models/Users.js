@@ -32,6 +32,10 @@ module.exports = function(sequelize, DataTypes) {
     emailEncrypted: {
       type: DataTypes.STRING(100),
       allowNull: false
+    },
+    imageUrl: {
+      type: DataTypes.STRING(255),
+      allowNull: true
     }
   }, {
     sequelize,
