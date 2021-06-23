@@ -26,7 +26,7 @@ CREATE TABLE Users (
 
 /* Création table des Articles postés par les utilisateurs*/
 CREATE TABLE Articles (
-    id SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT,
+    id MEDIUMINT UNSIGNED NOT NULL AUTO_INCREMENT,
     userId SMALLINT UNSIGNED NOT NULL,
     title VARCHAR(50) NOT NULL,
     imageUrl VARCHAR(255) NOT NULL,
@@ -38,9 +38,9 @@ CREATE TABLE Articles (
 
 /* Création table des likes/dislikes des articles par les utilisateurs  */
 CREATE TABLE Likes (
-    id SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT,
+    id MEDIUMINT UNSIGNED NOT NULL AUTO_INCREMENT,
     userId SMALLINT UNSIGNED NOT NULL,
-    articleId SMALLINT UNSIGNED NOT NULL,
+    articleId MEDIUMINT UNSIGNED NOT NULL,
     liked TINYINT DEFAULT 0,
     createdAt TIMESTAMP NOT NULL,
     updatedAt TIMESTAMP NOT NULL,
@@ -51,9 +51,9 @@ CREATE TABLE Likes (
 
 /* Création table des commentaires postés par les utilisateurs sur les articles */
 CREATE TABLE Comments (
-    id SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT,
+    id MEDIUMINT UNSIGNED NOT NULL AUTO_INCREMENT,
     userId SMALLINT UNSIGNED NOT NULL,
-    articleId SMALLINT UNSIGNED NOT NULL,
+    articleId MEDIUMINT UNSIGNED NOT NULL,
     content VARCHAR(1000) NOT NULL,
     createdAt TIMESTAMP NOT NULL,
     updatedAt TIMESTAMP NOT NULL,

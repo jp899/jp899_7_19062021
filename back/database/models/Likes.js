@@ -3,7 +3,7 @@ module.exports = function(sequelize, DataTypes) {
   return sequelize.define('Likes', {
     id: {
       autoIncrement: true,
-      type: DataTypes.SMALLINT.UNSIGNED,
+      type: DataTypes.MEDIUMINT.UNSIGNED,
       allowNull: false,
       primaryKey: true
     },
@@ -16,7 +16,7 @@ module.exports = function(sequelize, DataTypes) {
       }
     },
     articleId: {
-      type: DataTypes.SMALLINT.UNSIGNED,
+      type: DataTypes.MEDIUMINT.UNSIGNED,
       allowNull: false,
       references: {
         model: 'Articles',

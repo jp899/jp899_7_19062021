@@ -9,9 +9,12 @@ exports.create = (req, res, next) => {
       userId: req.body.userId,
     // Contruire l'url de l'image enregistrée sur le serveur (http://ipserveur/images/nomfichier)
     // Le fichier est fourni par multer dans une propriété file qui a été ajoutée à la requette
-      imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
+      imageUrl: `${req.protocol}://${req.get('host')}/images/`
     })
-    .then(() => res.status(201).json({ message: 'Article saved !'}))
+    .then((article) => res.status(201).json({ 
+      message: 'Article saved !',
+      articleId: article.id
+    }))
     .catch(error => res.status(400).json({ error }));
   };
 
@@ -52,7 +55,7 @@ exports.modify = (req, res, next) => {
 
 exports.delete = (req, res, next) => {
   // Trouver l'objet à supprimer
-  Article.findOne({ _id: req.params.id })
+  Article.findOne({ where: { id: req.params.id } })
     .then(article => {
       // Récuperer l'adresse du fichier lié à l'objet
       const filename = article.imageUrl.split('/images/')[1];
