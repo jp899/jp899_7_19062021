@@ -18,8 +18,8 @@ CREATE TABLE Users (
     emailEncrypted VARCHAR(100) NOT NULL,
     imageUrl VARCHAR(255),
     -- Dates de création/MAJ sous le nom utilisé par Sequelize
-    createdAt DATE NOT NULL,
-    updatedAt DATE NOT NULL,
+    createdAt TIMESTAMP NOT NULL,
+    updatedAt TIMESTAMP NOT NULL,
     PRIMARY KEY (id)
 ) ENGINE = InnoDB ;
 
@@ -30,8 +30,8 @@ CREATE TABLE Articles (
     userId SMALLINT UNSIGNED NOT NULL,
     title VARCHAR(50) NOT NULL,
     imageUrl VARCHAR(255) NOT NULL,
-    createdAt DATE NOT NULL,
-    updatedAt DATE NOT NULL,
+    createdAt TIMESTAMP NOT NULL,
+    updatedAt TIMESTAMP NOT NULL,
     PRIMARY KEY (id)
 ) ENGINE = InnoDB ;
 
@@ -42,8 +42,8 @@ CREATE TABLE Likes (
     userId SMALLINT UNSIGNED NOT NULL,
     articleId SMALLINT UNSIGNED NOT NULL,
     liked TINYINT DEFAULT 0,
-    createdAt DATE NOT NULL,
-    updatedAt DATE NOT NULL,
+    createdAt TIMESTAMP NOT NULL,
+    updatedAt TIMESTAMP NOT NULL,
     PRIMARY KEY (id),
     UNIQUE ind_uni_userId_articleId (userId, articleId)
 ) ENGINE = InnoDB ;
@@ -55,8 +55,8 @@ CREATE TABLE Comments (
     userId SMALLINT UNSIGNED NOT NULL,
     articleId SMALLINT UNSIGNED NOT NULL,
     content VARCHAR(1000) NOT NULL,
-    createdAt DATE NOT NULL,
-    updatedAt DATE NOT NULL,
+    createdAt TIMESTAMP NOT NULL,
+    updatedAt TIMESTAMP NOT NULL,
     PRIMARY KEY (id)
 ) ENGINE = InnoDB ;
 
