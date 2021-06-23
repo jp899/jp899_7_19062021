@@ -18,13 +18,13 @@ const multer = require('../middleware/multer-config');
 
 router.get('/', auth.generalAuth, articleCtrl.getAll);
 router.post('/', auth.generalAuth, multer, articleCtrl.create);
-router.put('/:id', auth.generalAuth, auth.ownerAuth, multer, articleCtrl.modify);
-router.delete('/:id', auth.generalAuth, auth.ownerAuth, articleCtrl.delete);
+router.put('/:id', auth.generalAuth, auth.checkArticleOwner, multer, articleCtrl.modify);
+router.delete('/:id', auth.generalAuth, auth.checkArticleOwner, articleCtrl.delete);
 
 router.post('/:articleId/like', auth.generalAuth, likeCtrl.like);
 
 router.post('/:articleId/comment', auth.generalAuth, commentCtrl.create)
-router.put('/:articleId/comment/:id', auth.generalAuth, auth.ownerAuth, commentCtrl.modify)
-router.delete('/:articleId/comment/:id', auth.generalAuth, auth.ownerAuth, commentCtrl.delete)
+router.put('/:articleId/comment/:id', auth.generalAuth, auth.checkCommentOwner, commentCtrl.modify)
+router.delete('/:articleId/comment/:id', auth.generalAuth, auth.checkCommentOwner, commentCtrl.delete)
 
 module.exports = router;

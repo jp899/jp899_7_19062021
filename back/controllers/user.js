@@ -1,4 +1,3 @@
-// const User = require('../models/user.js');
 const User = require('../database/models/').sequelize.models.Users;
 const fs = require('fs');
 const bcrypt = require('bcrypt');
@@ -164,8 +163,11 @@ exports.modify = (req, res, next) => {
 
   // Ensuite on enregistre l'objet mis à jour
   User.update({ ...userObject}, { where: { id: req.params.id } })
-    .then(() => res.status(200).json({ message: 'User modified !'}))
-    .catch(error => res.status(400).json({ error }));
+  .then(() => {
+    logger.info(`User modified {userId : ${req.params.id}}`);
+    res.status(200).json({ message: 'User modified !'});
+  })
+  .catch(error => res.status(400).json({ error }));
 };
 
 
@@ -180,7 +182,10 @@ exports.delete = (req, res, next) => {
       fs.unlink(`images/${filename}`, () => {});
     } 
     User.destroy({ where: { id: req.params.id } })
-    .then(() => res.status(200).json({ message: 'User deleted !'}))
+    .then(() => {
+      logger.info(`User deleted {userId : ${req.params.id}}`);
+      res.status(200).json({ message: 'User deleted !'});
+    })
     .catch(error => res.status(400).json({ error }));
   })
   .catch(error => res.status(500).json({ error }));

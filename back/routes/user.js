@@ -6,8 +6,8 @@ const multer = require('../middleware/multer-config');
 
 const userCtrl = require('../controllers/user');
 
-router.get('/:id', auth.generalAuth, auth.ownerAuth, userCtrl.getOne);
-router.put('/:id', auth.generalAuth, auth.ownerAuth, multer, userCtrl.modify);
-router.delete('/:id', auth.generalAuth, auth.ownerAuth, userCtrl.delete);
+router.get('/:id', auth.generalAuth, userCtrl.getOne);
+router.put('/:id', auth.generalAuth, multer, userCtrl.modify);
+router.delete('/:id', auth.generalAuth, userCtrl.delete);
 
 module.exports = router;

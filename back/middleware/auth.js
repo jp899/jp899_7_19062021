@@ -1,5 +1,7 @@
 const jwt = require('jsonwebtoken');
-// const Sauce = require('../models/sauce');
+const User = require('../database/models/').sequelize.models.Users;
+const Article = require('../database/models/').sequelize.models.Articles;
+const Comment = require('../database/models/').sequelize.models.Comments;
 
 const config = require('../config');
 const logger = require('../logger');
@@ -28,32 +30,58 @@ exports.generalAuth = (req, res, next) => {
 };
 
 
+// Middleware spécifique aux routes de modification/suppression d'un élément par son propriétaire
+// Vérifie que le user courant est le proprietaire/créateur de cet élément
+exports.checkArticleOwner = (req, res, next) => {
+  try {
+    Article.findOne({ where: { id: req.params.id } })
+    .then(article => {
+      // Comparer le user courant au user propriétaire de la sauce à modifier
+      if(article.userId !== req.body.userId){
+        // On regarde si le user qui veut modifier est admin sinon on rejette
+        User.findOne({ where: { id: req.body.userId } })
+        .then(user => {
+          if(! user.isAdmin){
+            logger.error(`Forbidden request : user is not the owner of the ressource {userId : ${req.body.userId}}`);
+            throw "Forbidden request : user is not the owner of the ressource";
+          }
+          else{next();}
+        })
+        .catch( err => res.status(401).json({error: err}));
+      }
+      else{next();}
+    })
+    .catch( err => res.status(401).json({error: err}));
+  } catch (err){
+    res.status(403).json({
+      error: new Error('Forbidden request!')
+    });
+  }
+};
 
 
 // Middleware spécifique aux routes de modification/suppression d'un élément par son propriétaire
 // Vérifie que le user courant est le proprietaire/créateur de cet élément
-exports.ownerAuth = (req, res, next) => {
+exports.checkCommentOwner = (req, res, next) => {
   try {
-    //   on récupere le token dans le header 
-    const token = req.headers.authorization.split(' ')[1];
-    const decodedToken = jwt.verify(token, config.sessionTokenSecret);
-    const userId = decodedToken.userId;
-
-    // // Recherche de la sauce à modifier en base de donnée
-    // Sauce.findOne({ _id: req.params.id })
-    // .then(sauce => {
-    //   // Comparer le user courant au user propriétaire de la sauce à modifier
-    //   if(sauce.userId !== userId){
-    //     logger.error(`Forbidden request : user is not the owner of the ressource {userId : ${userId}}`);
-    //     throw "Forbidden request : user is not the owner of the ressource";
-    //   }
-    //   else{
-    //     next();
-    //   }
-    // }).catch( err => res.status(401).json({error: err}));
-
-    next();
-
+    Comment.findOne({ where: { id: req.params.id } })
+    .then(comment => {
+      // Comparer le user courant au user propriétaire de la sauce à modifier
+      if(comment.userId !== req.body.userId){
+        // On regarde si le user qui veut modifier est admin sinon on rejette
+        User.findOne({ where: { id: req.body.userId } })
+        .then(user => {
+          if(! user.isAdmin){
+            logger.error(`Forbidden request : user is not the owner of the ressource {userId : ${req.body.userId}}`);
+            throw "Forbidden request : user is not the owner of the ressource";
+          }
+          else{next();}
+        })
+        .catch( err => res.status(401).json({error: err}));
+      }
+      else{next();}
+    })
+    .catch( err => res.status(401).json({error: err}));
   } catch (err){
     res.status(403).json({
       error: new Error('Forbidden request!')
