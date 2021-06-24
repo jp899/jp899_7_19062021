@@ -7,7 +7,8 @@ const initModels = require("./init-models");
 // Connection
 let sequelize = new Sequelize(config.dbCluster, config.dbUser, config.dbPassword, {
   host: 'localhost',
-  dialect: 'mysql'
+  dialect: 'mysql',
+  logging: false
 });
 
 // Chargement des modèles des tables
