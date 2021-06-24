@@ -21,6 +21,7 @@ router.post('/', auth.generalAuth, multer, articleCtrl.create);
 router.put('/:id', auth.generalAuth, auth.checkArticleOwner, multer, articleCtrl.modify);
 router.delete('/:id', auth.generalAuth, auth.checkArticleOwner, articleCtrl.delete);
 
+router.get('/:articleId/like', auth.generalAuth, likeCtrl.getLikesCount);
 router.post('/:articleId/like', auth.generalAuth, likeCtrl.like);
 
 router.post('/:articleId/comment', auth.generalAuth, commentCtrl.create)

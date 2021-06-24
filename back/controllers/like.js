@@ -20,3 +20,14 @@ exports.like = (req, res, next) => {
     }
   });
 };
+
+exports.getLikesCount = (req, res, next) => {
+  Like.count({ where: { articleId: req.params.articleId, liked: 1}})
+  .then((likes) => {
+    Like.count({ where: { articleId: req.params.articleId, liked: -1}})
+    .then((dislikes) => res.status(200).json({likes, dislikes}))
+    .catch(error => res.status(400).json({ error: error.message }));
+  })
+  .catch(error => res.status(400).json({ error: error.message }));
+};
+

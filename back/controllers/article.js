@@ -78,45 +78,6 @@ exports.delete = (req, res, next) => {
 };
 
 
-
-async function getUser(item) {
-  try{
-    const result = await item.getUser();
-    userLight = {
-      userId: result.id,
-      userName: result.userName,
-      imageUrl: result.imageUrl
-    };
-    return userLight;
-  }
-  catch (error) {
-    res.status(400).json({error: error.message});
-  }
-}
-
-async function getComments(article) {
-  try{
-    const result = await article.getComments();
-    for (comment of result){
-      commentUser = await getUser(comment);
-
-    }
-    userLight = {
-      userId: result.id,
-      userName: result.userName,
-      imageUrl: result.imageUrl
-    };
-    return userLight;
-  }
-  catch (error) {
-    res.status(400).json({error: error.message});
-  }
-}
-
-
-
-
-
 exports.getAll = (req, res, next) => {
   // Si une page a été demandée en paramètre on le prend en compte sinon on renvoie la première page (0)
   const pageNumber = req.query.page ? parseInt(req.query.page) : 1;
@@ -127,10 +88,9 @@ exports.getAll = (req, res, next) => {
     const numberOfPages = Math.ceil(numberOfItem / nbOfItemsInOnePage);
 
     if (pageNumber < 1 || pageNumber > numberOfPages){
-      // res.status(404).json({error: "Page demandée inexistante"});
       throw new Error("Page demandée inexistante");
     } else {
-      Article.findAll( { 
+      Article.findAll( {
         limit: nbOfItemsInOnePage,
         offset: (pageNumber -1) * nbOfItemsInOnePage,
         order: [['createdAt','DESC']],
@@ -142,15 +102,25 @@ exports.getAll = (req, res, next) => {
         },
         { model: Comment,
           as: 'Comments',
-          attributes: { exclude: ['userId', 'articleId'] },
+          attributes: ["id", "content", "createdAt"],
+          order:[[['createdAt','DESC']]],
           include: [{
             model: User,
             as: 'user',
             attributes: ["id", "userName", "imageUrl"]
           }]
+        },
+        {
+          model: Like,
+          as: 'Likes',
+          where: { userId: req.body.userId},
+          attributes: ["liked"],
+          required: false
         }]
       }).then(
-        (articles) => {res.status(200).json({articles, pages: numberOfPages});}
+        (articles) => {
+          res.status(200).json({articles, pages: numberOfPages});
+        }
       ).catch(
         (error) => {console.log(error); res.status(400).json({error: error.message});}
       );
