@@ -30,8 +30,18 @@ exports.generalAuth = (req, res, next) => {
 };
 
 
-// Middleware spécifique aux routes de modification/suppression d'un élément par son propriétaire
-// Vérifie que le user courant est le proprietaire/créateur de cet élément
+// Middlewares spécifique aux routes de modification/suppression d'un élément par son propriétaire
+// Vérifie que le user qui fait la demande est le proprietaire/créateur de cet élément
+
+exports.checkUserOwner = (req, res, next) => {
+  if (req.body.userId !== parseInt(req.params.id)){
+    res.status(403).json({error: new Error('Forbidden request!')});
+  } else {
+    next();
+  }
+};
+
+
 exports.checkArticleOwner = (req, res, next) => {
   try {
     Article.findOne({ where: { id: req.params.id } })
@@ -60,8 +70,6 @@ exports.checkArticleOwner = (req, res, next) => {
 };
 
 
-// Middleware spécifique aux routes de modification/suppression d'un élément par son propriétaire
-// Vérifie que le user courant est le proprietaire/créateur de cet élément
 exports.checkCommentOwner = (req, res, next) => {
   try {
     Comment.findOne({ where: { id: req.params.id } })

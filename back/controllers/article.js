@@ -24,7 +24,7 @@ exports.modify = (req, res, next) => {
 
     // Suppression de l'ancienne image si le fichier a été modifié par l'user
     if(req.file){
-      Article.findOne({ where: { id: req.params.id } })
+      Article.findByPk(req.params.id)
       .then(article => {
         // Récuperer l'adresse du fichier lié à l'objet
         const filename = article.imageUrl.split('/images/')[1];
@@ -56,7 +56,7 @@ exports.modify = (req, res, next) => {
 
 exports.delete = (req, res, next) => {
   // Trouver l'objet à supprimer
-  Article.findOne({ where: { id: req.params.id } })
+  Article.findByPk(req.params.id)
     .then(article => {
       // Récuperer l'adresse du fichier lié à l'objet
       const filename = article.imageUrl.split('/images/')[1];
@@ -72,10 +72,8 @@ exports.delete = (req, res, next) => {
 };
 
 
-
-
 exports.getAll = (req, res, next) => {
-  Article.find().then(
+  Article.findAll().then(
     (articles) => {
       res.status(200).json(articles);
     }
@@ -86,4 +84,5 @@ exports.getAll = (req, res, next) => {
       });
     }
   );
+
 };

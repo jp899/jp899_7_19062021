@@ -100,7 +100,7 @@ exports.signup = (req, res, next) => {
 
 
 exports.getOne = (req, res, next) => {
-  User.findOne({ where: { id: req.params.id } })
+  User.findByPk(req.params.id)
   .then(
     (user) => {
       // Retourner uniquement les informations à afficher
@@ -130,7 +130,7 @@ exports.modify = (req, res, next) => {
 
   // Suppression de l'ancienne image si le fichier a été modifié par l'user
   if(req.file){
-    User.findOne({ where: { id: req.params.id } })
+    User.findByPk(req.params.id)
     .then(user => {
       if (user.imageUrl) {
         // Récuperer l'adresse du fichier lié à l'objet
@@ -173,7 +173,7 @@ exports.modify = (req, res, next) => {
 
 exports.delete = (req, res, next) => {
   // Trouver l'objet à supprimer
-  User.findOne({ where: { id: req.params.id } })
+  User.findByPk(req.params.id)
   .then(user => {
     if (user.imageUrl) {
       // Récuperer l'adresse du fichier lié à l'objet
