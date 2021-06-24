@@ -1,7 +1,5 @@
 const Comment = require('../database/models/').sequelize.models.Comments;
 
-const logger = require('../logger');
-
 
 exports.create = (req, res, next) => {
   Comment.create({

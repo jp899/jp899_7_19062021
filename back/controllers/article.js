@@ -3,6 +3,7 @@ const fs = require('fs');
 
 const logger = require('../logger');
 
+
 exports.create = (req, res, next) => {
     Article.create({
       title: req.body.article.title,

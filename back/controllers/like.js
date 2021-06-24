@@ -1,8 +1,5 @@
 const Like = require('../database/models/').sequelize.models.Likes;
 
-const logger = require('../logger');
-
-
 
 exports.like = (req, res, next) => {
   // On essaie d'insérer un nouveau like
@@ -23,13 +20,3 @@ exports.like = (req, res, next) => {
     }
   });
 };
-
-
-
-
-
-
-
-
-
-
