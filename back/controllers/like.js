@@ -14,9 +14,9 @@ exports.like = (req, res, next) => {
     if (error.name === "SequelizeUniqueConstraintError"){
       Like.update({ liked: req.body.liked }, { where: { id: req.body.userId, articleId: req.params.articleId } })
       .then(() => res.status(200).json({ message: 'Like saved !'}))
-      .catch(error => res.status(400).json({ error }));
+      .catch(error => res.status(400).json({ error: error.message }));
     } else {
-      res.status(400).json({ error });
+      res.status(400).json({ error: error.message });
     }
   });
 };

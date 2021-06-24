@@ -17,14 +17,14 @@ exports.generalAuth = (req, res, next) => {
     const userId = decodedToken.userId;
     // On controle le user décrypté par rapport au userID fourni dans la requette
     if (req.body.userId !== userId) {
-      throw 'Invalid user ID';
+      throw new Error('Invalid userId or auth token');
     } else {
       next();
     }
-  } catch {
+  } catch (error) {
     logger.error(`Invalid user ID {userId : ${req.body.userId}}`);
     res.status(401).json({
-      error: new Error('Invalid request!')
+      error: error.message
     });
   }
 };
@@ -35,7 +35,7 @@ exports.generalAuth = (req, res, next) => {
 
 exports.checkUserOwner = (req, res, next) => {
   if (req.body.userId !== parseInt(req.params.id)){
-    res.status(403).json({error: new Error('Forbidden request!')});
+    res.status(403).json({error: 'Forbidden request!'});
   } else {
     next();
   }
@@ -53,18 +53,18 @@ exports.checkArticleOwner = (req, res, next) => {
         .then(user => {
           if(! user.isAdmin){
             logger.error(`Forbidden request : user is not the owner of the ressource {userId : ${req.body.userId}}`);
-            throw "Forbidden request : user is not the owner of the ressource";
+            throw new Error("Forbidden request : user is not the owner of the ressource");
           }
           else{next();}
         })
-        .catch( err => res.status(401).json({error: err}));
+        .catch( err => res.status(401).json({error: err.message}));
       }
       else{next();}
     })
-    .catch( err => res.status(401).json({error: err}));
+    .catch( err => res.status(401).json({error: err.message}));
   } catch (err){
     res.status(403).json({
-      error: new Error('Forbidden request!')
+      error: err.message
     });
   }
 };
@@ -81,18 +81,18 @@ exports.checkCommentOwner = (req, res, next) => {
         .then(user => {
           if(! user.isAdmin){
             logger.error(`Forbidden request : user is not the owner of the ressource {userId : ${req.body.userId}}`);
-            throw "Forbidden request : user is not the owner of the ressource";
+            throw new Error("Forbidden request : user is not the owner of the ressource");
           }
           else{next();}
         })
-        .catch( err => res.status(401).json({error: err}));
+        .catch( err => res.status(401).json({error: err.message}));
       }
       else{next();}
     })
-    .catch( err => res.status(401).json({error: err}));
+    .catch( err => res.status(401).json({error: err.message}));
   } catch (err){
     res.status(403).json({
-      error: new Error('Forbidden request!')
+      error: err.message
     });
   }
 };

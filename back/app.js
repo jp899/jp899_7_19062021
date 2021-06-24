@@ -14,9 +14,6 @@ const userRoutes = require('./routes/user');
 
 const logger = require('./logger');
 
-// Importer les paramètres d'environnement
-const config = require('./config');
-
 // Créer l'application express
 const app = express();
 
@@ -25,8 +22,6 @@ const db = require('./database/models/');
 db.sequelize.authenticate()
 .then(() => logger.info('Database connection has been established successfully.'))
 .catch((error) => logger.error('Unable to connect to the database:', error));
-
-// const test = require('./testDB');
 
 // Middleware GENERAL de gestion des headers pour le CORS
 app.use((req, res, next) => {

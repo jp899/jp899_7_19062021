@@ -11,19 +11,19 @@ exports.create = (req, res, next) => {
     message: 'Comment saved !',
     commentId: comment.id
   }))
-  .catch(error => res.status(400).json({ error }));
+  .catch(error => res.status(400).json({ error: error.message }));
 };
 
 
 exports.modify = (req, res, next) => {
   Comment.update({ content: req.body.comment.content }, { where: { id: req.params.id } })
     .then(() => res.status(200).json({ message: 'Comment modified !'}))
-    .catch(error => res.status(400).json({ error }));
+    .catch(error => res.status(400).json({ error: error.message }));
 };
 
 
 exports.delete = (req, res, next) => {
   Comment.destroy({ where: { id: req.params.id } })
   .then(() => res.status(200).json({ message: 'Comment deleted !'}))
-  .catch(error => res.status(400).json({ error }));
+  .catch(error => res.status(400).json({ error: error.message }));
 };

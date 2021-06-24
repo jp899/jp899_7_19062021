@@ -1,7 +1,13 @@
 const Article = require('../database/models/').sequelize.models.Articles;
+const User = require('../database/models/').sequelize.models.Users;
+const Like = require('../database/models/').sequelize.models.Likes;
+const Comment = require('../database/models/').sequelize.models.Comments;
+
 const fs = require('fs');
 
 const logger = require('../logger');
+
+const nbOfItemsInOnePage = 5;
 
 
 exports.create = (req, res, next) => {
@@ -16,7 +22,7 @@ exports.create = (req, res, next) => {
       message: 'Article saved !',
       articleId: article.id
     }))
-    .catch(error => res.status(400).json({ error }));
+    .catch(error => res.status(400).json({ error: error.message }));
   };
 
 
@@ -34,7 +40,7 @@ exports.modify = (req, res, next) => {
           else logger.info(`File deleted : ${filename}`);
         }));
       })
-      .catch(error => res.status(500).json({ error }));
+      .catch(error => res.status(500).json({ error: error.message }));
     }
 
     const articleObject = req.file ?
@@ -50,7 +56,7 @@ exports.modify = (req, res, next) => {
     // Ensuite on enregistre l'objet mis à jour
     Article.update({ ...articleObject}, { where: { id: req.params.id } })
       .then(() => res.status(200).json({ message: 'Article modified !'}))
-      .catch(error => res.status(400).json({ error }));
+      .catch(error => res.status(400).json({ error: error.message }));
   };
 
 
@@ -65,24 +71,94 @@ exports.delete = (req, res, next) => {
           // Supprimer l'objet lui-même
       Article.destroy({ where: { id: req.params.id } })
       .then(() => res.status(200).json({ message: 'Article deleted !'}))
-      .catch(error => res.status(400).json({ error }));
+      .catch(error => res.status(400).json({ error: error.message }));
     });
   })
-  .catch(error => res.status(500).json({ error }));
+  .catch(error => res.status(500).json({ error: error.message }));
 };
 
 
+
+async function getUser(item) {
+  try{
+    const result = await item.getUser();
+    userLight = {
+      userId: result.id,
+      userName: result.userName,
+      imageUrl: result.imageUrl
+    };
+    return userLight;
+  }
+  catch (error) {
+    res.status(400).json({error: error.message});
+  }
+}
+
+async function getComments(article) {
+  try{
+    const result = await article.getComments();
+    for (comment of result){
+      commentUser = await getUser(comment);
+
+    }
+    userLight = {
+      userId: result.id,
+      userName: result.userName,
+      imageUrl: result.imageUrl
+    };
+    return userLight;
+  }
+  catch (error) {
+    res.status(400).json({error: error.message});
+  }
+}
+
+
+
+
+
 exports.getAll = (req, res, next) => {
-  Article.findAll().then(
-    (articles) => {
-      res.status(200).json(articles);
+  // Si une page a été demandée en paramètre on le prend en compte sinon on renvoie la première page (0)
+  const pageNumber = req.query.page ? parseInt(req.query.page) : 1;
+
+  Article.count()
+  .then( numberOfItem => {
+
+    const numberOfPages = Math.ceil(numberOfItem / nbOfItemsInOnePage);
+
+    if (pageNumber < 1 || pageNumber > numberOfPages){
+      // res.status(404).json({error: "Page demandée inexistante"});
+      throw new Error("Page demandée inexistante");
+    } else {
+      Article.findAll( { 
+        limit: nbOfItemsInOnePage,
+        offset: (pageNumber -1) * nbOfItemsInOnePage,
+        order: [['createdAt','DESC']],
+        attributes: { exclude: ['userId'] },
+        include: [{ 
+          model: User,
+          as: 'user',
+          attributes: ["id", "userName", "imageUrl"]
+        },
+        { model: Comment,
+          as: 'Comments',
+          attributes: { exclude: ['userId', 'articleId'] },
+          include: [{
+            model: User,
+            as: 'user',
+            attributes: ["id", "userName", "imageUrl"]
+          }]
+        }]
+      }).then(
+        (articles) => {res.status(200).json({articles, pages: numberOfPages});}
+      ).catch(
+        (error) => {console.log(error); res.status(400).json({error: error.message});}
+      );
     }
-  ).catch(
-    (error) => {
-      res.status(400).json({
-        error: error
-      });
-    }
+
+  })
+  .catch(
+    (error) => {console.log(error); res.status(400).json({error: error.message});}
   );
 
 };
