@@ -78,6 +78,20 @@ exports.delete = (req, res, next) => {
 };
 
 
+async function getLikesCount(articles) {
+  try{
+    for (article of articles){
+      article.likesCount = await Like.count( { where: { articleId: article.id, liked: 1} } );
+      article.dislikesCount = await Like.count( { where: { articleId: article.id, liked: -1} } );
+    }
+    return articles;
+  }
+  catch (error) {
+    res.status(400).json({error: error.message});
+  }
+}
+
+
 exports.getAll = (req, res, next) => {
   // Si une page a été demandée en paramètre on le prend en compte sinon on renvoie la première page (0)
   const pageNumber = req.query.page ? parseInt(req.query.page) : 1;
@@ -90,6 +104,9 @@ exports.getAll = (req, res, next) => {
     if (pageNumber < 1 || pageNumber > numberOfPages){
       throw new Error("Page demandée inexistante");
     } else {
+      // récupération de la liste des articles, avec les infos sur l'user créateur
+      // + les commentaires avec les infos sur l'user auteur du commentaire
+      // + le like du user qui fait la requette
       Article.findAll( {
         limit: nbOfItemsInOnePage,
         offset: (pageNumber -1) * nbOfItemsInOnePage,
@@ -119,16 +136,21 @@ exports.getAll = (req, res, next) => {
         }]
       }).then(
         (articles) => {
-          res.status(200).json({articles, pages: numberOfPages});
+          let articlesLight = JSON.parse(JSON.stringify(articles));
+          // Récupération du nombre de like/dislikes de chaque article avant retour au front
+          getLikesCount(articlesLight)
+          .then( (articlesWithLikesCount) =>
+            res.status(200).json({articlesWithLikesCount, pages: numberOfPages})
+          ).catch(
+            (error) => {console.log(error); res.status(400).json({error: error.message});}
+          );
         }
       ).catch(
         (error) => {console.log(error); res.status(400).json({error: error.message});}
       );
     }
-
   })
   .catch(
     (error) => {console.log(error); res.status(400).json({error: error.message});}
   );
-
 };
