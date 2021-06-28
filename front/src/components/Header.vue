@@ -14,12 +14,12 @@
 
           <b-collapse id="nav-collapse" is-nav class="justify-content-end">
             <b-navbar-nav >
-                <b-nav-item><router-link class="text-decoration-none" to="/login">Se connecter</router-link></b-nav-item>
-                <b-nav-item><router-link class="text-decoration-none" to="/signup">S'inscrire</router-link></b-nav-item>
-                <!-- <b-nav-item-dropdown text="User" right>
+                <b-nav-item v-show="!withProfile"><router-link class="text-decoration-none" to="/login">Se connecter</router-link></b-nav-item>
+                <b-nav-item v-show="!withProfile"><router-link class="text-decoration-none" to="/signup">S'inscrire</router-link></b-nav-item>
+                <b-nav-item-dropdown v-show="withProfile" text="User" right>
                   <b-dropdown-item><router-link class="text-decoration-none" to="/profile">Mon profil</router-link></b-dropdown-item>
                   <b-dropdown-item><router-link class="text-decoration-none" to="/login">Se déconnecter</router-link></b-dropdown-item>
-                </b-nav-item-dropdown> -->
+                </b-nav-item-dropdown>
             </b-navbar-nav>
 
             <!-- Right aligned nav items -->
@@ -47,10 +47,19 @@
 
 <script>
     export default {
-        name: "Header",
-        data: () => ({
-          
-        })
+      name: "Header",
+      data: () => ({
+        
+      }),
+      props: {
+        withProfile: {type: Boolean, default: false}
+      },
+      methods:{
+        logout() {
+          localStorage.clear();
+          this.$router.push("/login");
+        }
+      }
     };
 </script>
 
