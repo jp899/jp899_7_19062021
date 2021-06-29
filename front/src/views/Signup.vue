@@ -2,8 +2,8 @@
   <div class="home">
     <Header/>
     <main>
-      <h2 align="center">Inscription</h2>
-      <b-form @submit="onSubmit" v-if="show">
+      <h2 align="center">Rejoignez vos collègues !</h2>
+      <b-form @submit="onSubmit" v-if="show" :novalidate="true">
 
         <b-form-group id="input-group-1" label="Pseudo:" label-for="input-1">
           <b-form-input
@@ -11,8 +11,8 @@
             v-model="form.username"
             placeholder="Pseudo"
             maxlength="15"
-            @input="usernameCheck(form.username)"
-            required
+            @input="usernameCheck()"
+            
           ></b-form-input>
           <b-form-invalid-feedback id="input-1-feedback"></b-form-invalid-feedback>
         </b-form-group>
@@ -24,8 +24,8 @@
             type="text"
             placeholder="Email"
             maxlength="50"
-            @input="emailCheck(form.email)"
-            required
+            @input="emailCheck()"
+            
           ></b-form-input>
           <b-form-invalid-feedback id="input-2-feedback"></b-form-invalid-feedback>
         </b-form-group>
@@ -37,8 +37,8 @@
             type="password"
             placeholder="Mot de passe"
             maxlength="15"
-            @input="passwordCheck(form.password)"
-            required
+            @input="passwordCheck()"
+            
           ></b-form-input>
           <b-form-invalid-feedback id="input-3-feedback"></b-form-invalid-feedback>
           
@@ -46,7 +46,7 @@
 
         <p class="text-danger my-2">{{ errorMessage }}</p>
 
-        <b-button type="submit" variant="primary" class="my-3">Submit</b-button>
+        <b-button type="submit" variant="primary" class="my-3">Inscription</b-button>
       </b-form>
 
       <p>
@@ -97,36 +97,57 @@ export default {
       let feedbackMessage = document.getElementById(fieldName + "-feedback");
       feedbackMessage.innerHTML = "";
     },
-    usernameCheck(username) {
-      if (!username){
+    usernameCheck() {
+      if (!this.form.username){
         this.setFieldError('input-1', "Pseudo requis");
-      } else if (! this.usernameRegex.test(username) ) {
+      } else if (! this.usernameRegex.test(this.form.username) ) {
         this.setFieldError('input-1', "Format invalide : 3 à 15 caractères/chiffres requis, sans caractère spéciaux.");
       } else {
         this.removeFieldError('input-1');
+        return true;
       }
+      return false;
     },
-    emailCheck(email) {
-      if (!email){
+    emailCheck() {
+      if (!this.form.email){
         this.setFieldError('input-2', "Email requis");
-      } else if (! this.emailRegex.test(email) ) {
+      } else if (! this.emailRegex.test(this.form.email) ) {
         this.setFieldError('input-2', "Format invalide");
       } else {
         this.removeFieldError('input-2');
+        return true;
       }
+      return false;
     },
-    passwordCheck(password) {
-      if (!password){
+    passwordCheck() {
+      if (!this.form.password){
         this.setFieldError('input-3', "Mot de passe requis");
-      } else if (! this.passwordRegex.test(password) ) {
+      } else if (! this.passwordRegex.test(this.form.password) ) {
         this.setFieldError('input-3', "Format invalide : 8 à 15 caractères requis avec chiffre, majuscule, minuscule et caractère spécial");
       } else {
         this.removeFieldError('input-3');
+        return true;
       }
+      return false;
     },
     onSubmit(event) {
-      event.preventDefault()
-      alert(JSON.stringify(this.form))
+      event.preventDefault();
+      if ( this.usernameCheck() 
+      && this.passwordCheck()
+      && this.emailCheck()){
+        const newUser = {
+          userName: this.form.username,
+          firstName:"",
+          lastName:"",
+          email: this.form.email,
+          password: this.form.password
+        }
+        // Envoyer le nouvel user à l'API
+        alert(JSON.stringify(newUser));
+        // Si OK Login via l'API
+
+        // Si OK débranchement vers accueuil
+      } 
     }
   }
 }
