@@ -62,6 +62,7 @@
 // @ is an alias to /src
 
 import Header from '@/components/Header.vue'
+import apiConnection from '../services/APIConnection.js'
 
 export default {
   name: 'Signup',
@@ -144,6 +145,18 @@ export default {
         }
         // Envoyer le nouvel user à l'API
         alert(JSON.stringify(newUser));
+        apiConnection.post("api/auth/signup", newUser)
+        .then( response => {console.log(response)})
+        .catch( error => {
+          const errorMessage = error.toString();
+          if(errorMessage.includes("apiMessage:")){
+            const apiMessage = errorMessage.split("apiMessage:")[1];
+            this.errorMessage = apiMessage;
+          } else {
+            console.log(error);
+            this.errorMessage = "Une erreur est survenue, veuillez réessayer plus tard.";
+          }
+        });
         // Si OK Login via l'API
 
         // Si OK débranchement vers accueuil
