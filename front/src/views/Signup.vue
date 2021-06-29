@@ -77,8 +77,11 @@ export default {
         password: '',
       },
       errorMessage: '',
+      // EMAIL : format standard : same regex used to check type="email" input in HTML5
       emailRegex: /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/,
+      // USERNAME : au moins 3 car/chiffres
       usernameRegex: /^[a-zA-Z0-9]{3,}$/,
+      // PASSWORD : de 8 à 15 caractères avec au moins : 1 minuscule, 1 majuscule, un chiffre, un caractère spécial
       passwordRegex: /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[-+!*$@%#=_])([-+!*$@%#=_\w]{8,15})$/,
       show: true
     }
@@ -146,20 +149,29 @@ export default {
         // Envoyer le nouvel user à l'API
         alert(JSON.stringify(newUser));
         apiConnection.post("api/auth/signup", newUser)
-        .then( response => {console.log(response)})
+        .then( response => {
+          console.log(response);
+          // Si OK Login via l'API
+          // Si Login OK débranchement vers acceuil
+        })
         .catch( error => {
+          console.log(error);
           const errorMessage = error.toString();
+          // En cas de message spécifique renvoyé dans l'erreur par l'API on la traite
+          //  sinon on affiche juste un message générique à l'utilisateur
           if(errorMessage.includes("apiMessage:")){
             const apiMessage = errorMessage.split("apiMessage:")[1];
-            this.errorMessage = apiMessage;
+            if(apiMessage === "Username not available"){
+              this.setFieldError("input-1","Ce pseudo n'est pas disponible");
+            } else {
+              console.log(error);
+              this.errorMessage = "Une erreur est survenue, veuillez réessayer plus tard.";
+            }
           } else {
             console.log(error);
             this.errorMessage = "Une erreur est survenue, veuillez réessayer plus tard.";
           }
         });
-        // Si OK Login via l'API
-
-        // Si OK débranchement vers accueuil
       } 
     }
   }

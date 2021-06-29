@@ -24,12 +24,7 @@ class APIConnection {
   
     async get(endpoint) {
         const result = await fetch(this.urlRoot + endpoint, {headers: this.headers()});
-        if(result.ok){
-            return result.json();
-        }
-        else{
-            throw new Error("ERREUR " + result.status);
-        }
+        return await this.resultHandle(result);
     }
   
     async post(endpoint, body, withFormData = false) {
@@ -43,12 +38,7 @@ class APIConnection {
   
     async delete(endpoint) {
         const result = await fetch(this.urlRoot + endpoint, {method: 'DELETE', headers: this.headers()});
-        if(result.ok){
-            return result.json();
-        }
-        else{
-            throw new Error("ERREUR " + result.status);
-        }
+        return await this.resultHandle(result);
     }
   
     async put(endpoint, body, withFormData = false) {
@@ -57,12 +47,7 @@ class APIConnection {
             body: withFormData ? body : JSON.stringify(body),
             headers: this.headers(withFormData)}
         );
-        if(result.ok){
-            return result.json();
-        }
-        else{
-            throw new Error("ERREUR " + result.status);
-        }
+        return await this.resultHandle(result);
     }
 }
 

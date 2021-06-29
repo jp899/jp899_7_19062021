@@ -1,4 +1,5 @@
 const User = require('../database/models/').sequelize.models.Users;
+const UniqueConstraintError = require('sequelize').UniqueConstraintError;
 const fs = require('fs');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
@@ -31,8 +32,6 @@ function emailDecrypt(emailEncrypted) {
 // Fonction de création d'un nouvel user
 exports.signup = (req, res, next) => {
 
-  console.log(req.body);
-
   // Validation des entrées utilisateur
   if(! emailRegex.test(req.body.email)){
     return res.status(400).json({ error: "Format de l'email incorrect !" });
@@ -56,7 +55,13 @@ exports.signup = (req, res, next) => {
         logger.info(`New user signed-up and saved {userId : ${addedUser.id}}`);
         res.status(201).json({ message: 'User created !' });
       })
-      .catch(error => res.status(400).json({ error: error.message }));
+      .catch(error => {
+        if(error instanceof UniqueConstraintError){
+          res.status(400).json({ error: "Username not available" });
+        } else {
+          res.status(400).json({ error: error.message });
+        }
+      });
     })
     .catch(error => res.status(500).json({ error: error.message }));
     } 
