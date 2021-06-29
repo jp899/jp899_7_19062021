@@ -105,7 +105,7 @@ export default {
       if (!this.form.username){
         this.setFieldError('input-1', "Pseudo requis");
       } else if (! this.usernameRegex.test(this.form.username) ) {
-        this.setFieldError('input-1', "Format invalide : 3 à 15 caractères/chiffres requis, sans caractère spéciaux.");
+        this.setFieldError('input-1', "Format invalide : 3 à 15 caractères/chiffres requis, sans caractères spéciaux.");
       } else {
         this.removeFieldError('input-1');
         return true;
@@ -127,7 +127,7 @@ export default {
       if (!this.form.password){
         this.setFieldError('input-3', "Mot de passe requis");
       } else if (! this.passwordRegex.test(this.form.password) ) {
-        this.setFieldError('input-3', "Format invalide : 8 à 15 caractères requis avec chiffre, majuscule, minuscule et caractère spécial");
+        this.setFieldError('input-3', "Format invalide : 8 à 15 caractères requis avec chiffre, majuscule, minuscule et caractère spécial.");
       } else {
         this.removeFieldError('input-3');
         return true;
@@ -147,15 +147,22 @@ export default {
           password: this.form.password
         }
         // Envoyer le nouvel user à l'API
-        alert(JSON.stringify(newUser));
         apiConnection.post("api/auth/signup", newUser)
         .then( response => {
           console.log(response);
           // Si OK Login via l'API
-          // Si Login OK débranchement vers acceuil
-        })
-        .catch( error => {
-          console.log(error);
+          apiConnection.post("api/auth/login", {userName: newUser.userName, password: newUser.password})
+          .then( userData => {
+            // SI login OK enregistrement infos de connection en local storage
+            localStorage.setItem('userToken', userData.token);
+            localStorage.setItem('userId', userData.userId);
+            // Puis débranchement vers vue acceuil
+            this.$router.push({ name: 'Home' })
+          }).catch(error => {
+            console.log(error);
+            this.errorMessage = "Une erreur est survenue, veuillez réessayer plus tard.";
+          });
+        }).catch( error => {
           const errorMessage = error.toString();
           // En cas de message spécifique renvoyé dans l'erreur par l'API on la traite
           //  sinon on affiche juste un message générique à l'utilisateur
