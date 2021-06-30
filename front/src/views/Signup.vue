@@ -3,7 +3,7 @@
     <Header/>
     <main>
       <h2 align="center">Rejoignez vos collègues !</h2>
-      <b-form @submit="onSubmit" v-if="show" :novalidate="true">
+      <b-form @submit="onSubmit">
 
         <b-form-group id="input-group-1" label="Pseudo:" label-for="input-1">
           <b-form-input
@@ -82,8 +82,7 @@ export default {
       // USERNAME : au moins 3 car/chiffres
       usernameRegex: /^[a-zA-Z0-9]{3,}$/,
       // PASSWORD : de 8 à 15 caractères avec au moins : 1 minuscule, 1 majuscule, un chiffre, un caractère spécial
-      passwordRegex: /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[-+!*$@%#=_])([-+!*$@%#=_\w]{8,15})$/,
-      show: true
+      passwordRegex: /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[-+!*$@%#=_])([-+!*$@%#=_\w]{8,15})$/
     }
   },
   methods: {

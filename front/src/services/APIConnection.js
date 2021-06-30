@@ -12,6 +12,9 @@ class APIConnection {
         if(result.ok){
             return result.json();
         }
+        else if(result.status === 429){
+            throw new Error("ERREUR " + result.status + " apiMessage:" + "Too Many Requests");
+        }
         else{
             const error = await result.json();
             if(error.error){
