@@ -114,7 +114,8 @@ exports.getOne = (req, res, next) => {
         userName: user.userName,
         firstName: user.firstName,
         lastName: user.lastName,
-        email: emailDecrypt(user.emailEncrypted)
+        email: emailDecrypt(user.emailEncrypted),
+        imageUrl: user.imageUrl
       }
       res.status(200).json(userLight);
     }
@@ -125,7 +126,10 @@ exports.getOne = (req, res, next) => {
 
 exports.modify = (req, res, next) => {
 
-  if(! emailRegex.test(req.body.user.email)){
+  const reqUser = req.file ? JSON.parse(req.body.user) : req.body;
+  console.log(reqUser);
+
+  if(! emailRegex.test(reqUser.email)){
     return res.status(400).json({ error: "Format de l'email incorrect !" });
   }
 
@@ -150,23 +154,23 @@ exports.modify = (req, res, next) => {
   // Si un fichier a été inclus dans la requette (fichier modifié par lutilisateur)
   // Alors on traite l'image
     {
-      firstName: req.body.user.firstName,
-      lastName: req.body.user.lastName,
-      emailEncrypted: emailEncrypt(req.body.user.email),
+      firstName: reqUser.firstName,
+      lastName: reqUser.lastName,
+      emailEncrypted: emailEncrypt(reqUser.email),
       imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
     }
   // sinon ou traite simplement l'objet entrant 
     : {
-      firstName: req.body.user.firstName,
-      lastName: req.body.user.lastName,
-      emailEncrypted: emailEncrypt(req.body.user.email)
+      firstName: reqUser.firstName,
+      lastName: reqUser.lastName,
+      emailEncrypted: emailEncrypt(reqUser.email)
     };
 
   // Ensuite on enregistre l'objet mis à jour
   User.update({ ...userObject}, { where: { id: req.params.id } })
   .then(() => {
     logger.info(`User modified {userId : ${req.params.id}}`);
-    res.status(200).json({ message: 'User modified !'});
+    res.status(200).json({ message: 'User modified !', imageUrl: userObject.imageUrl});
   })
   .catch(error => res.status(400).json({ error: error.message }));
 };

@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <Header/>
+    <Header :withProfile="true"/>
     <img alt="Vue logo" src="../assets/logo.png">
     <CardTest msg="Welcome to Your Vue.js App"/>
     <CardTest msg="Welcome to Your Vue.js App"/>
