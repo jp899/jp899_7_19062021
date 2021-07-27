@@ -17,7 +17,7 @@ const multer = require('../middleware/multer-config');
 // et enfin le middleware "fonctionnel"
 
 router.get('/', auth.generalAuth, articleCtrl.getAll);
-router.post('/', auth.generalAuth, multer, articleCtrl.create);
+router.post('/', auth.generalAuth, multer, auth.getUserIdFromToken, articleCtrl.create);
 router.put('/:id', auth.generalAuth, auth.checkArticleOwner, multer, articleCtrl.modify);
 router.delete('/:id', auth.generalAuth, auth.checkArticleOwner, articleCtrl.delete);
 

@@ -116,3 +116,16 @@ exports.checkCommentOwner = (req, res, next) => {
     });
   }
 };
+
+
+exports.getUserIdFromToken = (req, res, next) => {
+  try {
+    const userId = tokenDecode(req.headers.authorization);
+    req.body.userId = userId;
+    next();
+  } catch (err){
+    res.status(403).json({
+      error: err.message
+    });
+  }
+};
