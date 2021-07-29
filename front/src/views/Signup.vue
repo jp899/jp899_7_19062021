@@ -1,7 +1,7 @@
 <template>
   <div class="home">
     <Header/>
-    <main>
+    <main class="container">
       <h2 align="center">Rejoignez vos collègues !</h2>
       <b-form @submit="onSubmit">
 

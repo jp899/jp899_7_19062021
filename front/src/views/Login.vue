@@ -1,7 +1,7 @@
 <template>
   <div class="login">
     <Header/>
-    <main>
+    <main class="container">
       <h2 align="center">Connectez-vous !</h2>
       <b-form @submit="onSubmit">
 

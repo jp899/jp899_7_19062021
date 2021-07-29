@@ -2,19 +2,9 @@
   <div class="home">
     <Header :withProfile="true"/>
 
-    <main>
+    <main class="container">
 
-      <div>
-        <!-- <b-form-textarea
-              id="textarea"
-              v-model="newPostForm.text"
-              placeholder="Exprimez-vous !"
-              rows="3"
-              no-resize
-            ></b-form-textarea>
-
-            <textarea rows="4" cols="50" maxlength="50" placeholder="Enter text here"></textarea> -->
-
+      <div class="post-form border my-4 shadow">
         <b-form-group>
 
           <div class="d-flex">  
@@ -74,8 +64,8 @@
         </b-form-group>      
       </div>
 
-      <div>
-
+      <div class="postList">
+        <Post v-for="(post, index) in postsContent" :content="post" :key="post.id" :index="index" @deleteMe="postsContent.splice(index,1)"/>
       </div>
 
     </main>
@@ -90,6 +80,7 @@
 import apiConnection from '../services/APIConnection.js'
 import Header from '@/components/Header.vue'
 import ProfileImage from '@/components/ProfileImage.vue'
+import Post from '@/components/Post.vue'
 
 
 export default {
@@ -97,6 +88,7 @@ export default {
   components: {
     Header,
     ProfileImage,
+    Post,
   },
   data() {
     return {
@@ -106,14 +98,22 @@ export default {
         title: "",
       },
       user: {},
+      postsContent: [],
     }
   },
   // Récupération des informations de l'utilisateur à la création de la vue
-  created() {
+  created(){
     apiConnection.get("api/user/" + localStorage.getItem('userId'))
       .then( response => {
         // Enregistrer les données sur l'utilisateur
         this.user = response;
+      }).catch( error => {console.log(error)});
+  },
+  beforeMount(){
+    apiConnection.get("api/article/")
+      .then( response => {
+        console.log(response.articlesWithLikesCount);
+        this.postsContent = response.articlesWithLikesCount;
       }).catch( error => {console.log(error)});
   },
   methods: {
@@ -127,7 +127,7 @@ export default {
       field.classList.add("is-valid");
       field.classList.remove("is-invalid");
     },
-    titleCheck() {
+    titleCheck(){
       if (!this.newPostForm.title){
         this.setFieldError('input-title');
       } else {
@@ -136,26 +136,49 @@ export default {
       }
       return false;
     },
-    clickInput () {
+    clearFieldsColors(){
+      for(let fieldName of ["input-title" ]){
+        let field = document.getElementById(fieldName);
+        field.classList.remove("is-valid");
+        field.classList.remove("is-invalid");
+      }
+    },
+    clickInput (){
       this.$refs.fileInput.click();
     },
-    loadImage(event) {
+    loadImage(event){
       // Enregistrer l'image et l'afficher
       this.newPostForm.image = event.target.files[0];
       this.tempImage = URL.createObjectURL(this.newPostForm.image);
     },
-    postArticle() {
-      const formData = new FormData();
-      formData.append("image", this.newPostForm.image);
-      formData.append("title", JSON.stringify(this.newPostForm.title));
-  
-      apiConnection.post("api/article/", formData, true)
-      .then( response => {
-        console.log(response);
-        // récupérer l'url de la nouvelle image et recharger le composant
-        // this.user.imageUrl = response.imageUrl;
-        // this.$forceUpdate();
-      }).catch( error => {console.log(error)});
+    postArticle(){
+      // Post autorisé uniquement si une image a été chargée et un titre renseigné
+      if(this.tempImage && this.titleCheck()){
+        const formData = new FormData();
+        formData.append("image", this.newPostForm.image);
+        formData.append("title", this.newPostForm.title);
+    
+        apiConnection.post("api/article/", formData, true)
+        .then( response => {
+          console.log(response);
+          // ajouter un nouveau post au mur 
+          const newPost = {
+            ...response.article,
+            Comments: [],
+            Likes: [],
+            dislikesCount: 0,
+            likesCount: 0,
+            user: this.user,
+          } 
+          this.postsContent.unshift(newPost);
+
+          // Vider le formulaire et les données d'image
+          this.newPostForm.title = "";
+          this.newPostForm.image = null;
+          this.tempImage = null;
+          this.clearFieldsColors();
+        }).catch( error => {console.log(error)});
+      }
     },
   }
 }

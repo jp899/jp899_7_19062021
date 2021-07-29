@@ -15,7 +15,7 @@
       <p class="my-4">Votre compte ainsi que l'ensemble de vos posts et vos commentaires seront supprimés de manière irréversible.</p>
     </b-modal>
 
-    <main>
+    <main class="container">
       <h2 align="center">{{user.userName}}</h2>
       <div class="imageContainer">
         <ProfileImage :imageSrc="user.imageUrl"/>

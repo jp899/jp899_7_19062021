@@ -1,5 +1,5 @@
 <template>
-    <header class="sticky-top bg-white border-bottom border-2">
+    <header class="sticky-top bg-white border-bottom border-2 container">
       <nav>
         <b-navbar toggleable="lg" type="light">
           <b-navbar-brand>
@@ -16,10 +16,12 @@
             <b-navbar-nav >
                 <b-nav-item v-show="!withProfile"><router-link class="text-decoration-none" to="/login">Se connecter</router-link></b-nav-item>
                 <b-nav-item v-show="!withProfile"><router-link class="text-decoration-none" to="/signup">S'inscrire</router-link></b-nav-item>
-                <b-nav-item-dropdown v-show="withProfile" text="User" right>
-                  <b-dropdown-item><router-link class="text-decoration-none" to="/profile">Mon profil</router-link></b-dropdown-item>
-                  <b-dropdown-item @click="logout">Se déconnecter</b-dropdown-item>
-                </b-nav-item-dropdown>
+                <!-- <b-nav-item-dropdown v-show="withProfile" text="User" right>
+                  <b-dropdown-item v-show="withProfile"><router-link class="text-decoration-none" to="/profile">Mon profil</router-link></b-dropdown-item>
+                  <b-dropdown-item v-show="withProfile" @click="logout">Se déconnecter</b-dropdown-item>
+                </b-nav-item-dropdown> -->
+                  <b-nav-item v-show="withProfile"><router-link class="text-decoration-none" to="/profile">Mon profil</router-link></b-nav-item>
+                  <b-nav-item v-show="withProfile" @click="logout">Se déconnecter</b-nav-item>
             </b-navbar-nav>
           </b-collapse>
 

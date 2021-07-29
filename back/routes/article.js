@@ -16,7 +16,7 @@ const multer = require('../middleware/multer-config');
 // puis si necessaire le middleware pour ajouter un objet FILE à la requette avec le fichier fourni par le front
 // et enfin le middleware "fonctionnel"
 
-router.get('/', auth.generalAuth, articleCtrl.getAll);
+router.get('/', auth.generalAuth, auth.getUserIdFromToken, articleCtrl.getAll);
 router.post('/', auth.generalAuth, multer, auth.getUserIdFromToken, articleCtrl.create);
 router.put('/:id', auth.generalAuth, auth.checkArticleOwner, multer, articleCtrl.modify);
 router.delete('/:id', auth.generalAuth, auth.checkArticleOwner, articleCtrl.delete);

@@ -7,7 +7,7 @@ const fs = require('fs');
 
 const logger = require('../logger');
 
-const nbOfItemsInOnePage = 5;
+const nbOfItemsInOnePage = 100;
 
 
 exports.create = (req, res, next) => {
@@ -15,6 +15,10 @@ exports.create = (req, res, next) => {
   if(!req.file){
     res.status(400).json({ error: 'File is required' });
   } else{
+    console.log(req.body);
+    console.log("fef");
+    console.log(req.body.userId);
+
     Article.create({
       title: req.body.title,
       userId: req.body.userId,
@@ -24,7 +28,7 @@ exports.create = (req, res, next) => {
     })
     .then((article) => res.status(201).json({ 
       message: 'Article saved !',
-      articleId: article.id
+      article: article,
     }))
     .catch(error => res.status(400).json({ error: error.message }));
   }
