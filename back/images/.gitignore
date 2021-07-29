@@ -1,0 +1,5 @@
+# Ignorer tout le contenu mais pas le dossier lui même
+*
+*/
+!.gitignore
+

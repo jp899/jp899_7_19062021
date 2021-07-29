@@ -7,6 +7,4 @@ node_modules/
 #Dotenv configuration file
 .env
 
-#Images
-images/*
 
