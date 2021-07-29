@@ -7,11 +7,24 @@
         <ProfileImage :imageSrc="content.user.imageUrl" class="post-header__image"/>
         <div class="post-header__username h4">{{content.user.userName}}</div>
       </div>
-      <EditMenu v-if="(content.user.id == userId || isAdmin )" @deleteMe="deleteMe"/>
+      <EditMenu v-if="(hasEditRights)" @deleteMe="deleteMe" @updateMe="updateMe"/>
     </div>
 
     <div class="post-title row">
-      <h2>{{content.title}}</h2>
+      <h2>
+        <span v-if="(!editMode)">{{content.title}}</span>
+        <b-form @submit="newTitleSubmit" v-if="(editMode)" >
+          <b-form-input
+            size="lg"
+            ref="my-title"
+            v-model="form.title"
+            type="text"
+            maxlength="50"
+            placeholder="Saisir un nouveau titre"
+            @input="titleCheck()"
+          ></b-form-input>
+        </b-form>
+      </h2>
     </div>
 
     <div class="post-body row">
@@ -44,14 +57,24 @@ export default {
     ProfileImage,
     EditMenu,
   },
-  data: () => ({
- 
-  }),
+  data() {
+    return {
+      form: {
+        title: this.content.title,
+      },
+      editMode: false,
+    }
+  },
+  computed: {
+    hasEditRights: function () {
+      return (this.content.user.id == this.userId || this.isAdmin );
+    },
+  },
   props: {
     content: {type: Object, required: true},
     index: {type: Number, required: true},
     userId: {type: Number, required: true},
-    isAdmin: {type: Boolean, required: true},
+    isAdmin: {type: Boolean, default: false},
   },
   methods:{
     deleteMe() {
@@ -64,6 +87,52 @@ export default {
           console.log(error);
           this.errorMessage = "Une erreur est survenue, veuillez réessayer plus tard.";
       });
+    },
+    updateMe() {
+      this.editMode = true;
+      // Mettre le curseur/focus sur le champ de saisie que l'on vient de faire apparaitre
+      setTimeout(() => {this.$nextTick(() => this.$refs["my-title"].$el.focus()) }, 500);
+    },
+    setFieldError(fieldName){
+      let field = this.$refs[fieldName].$el;
+      field.classList.remove("is-valid");
+      field.classList.add("is-invalid");
+    },
+    removeFieldError(fieldName){
+      let field = this.$refs[fieldName].$el;
+      field.classList.add("is-valid");
+      field.classList.remove("is-invalid");
+    },
+    titleCheck(){
+      if (!this.form.title){
+        this.setFieldError('my-title');
+      } else {
+        this.removeFieldError('my-title');
+        return true;
+      }
+      return false;
+    },
+    clearFieldsColors(){
+      for(let fieldName of ["my-title"]){
+        let field = this.$refs[fieldName].$el;
+        field.classList.remove("is-valid");
+        field.classList.remove("is-invalid");
+      }
+    },
+    newTitleSubmit(event){
+      event.preventDefault();
+      if (this.form.title){
+        // Demander la mise à jour au back
+        apiConnection.put("api/article/" + this.content.id, this.form)
+        .then( response => {
+          console.log(response.message);
+          // Mettre à jour le titre en mémoire
+          this.content.title = this.form.title;
+          // Puis arreter le mode édit
+          this.clearFieldsColors()
+          this.editMode = false;
+        }).catch( error => {console.log(error)});
+      }
     },
   }
 };
@@ -84,10 +153,12 @@ export default {
 
   }
 
-  .post-image{
-    width: 100%;
-    height: 300px;
-    object-fit: cover;
+  .post-body{
+    &__image{
+      width: 90%;
+      margin:auto;
+      object-fit: cover;
+    }
   }
 
 </style>

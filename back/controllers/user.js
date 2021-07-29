@@ -50,6 +50,7 @@ exports.signup = (req, res, next) => {
         lastName: req.body.lastName,
         emailEncrypted: emailEncrypt(req.body.email),
         passwordHash: hash,
+        isAdmin: false,
       })
       .then((addedUser) => {
         logger.info(`New user signed-up and saved {userId : ${addedUser.id}}`);
