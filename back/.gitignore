@@ -8,5 +8,5 @@ node_modules/
 .env
 
 #Images
-images/
+#images/
 
