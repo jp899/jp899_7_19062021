@@ -103,12 +103,14 @@ export default {
         image: null,
         title: "",
       },
-      user: {},
+      user: {
+        id: null,
+      },
       postsContent: [],
     }
   },
   // Récupération des informations de l'utilisateur à la création de la vue
-  created(){
+  beforeCreate(){
     apiConnection.get("api/user/" + localStorage.getItem('userId'))
       .then( response => {
         // Enregistrer les données sur l'utilisateur

@@ -6,14 +6,14 @@ exports.like = (req, res, next) => {
   Like.create({
     liked: req.body.liked,
     userId: req.body.userId,
-    articleId: req.params.articleId
+    articleId: req.params.articleId,
   })
   .then(() => res.status(201).json({ message: 'Like saved !' }))
   .catch(error => {
     // En cas d'erreur car le like existe déja, on essaie d'update la ligne existante
     if (error.name === "SequelizeUniqueConstraintError"){
-      Like.update({ liked: req.body.liked }, { where: { id: req.body.userId, articleId: req.params.articleId } })
-      .then(() => res.status(200).json({ message: 'Like saved !'}))
+      Like.update({ liked: req.body.liked }, { where: { userId: req.body.userId, articleId: req.params.articleId } })
+      .then(() => res.status(200).json({ message: 'Like updated !'}))
       .catch(error => res.status(400).json({ error: error.message }));
     } else {
       res.status(400).json({ error: error.message });
