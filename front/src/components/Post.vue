@@ -7,7 +7,7 @@
         <ProfileImage :imageSrc="content.user.imageUrl" class="post-header__image"/>
         <div class="post-header__username h4">{{content.user.userName}}</div>
       </div>
-      <EditMenu @deleteMe="deleteMe"/>
+      <EditMenu v-if="(content.user.id == userId || isAdmin )" @deleteMe="deleteMe"/>
     </div>
 
     <div class="post-title row">
@@ -45,17 +45,15 @@ export default {
     EditMenu,
   },
   data: () => ({
-
+ 
   }),
   props: {
     content: {type: Object, required: true},
     index: {type: Number, required: true},
+    userId: {type: Number, required: true},
+    isAdmin: {type: Boolean, required: true},
   },
   methods:{
-    logout(){
-      localStorage.clear();
-      this.$router.push("/login");
-    },
     deleteMe() {
       apiConnection.delete("api/article/" + this.content.id)
       .then( response => {

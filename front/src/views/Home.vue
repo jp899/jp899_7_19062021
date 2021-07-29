@@ -65,7 +65,13 @@
       </div>
 
       <div class="postList">
-        <Post v-for="(post, index) in postsContent" :content="post" :key="post.id" :index="index" @deleteMe="postsContent.splice(index,1)"/>
+        <Post v-for="(post, index) in postsContent" 
+          :content="post" 
+          :key="post.id" 
+          :index="index"
+          :userId="user.id"
+          :isAdmin="user.isAdmin"
+          @deleteMe="postsContent.splice(index,1)"/>
       </div>
 
     </main>
@@ -160,7 +166,7 @@ export default {
     
         apiConnection.post("api/article/", formData, true)
         .then( response => {
-          console.log(response);
+          console.log(response.message);
           // ajouter un nouveau post au mur 
           const newPost = {
             ...response.article,

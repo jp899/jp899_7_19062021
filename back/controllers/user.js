@@ -115,7 +115,8 @@ exports.getOne = (req, res, next) => {
         firstName: user.firstName,
         lastName: user.lastName,
         email: emailDecrypt(user.emailEncrypted),
-        imageUrl: user.imageUrl
+        imageUrl: user.imageUrl,
+        isAdmin: user.isAdmin
       }
       res.status(200).json(userLight);
     }
@@ -127,7 +128,6 @@ exports.getOne = (req, res, next) => {
 exports.modify = (req, res, next) => {
 
   const reqUser = req.file ? JSON.parse(req.body.user) : req.body;
-  console.log(reqUser);
 
   if(! emailRegex.test(reqUser.email)){
     return res.status(400).json({ error: "Format de l'email incorrect !" });

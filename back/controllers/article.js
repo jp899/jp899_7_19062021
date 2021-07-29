@@ -15,10 +15,6 @@ exports.create = (req, res, next) => {
   if(!req.file){
     res.status(400).json({ error: 'File is required' });
   } else{
-    console.log(req.body);
-    console.log("fef");
-    console.log(req.body.userId);
-
     Article.create({
       title: req.body.title,
       userId: req.body.userId,
