@@ -6,6 +6,7 @@
       <div class="d-flex align-items-center">
         <ProfileImage :imageSrc="content.user.imageUrl" class="post-header__image"/>
         <div class="post-header__username h4">{{content.user.userName}}</div>
+        <div class="post-header__creationDate h4">{{toDisplayDate}}</div>
       </div>
       <EditMenu v-if="(hasEditRights)" @deleteMe="deleteMe" @updateMe="updateMe"/>
     </div>
@@ -121,11 +122,16 @@ export default {
       hasRatedDown: false,
       commentsContent: this.content.Comments,
       currentUser: JSON.parse(localStorage.getItem('user')),
+      creationDate: new Date(this.content.createdAt),
+      dateOptions: {  year: 'numeric', month: 'short', day: 'numeric', hour:'numeric', minute: 'numeric' }
     }
   },
   computed: {
     hasEditRights: function () {
       return (this.content.user.id == this.currentUser.id || this.currentUser.isAdmin );
+    },
+    toDisplayDate:  function () {
+      return "Le " + this.creationDate.toLocaleDateString('fr-FR', this.dateOptions);
     },
   },
   props: {
@@ -291,6 +297,10 @@ export default {
 
     &__username{
       margin-left: 10px;
+    }
+
+    &__creationDate{
+      margin-left: 20px;
     }
 
   }
