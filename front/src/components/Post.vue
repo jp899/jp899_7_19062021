@@ -46,9 +46,47 @@
       <div class="post__dislikes col">{{content.dislikesCount}}</div>
     </div>
 
-    <div class="post-comments row">
+    <div class="post-newComment row">
+  
+      <b-form-group>
 
+        <div class="d-flex">  
+          <div class="post-newComment__imageContainer">
+            <ProfileImage :imageSrc="currentUser.imageUrl"/>
+          </div>
+          
+          <b-form-input
+            class="post-newComment__input"
+            ref="my-comment"
+            v-model="newCommentForm.content" 
+            placeholder="Donnez votre avis!" 
+            maxlength="50"
+            type="text"
+            @input="commentCheck()"
+          ></b-form-input>
+        
+          <b-button
+            class="post-newComment__button"
+            variant="outline-primary"
+            @click="commentArticle"
+            type="button"
+            aria-label="Commenter"
+          >
+            <b-icon-plus-circle class="file-icon"></b-icon-plus-circle>
+          </b-button>
+        </div>
+
+      </b-form-group>      
+ 
     </div>
+
+    <div class="post-comments row">
+        <Comment v-for="(comment, index) in commentsContent" 
+          :content="comment" 
+          :key="comment.id" 
+          :index="index"
+          @deleteMe="commentsContent.splice(index,1)"/>
+      </div>
 
   </div>
 
@@ -58,6 +96,7 @@
 
 import apiConnection from '../services/APIConnection.js'
 import ProfileImage from '@/components/ProfileImage.vue'
+import Comment from '@/components/Comment.vue'
 import EditMenu from '@/components/EditMenu.vue'
 
 
@@ -65,6 +104,7 @@ export default {
   name: "Post",
   components: {
     ProfileImage,
+    Comment,
     EditMenu,
   },
   data() {
@@ -72,15 +112,20 @@ export default {
       form: {
         title: this.content.title,
       },
+      newCommentForm: {
+        content: "",
+      },
       editMode: false,
       hasNotRated: false,
       hasRatedUp: false,
       hasRatedDown: false,
+      commentsContent: this.content.Comments,
+      currentUser: JSON.parse(localStorage.getItem('user')),
     }
   },
   computed: {
     hasEditRights: function () {
-      return (this.content.user.id == JSON.parse(localStorage.getItem('user')).id || JSON.parse(localStorage.getItem('user')).isAdmin );
+      return (this.content.user.id == this.currentUser.id || this.currentUser.isAdmin );
     },
   },
   props: {
@@ -105,7 +150,7 @@ export default {
     rateIt(newLiked) {
       const body = {
         liked: newLiked,
-        userId: JSON.parse(localStorage.getItem('user')).id,
+        userId: this.currentUser.id,
       };
       apiConnection.post("api/article/" + this.content.id +"/like", body)
       .then( response => {
@@ -182,12 +227,19 @@ export default {
       }
       return false;
     },
-    clearFieldsColors(){
-      for(let fieldName of ["my-title"]){
-        let field = this.$refs[fieldName].$el;
-        field.classList.remove("is-valid");
-        field.classList.remove("is-invalid");
+    commentCheck(){
+      if (!this.newCommentForm.content){
+        this.setFieldError('my-comment');
+      } else {
+        this.removeFieldError('my-comment');
+        return true;
       }
+      return false;
+    },
+    clearFieldsColors(fieldName){
+      let field = this.$refs[fieldName].$el;
+      field.classList.remove("is-valid");
+      field.classList.remove("is-invalid");
     },
     newTitleSubmit(event){
       event.preventDefault();
@@ -199,8 +251,28 @@ export default {
           // Mettre à jour le titre en mémoire
           this.content.title = this.form.title;
           // Puis arreter le mode édit
-          this.clearFieldsColors()
+          this.clearFieldsColors("my-title")
           this.editMode = false;
+        }).catch( error => {console.log(error)});
+      }
+    },
+    commentArticle(){
+      // Post autorisé uniquement si une image a été chargée et un titre renseigné
+      if(this.commentCheck()){
+        const body = {comment: this.newCommentForm, userId: this.currentUser.id};
+        apiConnection.post("api/article/" + this.content.id + "/comment/", body)
+        .then( response => {
+          console.log(response.message);
+          // ajouter un nouveau post au mur 
+          const newComment = {
+            ...response.comment,
+            user: this.currentUser,
+          } 
+          this.commentsContent.unshift(newComment);
+
+          // Vider le formulaire et les données d'image
+          this.newCommentForm.content = "";
+          this.clearFieldsColors("my-comment");
         }).catch( error => {console.log(error)});
       }
     },
@@ -229,6 +301,15 @@ export default {
       margin:auto;
       object-fit: cover;
     }
+  }
+
+  .post-newComment{
+
+    &__imageContainer{
+       width: 40px;
+      height: 40px;
+    }
+
   }
 
 </style>

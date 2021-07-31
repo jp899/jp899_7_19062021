@@ -12,7 +12,6 @@
               <ProfileImage :imageSrc="user.imageUrl"/>
             </div>
             
-
             <b-form-input
               id="input-title"
               v-model="newPostForm.title" 
@@ -21,9 +20,7 @@
               type="text"
               @input="titleCheck()"
             ></b-form-input>
-            <b-form-invalid-feedback id="input-3-feedback"></b-form-invalid-feedback>
           
-            
           </div>
 
           <b-img class="post-img" v-if="tempImage" :src="tempImage" fluid alt="Image à partager"></b-img>
@@ -57,9 +54,7 @@
               <span>Partager</span>
             </b-button>
 
-
           </div>
-
 
         </b-form-group>      
       </div>

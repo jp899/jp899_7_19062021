@@ -9,7 +9,7 @@ exports.create = (req, res, next) => {
   })
   .then((comment) => res.status(201).json({ 
     message: 'Comment saved !',
-    commentId: comment.id
+    comment: comment,
   }))
   .catch(error => res.status(400).json({ error: error.message }));
 };
