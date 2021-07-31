@@ -212,7 +212,7 @@ export default {
     updateMe() {
       this.editMode = true;
       // Mettre le curseur/focus sur le champ de saisie que l'on vient de faire apparaitre
-      setTimeout(() => {this.$nextTick(() => this.$refs["my-title"].$el.focus()) }, 500);
+      setTimeout(() => {this.$nextTick(() => this.$refs["my-title"].$el.focus()) }, 250);
     },
     setFieldError(fieldName){
       let field = this.$refs[fieldName].$el;
