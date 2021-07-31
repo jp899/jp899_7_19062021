@@ -120,20 +120,15 @@ export default {
       firstnameRegex: /^[a-zA-Z-]{2,}[a-zA-Z- ]*$/,
       // LASTNAME : au moins 2 car + espaces et tirets acceptés
       lastnameRegex: /^[a-zA-Z-]{2,}[a-zA-Z- ]*$/,
-      user: {},
+      user: JSON.parse(localStorage.getItem('user')),
     }
   },
   // Récupération des informations de l'utilisateur à la création de la vue
   created() {
-    apiConnection.get("api/user/" + localStorage.getItem('userId'))
-      .then( response => {
-        // Enregistrer les données sur l'utilisateur
-        this.user= response;
-        // Préremplir les champs de saisie avec les informations connues
-        this.form.lastname = this.user.lastName;
-        this.form.firstname = this.user.firstName;
-        this.form.email = this.user.email;
-      }).catch( error => {console.log(error)});
+    // Préremplir les champs de saisie avec les informations connues
+    this.form.lastname = this.user.lastName;
+    this.form.firstname = this.user.firstName;
+    this.form.email = this.user.email;
   },
   methods: {
     clickInput () {
@@ -145,11 +140,12 @@ export default {
       formData.append("image", image);
       formData.append("user", JSON.stringify(this.user));
   
-      apiConnection.put("api/user/" + localStorage.getItem('userId'), formData, true)
+      apiConnection.put("api/user/" + this.user.id, formData, true)
       .then( response => {
         console.log(response.message);
         // récupérer l'url de la nouvelle image et recharger le composant
         this.user.imageUrl = response.imageUrl;
+        localStorage.setItem('user', JSON.stringify(this.user));
         this.$forceUpdate();
       }).catch( error => {console.log(error)});
     },
@@ -209,23 +205,25 @@ export default {
     },
     onSubmit(event) {
       event.preventDefault();
-      if ( this.firstnameCheck() 
-      && this.lastnameCheck()
-      && this.emailCheck()){
+      // contrôle du format en entrée et qu'une donnée a bien été modifiée par l'utilisateur
+      if ( ( this.user.firstName !== this.form.firstname 
+            || this.user.lastName !== this.form.lastname
+            || this.user.email !== this.form.email ) 
+        && this.firstnameCheck() && this.lastnameCheck() && this.emailCheck()){
         const updatedUser = {
-          userName: this.form.username,
           firstName:this.form.firstname,
           lastName:this.form.lastname,
           email: this.form.email,
         }
         // Envoyer le nouvel user à l'API
-        apiConnection.put("api/user/" + localStorage.getItem('userId'), updatedUser)
+        apiConnection.put("api/user/" + this.user.id, updatedUser)
         .then( response => {
           console.log(response.message);
           // mise à jour des données utilisateur coté front
           this.user.firstName = updatedUser.firstName;
           this.user.lastName = updatedUser.lastName;
           this.user.email = updatedUser.email;
+          localStorage.setItem('user', JSON.stringify(this.user));
           this.clearFieldsColors();
         }).catch( error => {
             console.log(error);
@@ -237,7 +235,7 @@ export default {
       this.$refs['my-modal'].show();
     },
     deleteUser(){
-      apiConnection.delete("api/user/" + localStorage.getItem('userId'))
+      apiConnection.delete("api/user/" + this.user.id)
       .then( response => {
         console.log(response.message);
         // RAZ du localStorage

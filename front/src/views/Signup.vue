@@ -154,7 +154,7 @@ export default {
           .then( userData => {
             // SI login OK enregistrement infos de connection en local storage
             localStorage.setItem('userToken', userData.token);
-            localStorage.setItem('userId', userData.userId);
+            localStorage.setItem('user', JSON.stringify(userData.user));
             // Puis débranchement vers vue acceuil
             this.$router.push({ name: 'Home' })
           }).catch(error => {

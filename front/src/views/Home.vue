@@ -69,8 +69,6 @@
           :content="post" 
           :key="post.id" 
           :index="index"
-          :userId="user.id"
-          :isAdmin="user.isAdmin"
           @deleteMe="postsContent.splice(index,1)"/>
       </div>
 
@@ -103,20 +101,11 @@ export default {
         image: null,
         title: "",
       },
-      user: {
-        id: null,
-      },
+      user: JSON.parse(localStorage.getItem('user')),
       postsContent: [],
     }
   },
   // Récupération des informations de l'utilisateur à la création de la vue
-  beforeCreate(){
-    apiConnection.get("api/user/" + localStorage.getItem('userId'))
-      .then( response => {
-        // Enregistrer les données sur l'utilisateur
-        this.user = response;
-      }).catch( error => {console.log(error)});
-  },
   beforeMount(){
     apiConnection.get("api/article/")
       .then( response => {

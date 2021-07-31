@@ -79,24 +79,13 @@ export default {
     }
   },
   computed: {
-    // hasNotRated: function () {
-    //   return (this.content.Likes.length === 0 || this.content.Likes[0].liked === 0 );
-    // },
-    // hasRatedUp: function () {
-    //   return (this.content.Likes.length !== 0 && this.content.Likes[0].liked === 1 );
-    // },
-    // hasRatedDown: function () {
-    //   return (this.content.Likes.length !== 0 && this.content.Likes[0].liked === -1 );
-    // },
     hasEditRights: function () {
-      return (this.content.user.id == this.userId || this.isAdmin );
+      return (this.content.user.id == JSON.parse(localStorage.getItem('user')).id || JSON.parse(localStorage.getItem('user')).isAdmin );
     },
   },
   props: {
     content: {type: Object, required: true},
     index: {type: Number, required: true},
-    userId: {type: Number, required: true},
-    isAdmin: {type: Boolean, default: false},
   },
   created(){
     this.setHasNotRated();
@@ -116,7 +105,7 @@ export default {
     rateIt(newLiked) {
       const body = {
         liked: newLiked,
-        userId: this.userId,
+        userId: JSON.parse(localStorage.getItem('user')).id,
       };
       apiConnection.post("api/article/" + this.content.id +"/like", body)
       .then( response => {

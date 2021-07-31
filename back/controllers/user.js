@@ -87,7 +87,15 @@ exports.signup = (req, res, next) => {
             return res.status(401).json({ error: 'Incorrect password !' });
           }
           res.status(200).json({
-            userId: user.id,
+            user : {
+              id: user.id,
+              userName: user.userName,
+              firstName: user.firstName,
+              lastName: user.lastName,
+              email: emailDecrypt(user.emailEncrypted),
+              imageUrl: user.imageUrl,
+              isAdmin: user.isAdmin
+            },
             token: jwt.sign(
               // Données a encoder dans le token
               {userId: user.id},
