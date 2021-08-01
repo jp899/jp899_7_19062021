@@ -1,6 +1,6 @@
 <template>
 
-  <div class="comment container border mb-4 shadow">
+  <div class="comment container border mb-4 shadow bg-white">
 
     <div class="comment-body d-flex align-items-center justify-content-between my-2">
       <div class="d-flex align-items-center">

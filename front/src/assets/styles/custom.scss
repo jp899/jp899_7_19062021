@@ -1,17 +1,30 @@
 // Définition des couleurs utilisées par le theme : 
 $my-deep-blue:#091F43;
 $my-coral:#D1515A;
-$my-grey:#C3C3C3;
+$my-grey:#AFAFAF;
+$my-logo-color-dark:#FD2D01;
+$my-logo-color-light:#FFD7D7;
 
+$my-light-blue:lighten($my-deep-blue,20%);
+
+$my-light-grey:lighten($my-grey,20%);
+$my-dark-grey:darken($my-grey,20%);
+
+$my-logo-color-medium:lighten($my-logo-color-dark,10%);
 
 // Surcharge des variables bootstrap
 $primary: $my-deep-blue;
-$secondary: $my-grey;
-$tertiary: $my-coral;
+$secondary: $my-light-grey;
+$tertiary: $my-logo-color-medium;
 
 // ajout d'un variant à bootstrap
 $theme-colors: (
-  "tertiary": $tertiary
+  "tertiary": $tertiary,
+  "primary-light": $my-light-blue,
+  "my-dark-grey": $my-dark-grey,
+  "my-logo-color-dark": $my-logo-color-dark,
+  "my-logo-color-medium": $my-logo-color-medium,
+  "my-logo-color-light": $my-logo-color-light,
 );
 
 // Import des scss de bootstrap et bootstrap vue

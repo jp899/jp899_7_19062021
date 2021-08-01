@@ -16,20 +16,21 @@
     </b-modal>
 
     <main class="container">
-      <h2 align="center">{{user.userName}}</h2>
-      <div class="imageContainer">
+      <h1 align="center" class="mt-3">{{user.userName}}</h1>
+      <div class="imageContainer border-tertiary">
         <ProfileImage :imageSrc="user.imageUrl"/>
       </div>
 
-      <form>
+      <form class="mt-3">
         <b-button
-          variant="outline-secondary"
+          class="btn-sm shadow-sm"
+          variant="outline-my-dark-grey"
           @click="clickInput"
           type="button"
           aria-label="Modifier ma photo de profil"
         >
-          <span >Modifier ma photo</span>
-          <b-icon-image class="file-icon"></b-icon-image>
+          <span class="mr-2">Modifier ma photo</span>
+          <b-icon-image class="m-0"></b-icon-image>
         </b-button>
 
         <input
@@ -40,55 +41,65 @@
         />
       </form>      
 
-      <b-form @submit="onSubmit">
 
-        <b-form-group id="input-group-1" label="Prénom:" label-for="input-1">
-          <b-form-input
-            id="input-1"
-            v-model="form.firstname"
-            type="text"
-            placeholder="Prénom"
-            maxlength="30"
-            @input="firstnameCheck()"
-            
-          ></b-form-input>
-          <b-form-invalid-feedback id="input-1-feedback"></b-form-invalid-feedback>
-        </b-form-group>
+      <div class="row px-3"><div class="col col-md-8 offset-md-2 col-xl-4 offset-xl-4 userdata-form border-tertiary mt-3 shadow">
+        <b-form @submit="onSubmit" >
 
-        <b-form-group id="input-group-2" label="Nom:" label-for="input-2">
-          <b-form-input
-            id="input-2"
-            v-model="form.lastname"
-            type="text"
-            placeholder="Nom"
-            maxlength="30"
-            @input="lastnameCheck()"
-            
-          ></b-form-input>
-          <b-form-invalid-feedback id="input-2-feedback"></b-form-invalid-feedback>
-        </b-form-group>
+          <b-form-group id="input-group-1" class="text-left">
+            <label for="input-1" >Prénom:</label>
+            <b-form-input
+           
+              id="input-1"
+              v-model="form.firstname"
+              type="text"
+              placeholder="Prénom"
+              maxlength="30"
+              @input="firstnameCheck()"
+              
+            ></b-form-input>
+            <b-form-invalid-feedback id="input-1-feedback"></b-form-invalid-feedback>
+          </b-form-group>
 
-        <b-form-group id="input-group-3" label="Adresse email:" label-for="input-3">
-          <b-form-input
-            id="input-3"
-            v-model="form.email"
-            type="text"
-            placeholder="Email"
-            maxlength="50"
-            @input="emailCheck()"
-            
-          ></b-form-input>
-          <b-form-invalid-feedback id="input-3-feedback"></b-form-invalid-feedback>
-        </b-form-group>
+          <b-form-group id="input-group-2" class="text-left">
+            <label for="input-2" >Nom:</label>
+            <b-form-input
+              id="input-2"
           
-        <p class="text-danger my-2">{{ errorMessage }}</p>
-        
-        <b-button type="submit" variant="primary" class="my-3">Enregistrer les modifications</b-button>
-      </b-form>
+              v-model="form.lastname"
+              type="text"
+              placeholder="Nom"
+              maxlength="30"
+              @input="lastnameCheck()"
+              
+            ></b-form-input>
+            <b-form-invalid-feedback id="input-2-feedback"></b-form-invalid-feedback>
+          </b-form-group>
 
-      <b-button variant="outline-danger" @click="promptConfirmModal">
-        Supprimer le compte
-      </b-button>
+          <b-form-group id="input-group-3" class="text-left">
+            <label for="input-3">Adresse email:</label>
+            <b-form-input
+              id="input-3"
+         
+              v-model="form.email"
+              type="text"
+              placeholder="Email"
+              maxlength="50"
+              @input="emailCheck()"
+              
+            ></b-form-input>
+            <b-form-invalid-feedback id="input-3-feedback"></b-form-invalid-feedback>
+          </b-form-group>
+            
+          <p class="text-danger my-2">{{ errorMessage }}</p>
+          
+          <b-button type="submit" variant="secondary" class="my-3">Enregistrer les modifications</b-button>
+        </b-form>
+
+        <b-button variant="outline-my-dark-grey btn-sm" @click="promptConfirmModal">
+          Supprimer le compte
+        </b-button>
+
+      </div></div>
 
     </main>
   </div>
@@ -257,12 +268,21 @@ export default {
   .imageContainer{
     width: 150px;
     margin: auto;
+    border: 2px solid;
+    border-radius:50%;
+    padding:3px;
   }
 
   .file-icon{
   width:24px;
   height:24px;
   margin-left:5px;
+  }
+
+  .userdata-form{
+    border: 2px solid;
+    border-radius:5%;
+    padding: 15px;
   }
 
 </style>

@@ -2,10 +2,10 @@
   <div class="signup">
     <Header/>
     <main class="container">
-      <h2 align="center">Rejoignez vos collègues !</h2>
-      <b-form @submit="onSubmit">
+      <h1 align="center" class="h2 mt-3">Rejoignez-nous !</h1>
+      <b-form @submit="onSubmit" class="mt-3">
 
-        <b-form-group id="input-group-1" label="Pseudo:" label-for="input-1">
+        <b-form-group id="input-group-1" label="Pseudo:" label-for="input-1" class="text-left">
           <b-form-input
             id="input-1"
             v-model="form.username"
@@ -17,7 +17,7 @@
           <b-form-invalid-feedback id="input-1-feedback"></b-form-invalid-feedback>
         </b-form-group>
 
-        <b-form-group id="input-group-2" label="Adresse email:" label-for="input-2">
+        <b-form-group id="input-group-2" label="Adresse email:" label-for="input-2" class="text-left">
           <b-form-input
             id="input-2"
             v-model="form.email"
@@ -30,7 +30,7 @@
           <b-form-invalid-feedback id="input-2-feedback"></b-form-invalid-feedback>
         </b-form-group>
 
-        <b-form-group id="input-group-3" label="Mot de passe:" label-for="input-3">
+        <b-form-group id="input-group-3" label="Mot de passe:" label-for="input-3" class="text-left">
           <b-form-input
             id="input-3"
             v-model="form.password"
@@ -51,7 +51,7 @@
 
       <p>
         Déja inscrit ?
-        <router-link to="/login">Se connecter</router-link>
+        <router-link to="/login" class="text-tertiary">Se connecter</router-link>
       </p>
 
     </main>

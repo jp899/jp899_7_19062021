@@ -2,10 +2,10 @@
   <div class="login">
     <Header/>
     <main class="container">
-      <h2 align="center">Connectez-vous !</h2>
-      <b-form @submit="onSubmit">
+      <h1 align="center" class="h2 mt-3">Connectez-vous !</h1>
+      <b-form @submit="onSubmit" class="mt-3">
 
-        <b-form-group id="input-group-1" label="Pseudo:" label-for="input-1">
+        <b-form-group id="input-group-1" label="Pseudo:" label-for="input-1" class="text-left">
           <b-form-input
             id="input-1"
             v-model="form.username"
@@ -16,7 +16,7 @@
           <b-form-invalid-feedback id="input-1-feedback"></b-form-invalid-feedback>
         </b-form-group>
 
-        <b-form-group id="input-group-2" label="Mot de passe:" label-for="input-2">
+        <b-form-group id="input-group-2" label="Mot de passe:" label-for="input-2" class="text-left">
           <b-form-input
             id="input-2"
             v-model="form.password"
@@ -36,7 +36,7 @@
 
       <p>
         Première visite ?
-        <router-link to="/signup">Inscrivez-vous</router-link>
+        <router-link to="/signup" class="text-my-dark-grey">Inscrivez-vous</router-link>
       </p>
 
     </main>
