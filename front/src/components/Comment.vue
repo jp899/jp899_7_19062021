@@ -5,6 +5,7 @@
     <div class="comment-body d-flex align-items-center justify-content-between my-2">
       <div class="d-flex align-items-center">
         <ProfileImage :imageSrc="content.user.imageUrl" class="comment-body__image"/>
+        <div class="comment-body__creationDate h4">{{toDisplayDate}}</div>
         <div class="comment-body__content h5">
           <span v-if="(!editMode)">{{content.content}}</span>
           <b-form @submit="newTextSubmit" v-if="(editMode)" >
@@ -47,11 +48,16 @@ export default {
       },
       editMode: false,
       currentUser: JSON.parse(localStorage.getItem('user')),
+      creationDate: new Date(this.content.createdAt),
+      dateOptions: {  year: 'numeric', month: 'short', day: 'numeric', hour:'numeric', minute: 'numeric' }
     }
   },
   computed: {
     hasEditRights: function () {
       return (this.content.user.id == this.currentUser.id || this.currentUser.isAdmin );
+    },
+    toDisplayDate:  function () {
+      return "Le " + this.creationDate.toLocaleDateString('fr-FR', this.dateOptions);
     },
   },
   props: {
