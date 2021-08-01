@@ -1,0 +1,28 @@
+// Définition des couleurs utilisées par le theme : 
+$my-deep-blue:#091F43;
+$my-coral:#D1515A;
+$my-grey:#C3C3C3;
+
+
+// Surcharge des variables bootstrap
+$primary: $my-deep-blue;
+$secondary: $my-grey;
+$tertiary: $my-coral;
+
+// ajout d'un variant à bootstrap
+$theme-colors: (
+  "tertiary": $tertiary
+);
+
+// Import des scss de bootstrap et bootstrap vue
+@import 'node_modules/bootstrap/scss/bootstrap.scss';
+@import 'node_modules/bootstrap-vue/src/index.scss';
+
+// Define any custom or additional CSS/SCSS here,
+// or via an @import
+
+// corrige le décalage de la page du à l'apparition de la barre de scroll vertical 
+html { margin-left: calc(100vw - 100%); }
+
+@import './fonts.scss'
+// @import './mixins.scss'

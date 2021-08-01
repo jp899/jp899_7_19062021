@@ -1,10 +1,12 @@
 <template>
 
-  <div class="post container border mb-4 shadow">
+  <div class="post container border mb-4 shadow bg-secondary">
 
     <div class="post-header d-flex align-items-center justify-content-between my-2">
       <div class="d-flex align-items-center">
-        <ProfileImage :imageSrc="content.user.imageUrl" class="post-header__image"/>
+        <div class="post-header__imageContainer">
+          <ProfileImage :imageSrc="content.user.imageUrl" class="post-header__image"/>
+        </div>
         <div class="post-header__username h4">{{content.user.userName}}</div>
         <div class="post-header__creationDate h4">{{toDisplayDate}}</div>
       </div>
@@ -257,7 +259,7 @@ export default {
           // Mettre à jour le titre en mémoire
           this.content.title = this.form.title;
           // Puis arreter le mode édit
-          this.clearFieldsColors("my-title")
+          this.clearFieldsColors("my-title");
           this.editMode = false;
         }).catch( error => {console.log(error)});
       }
@@ -290,7 +292,7 @@ export default {
 <style scoped lang="scss">
   .post-header{
 
-    &__image{
+    &__imageContainer{
       width: 60px;
       height: 60px;
     }

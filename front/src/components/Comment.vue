@@ -4,7 +4,9 @@
 
     <div class="comment-body d-flex align-items-center justify-content-between my-2">
       <div class="d-flex align-items-center">
-        <ProfileImage :imageSrc="content.user.imageUrl" class="comment-body__image"/>
+        <div class="comment-body__imageContainer">
+          <ProfileImage :imageSrc="content.user.imageUrl" class="comment-body__image"/>
+        </div>
         <div class="comment-body__creationDate h4">{{toDisplayDate}}</div>
         <div class="comment-body__content h5">
           <span v-if="(!editMode)">{{content.content}}</span>
@@ -117,7 +119,7 @@ export default {
           // Mettre à jour le titre en mémoire
           this.content.content = this.form.content;
           // Puis arreter le mode édit
-          this.clearFieldsColors()
+          this.clearFieldsColors();
           this.editMode = false;
         }).catch( error => {console.log(error)});
       }
@@ -131,7 +133,7 @@ export default {
  
    .comment-body{
 
-    &__image{
+    &__imageContainer{
        width: 35px;
       height: 35px;
     }

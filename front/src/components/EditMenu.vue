@@ -1,6 +1,6 @@
 <template>
   <div class="menu-container">
-    <b-dropdown id="dropdown-1" right text="..." class="m-2" variant="light" no-caret>
+    <b-dropdown id="dropdown-1" right text="..." class="m-2" variant="outline-tertiary" no-caret>
       <b-dropdown-item-button @click="onUpdateClick">Modifier le texte</b-dropdown-item-button>
       <b-dropdown-item-button @click="onDeleteClick">Supprimer</b-dropdown-item-button>
     </b-dropdown>

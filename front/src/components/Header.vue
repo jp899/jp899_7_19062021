@@ -20,6 +20,7 @@
                   <b-dropdown-item v-show="withProfile"><router-link class="text-decoration-none" to="/profile">Mon profil</router-link></b-dropdown-item>
                   <b-dropdown-item v-show="withProfile" @click="logout">Se déconnecter</b-dropdown-item>
                 </b-nav-item-dropdown> -->
+                  <b-nav-item v-show="withProfile"><router-link class="text-decoration-none" to="/">Accueil</router-link></b-nav-item>
                   <b-nav-item v-show="withProfile"><router-link class="text-decoration-none" to="/profile">Mon profil</router-link></b-nav-item>
                   <b-nav-item v-show="withProfile" @click="logout">Se déconnecter</b-nav-item>
             </b-navbar-nav>
@@ -52,7 +53,7 @@
 <style scoped lang="scss">
   #mainLogo{
     height: 100%;
-    width: 240px;
+    width: 220px;
   }
 
   .border-2 {

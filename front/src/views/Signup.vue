@@ -1,5 +1,5 @@
 <template>
-  <div class="home">
+  <div class="signup">
     <Header/>
     <main class="container">
       <h2 align="center">Rejoignez vos collègues !</h2>

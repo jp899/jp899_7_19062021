@@ -4,7 +4,7 @@
 
     <main class="container">
 
-      <div class="post-form border my-4 shadow">
+      <section class="post-form border my-4 shadow">
         <b-form-group>
 
           <div class="d-flex">  
@@ -57,15 +57,15 @@
           </div>
 
         </b-form-group>      
-      </div>
+      </section>
 
-      <div class="postList">
+      <section class="postList">
         <Post v-for="(post, index) in postsContent" 
           :content="post" 
           :key="post.id" 
           :index="index"
           @deleteMe="postsContent.splice(index,1)"/>
-      </div>
+      </section>
 
     </main>
 
