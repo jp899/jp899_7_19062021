@@ -104,7 +104,6 @@ export default {
   beforeMount(){
     apiConnection.get("api/article/")
       .then( response => {
-        console.log(response.articlesWithLikesCount);
         this.postsContent = response.articlesWithLikesCount;
       }).catch( error => {console.log(error)});
   },
