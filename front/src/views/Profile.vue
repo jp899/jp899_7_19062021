@@ -271,7 +271,6 @@ export default {
 <style scoped lang="scss">
   .imageContainer{
     width: 150px;
-    
     border: 2px solid;
     border-radius:50%;
     padding:3px;
