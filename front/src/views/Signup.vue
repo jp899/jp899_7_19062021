@@ -2,56 +2,65 @@
   <div class="signup">
     <Header/>
     <main class="container">
-      <h1 align="center" class="h2 mt-3">Rejoignez-nous !</h1>
-      <b-form @submit="onSubmit" class="mt-3">
 
-        <b-form-group id="input-group-1" label="Pseudo:" label-for="input-1" class="text-left">
-          <b-form-input
-            id="input-1"
-            v-model="form.username"
-            placeholder="Pseudo"
-            maxlength="15"
-            @input="usernameCheck()"
-            
-          ></b-form-input>
-          <b-form-invalid-feedback id="input-1-feedback"></b-form-invalid-feedback>
-        </b-form-group>
+      <img class="single-logo mt-4" src='../assets/logo-alone-blue-light.svg' alt="logo simple de groupomania"/>
 
-        <b-form-group id="input-group-2" label="Adresse email:" label-for="input-2" class="text-left">
-          <b-form-input
-            id="input-2"
-            v-model="form.email"
-            type="text"
-            placeholder="Email"
-            maxlength="50"
-            @input="emailCheck()"
-            
-          ></b-form-input>
-          <b-form-invalid-feedback id="input-2-feedback"></b-form-invalid-feedback>
-        </b-form-group>
+      <h1 align="center" class="h2">Rejoignez-nous !</h1>
 
-        <b-form-group id="input-group-3" label="Mot de passe:" label-for="input-3" class="text-left">
-          <b-form-input
-            id="input-3"
-            v-model="form.password"
-            type="password"
-            placeholder="Mot de passe"
-            maxlength="15"
-            @input="passwordCheck()"
-            
-          ></b-form-input>
-          <b-form-invalid-feedback id="input-3-feedback"></b-form-invalid-feedback>
-          
-        </b-form-group>
+      <div class="row px-3">
+        <div class="col col-md-8 offset-md-2 col-xl-4 offset-xl-4 userdata-form border-tertiary mt-3 mb-2 shadow bg-my-light-grey">
+          <b-form @submit="onSubmit" class="mt-3">
 
-        <p class="text-danger my-2">{{ errorMessage }}</p>
+            <b-form-group id="input-group-1" label="Pseudo:" label-for="input-1" class="text-left">
+              <b-form-input
+                id="input-1"
+                v-model="form.username"
+                placeholder="Pseudo"
+                maxlength="15"
+                @input="usernameCheck()"
+                
+              ></b-form-input>
+              <b-form-invalid-feedback id="input-1-feedback"></b-form-invalid-feedback>
+            </b-form-group>
 
-        <b-button type="submit" variant="primary" class="my-3">Inscription</b-button>
-      </b-form>
+            <b-form-group id="input-group-2" label="Adresse email:" label-for="input-2" class="text-left">
+              <b-form-input
+                id="input-2"
+                v-model="form.email"
+                type="text"
+                placeholder="Email"
+                maxlength="50"
+                @input="emailCheck()"
+                
+              ></b-form-input>
+              <b-form-invalid-feedback id="input-2-feedback"></b-form-invalid-feedback>
+            </b-form-group>
 
-      <p>
+            <b-form-group id="input-group-3" label="Mot de passe:" label-for="input-3" class="text-left">
+              <b-form-input
+                id="input-3"
+                v-model="form.password"
+                type="password"
+                placeholder="Mot de passe"
+                maxlength="15"
+                @input="passwordCheck()"
+                
+              ></b-form-input>
+              <b-form-invalid-feedback id="input-3-feedback"></b-form-invalid-feedback>
+              
+            </b-form-group>
+
+            <p class="text-danger my-2">{{ errorMessage }}</p>
+
+            <b-button type="submit" variant="my-logo-color-darker" class="my-3">Inscription</b-button>
+          </b-form>
+
+        </div>
+      </div>
+
+      <p class="mt-3 mb-5">
         Déja inscrit ?
-        <router-link to="/login" class="text-tertiary">Se connecter</router-link>
+        <router-link to="/login" class="text-my-logo-color-darker">Se connecter</router-link>
       </p>
 
     </main>
@@ -183,3 +192,19 @@ export default {
   }
 }
 </script>
+
+<!-- Add "scoped" attribute to limit CSS to this component only -->
+<style scoped lang="scss">
+
+  .single-logo{
+    width: 80px;
+    margin: auto;
+  }
+
+  .userdata-form{
+    border: 2px solid;
+    border-radius:5%;
+    padding: 15px;
+  }
+
+</style>

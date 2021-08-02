@@ -18,7 +18,7 @@
 
     <main class="container mt-4">
       <div class="profilePhoto">
-        <div class="imageContainer border-tertiary shadow-sm">
+        <div class="profilePhoto__imageContainer border-tertiary shadow-sm">
           <ProfileImage :imageSrc="user.imageUrl"/>
         </div>
           <b-button
@@ -226,7 +226,7 @@ export default {
       if ( ( this.user.firstName !== this.form.firstname 
             || this.user.lastName !== this.form.lastname
             || this.user.email !== this.form.email ) 
-        && this.emailCheck()){
+        && this.lastnameCheck() && this.firstnameCheck() && this.emailCheck()){
         const updatedUser = {
           firstName:this.form.firstname,
           lastName:this.form.lastname,
@@ -278,19 +278,6 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
 
-  .imageContainer{
-    width: 150px;
-    border: 2px solid;
-    border-radius:50%;
-    padding:3px;
-  }
-
-  .file-icon{
-  width:24px;
-  height:24px;
-  margin-left:5px;
-  }
-
   .userdata-form{
     border: 2px solid;
     border-radius:5%;
@@ -301,6 +288,13 @@ export default {
     width: 150px;
     margin: auto;
     position:relative;
+
+    &__imageContainer{
+    width: 150px;
+    border: 2px solid;
+    border-radius:50%;
+    padding:3px;
+    }
     
     &__button{
       position:absolute;
@@ -312,14 +306,14 @@ export default {
       border-radius: 50%;
       text-align: center;
       font-size: 12px;
-      line-height: 1.42857;
 
       // Agrandir le bouton pour les écran tactiles
       @include media-breakpoint-down(md) {
         width: 45px;
         height: 45px;
-        font-size: 16px;
+        font-size: 18px;
         right:-40px;
+        padding: 3px 0px 0px 1px;
       }
 
       &:focus{
