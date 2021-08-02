@@ -59,6 +59,8 @@
         </b-form-group>      
       </section>
 
+      <h1>Dernières publications</h1>
+
       <section class="postList">
         <Post v-for="(post, index) in postsContent" 
           :content="post" 

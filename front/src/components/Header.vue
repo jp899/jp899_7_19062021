@@ -22,7 +22,7 @@
                 </b-nav-item-dropdown> -->
                   <b-nav-item v-show="withProfile"><router-link to="/">Accueil</router-link></b-nav-item>
                   <b-nav-item v-show="withProfile"><router-link to="/profile">Mon profil</router-link></b-nav-item>
-                  <b-nav-item v-show="withProfile" @click="logout">Se déconnecter</b-nav-item>
+                  <b-nav-item v-show="withProfile" @click="logout" id="logout-link">Se déconnecter</b-nav-item>
             </b-navbar-nav>
           </b-collapse>
 
@@ -58,5 +58,14 @@
 
   .border-2 {
     border-width:2px !important;
+  }
+
+  #logout-link a{
+    color: rgba(0, 0, 0, 0.6);
+
+    &:hover, &:focus{
+      color: rgba(0, 0, 0, 0.9);
+    }
+
   }
 </style>

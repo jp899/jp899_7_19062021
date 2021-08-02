@@ -9,13 +9,13 @@
     name: "ProfileImage",
     data() {
       return {
-        defaultSrc: "images/profileImageDefault.svg"
+        defaultSrc: "images/profileImageDefaultLight.svg"
       }
     },
     props: {
       imageSrc: {
         type: String,
-        default: "images/profileImageDefault.svg"},
+        default: "images/profileImageDefaultLight.svg"},
     },
   };
 </script>

@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Written by Treer (gitlab.com/Treer) -->
+
+<svg
+   version="1.1"
+   width="600"
+   height="600"
+   fill="white"
+   id="svg18"
+   sodipodi:docname="profileImageDefaultLight.svg"
+   inkscape:version="1.1 (c68e22c387, 2021-05-23)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <sodipodi:namedview
+     id="namedview20"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     showgrid="false"
+     inkscape:zoom="1.455"
+     inkscape:cx="259.45017"
+     inkscape:cy="300"
+     inkscape:window-width="2560"
+     inkscape:window-height="1377"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg18" />
+  <title
+     id="title2">Abstract user icon</title>
+  <defs
+     id="defs10">
+    <clipPath
+       id="circular-border">
+      <circle
+         cx="300"
+         cy="300"
+         r="280"
+         id="circle4" />
+    </clipPath>
+    <clipPath
+       id="avoid-antialiasing-bugs">
+      <rect
+         width="100%"
+         height="498"
+         id="rect7" />
+    </clipPath>
+  </defs>
+  <ellipse
+     style="fill:#ff9494;fill-opacity:1;stroke-width:1.13894"
+     id="path882"
+     cx="300.34369"
+     cy="297.93817"
+     rx="298.28201"
+     ry="296.56357" />
+  <circle
+     cx="301.31271"
+     cy="227.25087"
+     r="115"
+     id="circle14" />
+  <circle
+     cx="300"
+     cy="550"
+     clip-path="url(#circular-border)"
+     id="circle16"
+     transform="matrix(0.91115581,0,0,0.81574907,28.433324,75.250416)"
+     r="205" />
+  <metadata
+     id="metadata1234">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:title>Abstract user icon</dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+</svg>

@@ -8,7 +8,8 @@
       centered 
       title="Supprimer le compte" 
       @ok="deleteUser" 
-      ok-variant="danger"
+      @hidden="cancelDelete"
+      ok-variant="my-logo-color-darker"
       ok-title="Supprimer"
       cancel-title="Annuler"
     >
@@ -21,25 +22,25 @@
           <ProfileImage :imageSrc="user.imageUrl"/>
         </div>
           <b-button
-            pill
             class="btn-sm shadow-sm profilePhoto__button"
             variant="outline-tertiary"
             @click="clickInput"
             type="button"
             aria-label="Modifier ma photo de profil"
+            ref="edit-image-button"
           >
             <b-icon-pencil class="m-0"></b-icon-pencil>
           </b-button>
       </div>
       <h1 align="center" class="mt-3">{{user.userName}}</h1>
 
-      <form class="mt-2">
+      <form class="mt-2 d-none">
 
         <input
           ref="fileInput"
-          class="d-none"
           type="file"
           @change="updateProfilImage"
+          aria-label="Elément technique caché"
         />
       </form>      
 
@@ -95,13 +96,13 @@
               
             <p class="text-danger my-2">{{ errorMessage }}</p>
             
-            <b-button type="submit" variant="my-logo-color-darker" class="my-3">Enregistrer les modifications</b-button>
+            <b-button type="submit" variant="my-logo-color-darker" class="my-3" ref="submit-button">Enregistrer les modifications</b-button>
           </b-form>
 
         </div>
       </div>
 
-        <b-button variant="outline-my-dark-grey btn-sm mt-4 shadow-sm" @click="promptConfirmModal">
+        <b-button variant="outline-my-dark-grey" class="btn-sm mt-4 mb-5 shadow-sm delete-button" ref="delete-button" @click="promptConfirmModal">
           Supprimer le compte
         </b-button>
 
@@ -148,6 +149,7 @@ export default {
   methods: {
     clickInput () {
       this.$refs.fileInput.click();
+      this.$refs["edit-image-button"].blur();
     },
     updateProfilImage(event) {
       const image = event.target.files[0];
@@ -240,6 +242,8 @@ export default {
           this.user.email = updatedUser.email;
           localStorage.setItem('user', JSON.stringify(this.user));
           this.clearFieldsColors();
+          // Enlever l'effet visuel de focus
+          this.$refs["submit-button"].blur();
         }).catch( error => {
             console.log(error);
             this.errorMessage = "Une erreur est survenue, veuillez réessayer plus tard.";
@@ -261,6 +265,10 @@ export default {
           console.log(error);
           this.errorMessage = "Une erreur est survenue, veuillez réessayer plus tard.";
       });
+    },
+    cancelDelete(){
+      setTimeout(() => {this.$nextTick(() => this.$refs["delete-button"].blur()) }, 250);
+      
     }
   }
 }
@@ -269,6 +277,7 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
+
   .imageContainer{
     width: 150px;
     border: 2px solid;
@@ -300,10 +309,32 @@ export default {
       width: 30px;
       height: 30px;
       padding: 6px 0px;
-      border-radius: 15px;
+      border-radius: 50%;
       text-align: center;
       font-size: 12px;
       line-height: 1.42857;
+
+      // Agrandir le bouton pour les écran tactiles
+      @include media-breakpoint-down(md) {
+        width: 45px;
+        height: 45px;
+        font-size: 16px;
+        right:-40px;
+      }
+
+      &:focus{
+          color:white;
+          background-color: $tertiary;
+      }
+
+    }
+  }
+
+  .delete-button{
+    
+    &:focus{
+      color:white;
+      background-color: $my-dark-grey;
     }
   }
 

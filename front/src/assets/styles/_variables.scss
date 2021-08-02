@@ -1,0 +1,21 @@
+// Définition des couleurs du thème perso : 
+$my-deep-blue:#091F43;
+$my-coral:#D1515A;
+$my-grey:#AFAFAF;
+$my-logo-color-dark:#FD2D01;
+$my-logo-color-light:#FFD7D7;
+
+$my-light-blue:lighten($my-deep-blue,40%);
+
+$my-light-grey:lighten($my-grey,20%);
+$my-dark-grey:darken($my-grey,23%);
+
+$my-logo-color-medium:lighten($my-logo-color-dark,10%);
+$my-logo-color-darker:darken($my-logo-color-dark,4.7%);
+
+
+// Surcharge des variables bootstrap
+$primary: $my-deep-blue;
+$secondary: $my-light-grey;
+$tertiary: $my-logo-color-medium;
+

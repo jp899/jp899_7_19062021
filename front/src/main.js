@@ -21,5 +21,9 @@ Vue.use(IconsPlugin)
 new Vue({
   router,
   store,
-  render: h => h(App)
+  render: h => h(App),
+  created(){
+    const html = document.documentElement;
+    html.setAttribute('lang', 'fr');
+  }
 }).$mount('#app')
