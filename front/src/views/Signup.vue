@@ -80,7 +80,7 @@ export default {
       // EMAIL : format standard : same regex used to check type="email" input in HTML5
       emailRegex: /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/,
       // USERNAME : au moins 3 car/chiffres
-      usernameRegex: /^[a-zA-Z0-9]{3,}$/,
+      usernameRegex: /^[a-zA-Z0-9éàèùç]{3,}$/,
       // PASSWORD : de 8 à 15 caractères avec au moins : 1 minuscule, 1 majuscule, un chiffre, un caractère spécial
       passwordRegex: /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[-+!*$@%#=_])([-+!*$@%#=_\w]{8,15})$/
     }

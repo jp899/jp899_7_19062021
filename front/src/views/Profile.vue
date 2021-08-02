@@ -132,9 +132,9 @@ export default {
       // EMAIL : format standard : same regex used to check type="email" input in HTML5
       emailRegex: /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/,
       // FIRSTNAME : au moins 2 car + espaces et tirets acceptés
-      firstnameRegex: /^[a-zA-Z-]{2,}[a-zA-Z- ]*$/,
+      firstnameRegex: /^[a-zA-Zéàèùç]{1,}[a-zA-Z- éàèùç]{1,}$/,
       // LASTNAME : au moins 2 car + espaces et tirets acceptés
-      lastnameRegex: /^[a-zA-Z-]{2,}[a-zA-Z- ]*$/,
+      lastnameRegex: /^[a-zA-Zéàèùç]{1,}[a-zA-Z- éàèùç]{1,}$/,
       user: JSON.parse(localStorage.getItem('user')),
     }
   },
@@ -200,7 +200,7 @@ export default {
       if (!this.form.lastname){
         this.removeFieldError('input-2');
       } else if (! this.lastnameRegex.test(this.form.lastname) ) {
-        this.setFieldError('input-2', "Format invalide : 3 à 15 caractères requis.");
+        this.setFieldError('input-2', "Format invalide : 2 à 30 caractères requis.");
       } else {
         this.removeFieldError('input-2');
         return true;
@@ -209,7 +209,7 @@ export default {
     },
     emailCheck() {
       if (!this.form.email){
-        this.removeFieldError('input-3');
+        this.setFieldError('input-3', "Email obligatoire");
       } else if (! this.emailRegex.test(this.form.email) ) {
         this.setFieldError('input-3', "Format invalide");
       } else {
@@ -224,7 +224,7 @@ export default {
       if ( ( this.user.firstName !== this.form.firstname 
             || this.user.lastName !== this.form.lastname
             || this.user.email !== this.form.email ) 
-        && this.firstnameCheck() && this.lastnameCheck() && this.emailCheck()){
+        && this.emailCheck()){
         const updatedUser = {
           firstName:this.form.firstname,
           lastName:this.form.lastname,
