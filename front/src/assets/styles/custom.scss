@@ -5,12 +5,13 @@ $my-grey:#AFAFAF;
 $my-logo-color-dark:#FD2D01;
 $my-logo-color-light:#FFD7D7;
 
-$my-light-blue:lighten($my-deep-blue,20%);
+$my-light-blue:lighten($my-deep-blue,40%);
 
 $my-light-grey:lighten($my-grey,20%);
 $my-dark-grey:darken($my-grey,20%);
 
 $my-logo-color-medium:lighten($my-logo-color-dark,10%);
+$my-logo-color-darker:darken($my-logo-color-dark,4.7%);
 
 // Surcharge des variables bootstrap
 $primary: $my-deep-blue;
@@ -22,7 +23,9 @@ $theme-colors: (
   "tertiary": $tertiary,
   "primary-light": $my-light-blue,
   "my-dark-grey": $my-dark-grey,
+  "my-light-grey": $my-light-grey,
   "my-logo-color-dark": $my-logo-color-dark,
+  "my-logo-color-darker": $my-logo-color-darker,
   "my-logo-color-medium": $my-logo-color-medium,
   "my-logo-color-light": $my-logo-color-light,
 );

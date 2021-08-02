@@ -15,23 +15,25 @@
       <p class="my-4">Votre compte ainsi que l'ensemble de vos posts et vos commentaires seront supprimés de manière irréversible.</p>
     </b-modal>
 
-    <main class="container">
-      <h1 align="center" class="mt-3">{{user.userName}}</h1>
-      <div class="imageContainer border-tertiary">
-        <ProfileImage :imageSrc="user.imageUrl"/>
+    <main class="container mt-4">
+      <div class="profilePhoto">
+        <div class="imageContainer border-tertiary shadow-sm">
+          <ProfileImage :imageSrc="user.imageUrl"/>
+        </div>
+          <b-button
+            pill
+            class="btn-sm shadow-sm profilePhoto__button"
+            variant="outline-tertiary"
+            @click="clickInput"
+            type="button"
+            aria-label="Modifier ma photo de profil"
+          >
+            <b-icon-pencil class="m-0"></b-icon-pencil>
+          </b-button>
       </div>
+      <h1 align="center" class="mt-3">{{user.userName}}</h1>
 
-      <form class="mt-3">
-        <b-button
-          class="btn-sm shadow-sm"
-          variant="outline-my-dark-grey"
-          @click="clickInput"
-          type="button"
-          aria-label="Modifier ma photo de profil"
-        >
-          <span class="mr-2">Modifier ma photo</span>
-          <b-icon-image class="m-0"></b-icon-image>
-        </b-button>
+      <form class="mt-2">
 
         <input
           ref="fileInput"
@@ -42,64 +44,66 @@
       </form>      
 
 
-      <div class="row px-3"><div class="col col-md-8 offset-md-2 col-xl-4 offset-xl-4 userdata-form border-tertiary mt-3 shadow">
-        <b-form @submit="onSubmit" >
+      <div class="row px-3">
+        <div class="col col-md-8 offset-md-2 col-xl-4 offset-xl-4 userdata-form border-tertiary mt-3 mb-2 shadow bg-my-light-grey">
+          <b-form @submit="onSubmit" >
 
-          <b-form-group id="input-group-1" class="text-left">
-            <label for="input-1" >Prénom:</label>
-            <b-form-input
-           
-              id="input-1"
-              v-model="form.firstname"
-              type="text"
-              placeholder="Prénom"
-              maxlength="30"
-              @input="firstnameCheck()"
-              
-            ></b-form-input>
-            <b-form-invalid-feedback id="input-1-feedback"></b-form-invalid-feedback>
-          </b-form-group>
-
-          <b-form-group id="input-group-2" class="text-left">
-            <label for="input-2" >Nom:</label>
-            <b-form-input
-              id="input-2"
-          
-              v-model="form.lastname"
-              type="text"
-              placeholder="Nom"
-              maxlength="30"
-              @input="lastnameCheck()"
-              
-            ></b-form-input>
-            <b-form-invalid-feedback id="input-2-feedback"></b-form-invalid-feedback>
-          </b-form-group>
-
-          <b-form-group id="input-group-3" class="text-left">
-            <label for="input-3">Adresse email:</label>
-            <b-form-input
-              id="input-3"
-         
-              v-model="form.email"
-              type="text"
-              placeholder="Email"
-              maxlength="50"
-              @input="emailCheck()"
-              
-            ></b-form-input>
-            <b-form-invalid-feedback id="input-3-feedback"></b-form-invalid-feedback>
-          </b-form-group>
+            <b-form-group id="input-group-1" class="text-left">
+              <label for="input-1" >Prénom:</label>
+              <b-form-input
             
-          <p class="text-danger my-2">{{ errorMessage }}</p>
-          
-          <b-button type="submit" variant="secondary" class="my-3">Enregistrer les modifications</b-button>
-        </b-form>
+                id="input-1"
+                v-model="form.firstname"
+                type="text"
+                placeholder="Prénom"
+                maxlength="30"
+                @input="firstnameCheck()"
+                
+              ></b-form-input>
+              <b-form-invalid-feedback id="input-1-feedback"></b-form-invalid-feedback>
+            </b-form-group>
 
-        <b-button variant="outline-my-dark-grey btn-sm" @click="promptConfirmModal">
+            <b-form-group id="input-group-2" class="text-left">
+              <label for="input-2" >Nom:</label>
+              <b-form-input
+                id="input-2"
+            
+                v-model="form.lastname"
+                type="text"
+                placeholder="Nom"
+                maxlength="30"
+                @input="lastnameCheck()"
+                
+              ></b-form-input>
+              <b-form-invalid-feedback id="input-2-feedback"></b-form-invalid-feedback>
+            </b-form-group>
+
+            <b-form-group id="input-group-3" class="text-left">
+              <label for="input-3">Adresse email:</label>
+              <b-form-input
+                id="input-3"
+          
+                v-model="form.email"
+                type="text"
+                placeholder="Email"
+                maxlength="50"
+                @input="emailCheck()"
+                
+              ></b-form-input>
+              <b-form-invalid-feedback id="input-3-feedback"></b-form-invalid-feedback>
+            </b-form-group>
+              
+            <p class="text-danger my-2">{{ errorMessage }}</p>
+            
+            <b-button type="submit" variant="my-logo-color-darker" class="my-3">Enregistrer les modifications</b-button>
+          </b-form>
+
+        </div>
+      </div>
+
+        <b-button variant="outline-my-dark-grey btn-sm mt-4 shadow-sm" @click="promptConfirmModal">
           Supprimer le compte
         </b-button>
-
-      </div></div>
 
     </main>
   </div>
@@ -267,7 +271,7 @@ export default {
 <style scoped lang="scss">
   .imageContainer{
     width: 150px;
-    margin: auto;
+    
     border: 2px solid;
     border-radius:50%;
     padding:3px;
@@ -283,6 +287,25 @@ export default {
     border: 2px solid;
     border-radius:5%;
     padding: 15px;
+  }
+
+  .profilePhoto{
+    width: 150px;
+    margin: auto;
+    position:relative;
+    
+    &__button{
+      position:absolute;
+      right:-12px;
+      bottom:-2px;
+      width: 30px;
+      height: 30px;
+      padding: 6px 0px;
+      border-radius: 15px;
+      text-align: center;
+      font-size: 12px;
+      line-height: 1.42857;
+    }
   }
 
 </style>
