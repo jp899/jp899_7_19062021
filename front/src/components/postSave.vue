@@ -60,54 +60,49 @@
 
     <div class="hz-bar mt-2"></div>
 
-    <div class="post-ratings mx-2 my-3">
+    <div class="post-ratings mx-2 my-2">
       <div class="row">
-        <div class="post-ratings__thumbUp col d-flex align-items-center">
+        <div class="post-ratings__thumbUp col d-flex">
            <b-button 
             variant="outline-primary" 
             aria-label="Pouces en haut" 
             @click="likeIt"
             type="button"
             ref="thumbUp-button"
-            class="rounded-circle my-btn-round mr-2"
+            size="lg"
+            class="d-flex justify-content-between"
             :pressed="(hasRatedUp)"
           >
-            <font-awesome-icon :icon="['far', 'thumbs-down']" class="thumb-icon"/>
-            <!-- <b-icon-hand-thumbs-up scale="1.5" ></b-icon-hand-thumbs-up> -->
+            <b-icon-arrow-up-circle></b-icon-arrow-up-circle>
+            <div class="post-ratings__thumbUpCounter">{{content.likesCount}}</div>
           </b-button>
-          <div class="post-ratings__thumbUpCounter h5 mb-0">{{content.likesCount}}</div>
         </div>
-        <div class="post-ratings__thumbDown col d-flex align-items-center">
+        <div class="post-ratings__thumbDown col">
           <b-button 
             variant="outline-my-logo-color-darker" 
             aria-label="Pouces en bas" 
             @click="dislikeIt"
             type="button"
             ref="thumbDown-button"
-            class="rounded-circle my-btn-round mr-2"
-            :pressed="false"
+            size="lg"
+            class="d-flex justify-content-between"
+            :pressed="(hasRatedDown)"
           >
-            <font-awesome-icon :icon="['fas', 'thumbs-up']" class="thumb-icon"/>
-            <!-- <b-icon-hand-thumbs-down scale="1.5"></b-icon-hand-thumbs-down> -->
+            <b-icon-arrow-down-circle></b-icon-arrow-down-circle>
+            <div class="post-ratings__thumbDownCounter">{{content.dislikesCount}}</div>
           </b-button>
-          <div class="post-ratings__thumbDownCounter text-my-logo-color-darker h5 mb-0">{{content.dislikesCount}}</div>
         </div>
 
         <div class="post-ratings__toggleComments col">
-          <div class="my-button-container">
-            <b-button 
-              variant="outline-primary" 
-              aria-label="Activer l'affichage des commentaires" 
-              @click="toggleComments"
-              type="button"
-              ref="toggle-comments-button"
-              :pressed="(displayComments)"
-              class="rounded-circle my-btn-round"
-            >
-              <font-awesome-icon :icon="['far', 'comment-dots']" class="thumb-icon"/>
-              <!-- <b-icon-chat-left-dots class="comments-icon" scale="1.2"></b-icon-chat-left-dots> -->
-            </b-button>
-          </div>
+          <b-button 
+            variant="outline-primary" 
+            aria-label="Activer l'affichage des commentaires" 
+            @click="toggleComments"
+            type="button"
+            ref="toggle-comments-button"
+            :pressed="(displayComments)"
+            size="lg"
+          ><b-icon-chat-left-dots></b-icon-chat-left-dots></b-button>
         </div>
       </div>
     </div>
@@ -407,10 +402,6 @@ export default {
 
   }
 
-  .comments-icon{
-    margin-top:4px;
-    margin-left:1px;
-  }
 
   .post-title__feedback{
     font-size:55%;
@@ -435,13 +426,6 @@ export default {
 
   }
 
-
-  .my-btn-container, .my-btn-round{
-    width: 45px;
-    height: 45px;
-    border: 0px;
-  }
-  
 
   .post{
     border: 2px solid;
@@ -471,10 +455,6 @@ export default {
     height:1px;
     width: 100%;
     background-color: $primary;
-  }
-
-  .thumb-icon{
-    font-size: 1.5em;
   }
 
 </style>

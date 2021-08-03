@@ -21,6 +21,7 @@
                     :placeholder='"Bonjour " + user.userName + ", que voulez-vous partager ?"'
                     rows="2"
                     max-rows="2"
+                    maxlength="50"
                     @input="titleCheckLight()"
                     aria-label="Titre de la publication"
                   ></b-form-textarea>
@@ -232,6 +233,14 @@ export default {
   height:24px;
   margin-left:5px;
   }
+
+  .post-img{
+    border: 0px;
+    border-radius:7px;
+    width:100%;
+    object-fit: cover;
+  }
+
 
   .post-form{
     border: 2px solid;

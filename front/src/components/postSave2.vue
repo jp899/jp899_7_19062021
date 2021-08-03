@@ -60,41 +60,30 @@
 
     <div class="hz-bar mt-2"></div>
 
-    <div class="post-ratings mx-2 my-3">
+    <div class="post-ratings mx-2 my-2">
       <div class="row">
-        <div class="post-ratings__thumbUp col d-flex align-items-center">
-           <b-button 
-            variant="outline-primary" 
-            aria-label="Pouces en haut" 
-            @click="likeIt"
+        <div class="post-ratings__thumbUp col d-flex">
+          <!-- <b-button 
+            variant="ouline-primary" 
+            aria-label="Activer l'affichage des commentaires" 
+            @click="toggleComments"
             type="button"
-            ref="thumbUp-button"
-            class="rounded-circle my-btn-round mr-2"
-            :pressed="(hasRatedUp)"
-          >
-            <font-awesome-icon :icon="['far', 'thumbs-down']" class="thumb-icon"/>
-            <!-- <b-icon-hand-thumbs-up scale="1.5" ></b-icon-hand-thumbs-up> -->
-          </b-button>
-          <div class="post-ratings__thumbUpCounter h5 mb-0">{{content.likesCount}}</div>
+            ref="share-button"
+          ><b-icon-chat-left-dots></b-icon-chat-left-dots></b-button> -->
+          
+            <b-icon-arrow-up-circle v-if="(hasNotRated || hasRatedDown)" class="icon-thumbs-up h2" variant="primary" @click="likeIt"></b-icon-arrow-up-circle>
+            <b-icon-arrow-up-circle-fill v-if="(hasRatedUp)" class="icon-thumbs-up h2" variant="primary" @click="unlikeIt"></b-icon-arrow-up-circle-fill>
+
         </div>
-        <div class="post-ratings__thumbDown col d-flex align-items-center">
-          <b-button 
-            variant="outline-my-logo-color-darker" 
-            aria-label="Pouces en bas" 
-            @click="dislikeIt"
-            type="button"
-            ref="thumbDown-button"
-            class="rounded-circle my-btn-round mr-2"
-            :pressed="false"
-          >
-            <font-awesome-icon :icon="['fas', 'thumbs-up']" class="thumb-icon"/>
-            <!-- <b-icon-hand-thumbs-down scale="1.5"></b-icon-hand-thumbs-down> -->
-          </b-button>
-          <div class="post-ratings__thumbDownCounter text-my-logo-color-darker h5 mb-0">{{content.dislikesCount}}</div>
+        <div class="post-ratings__likes col d-flex">{{content.likesCount}}</div>
+        <div class="post-ratings__thumbDown col">
+          <b-icon-arrow-down-circle v-if="(hasNotRated || hasRatedUp)" class="icon-thumbs-up h2" variant="my-logo-color-darker" @click="dislikeIt"></b-icon-arrow-down-circle>
+          <b-icon-arrow-down-circle-fill v-if="(hasRatedDown)" class="icon-thumbs-up h2" variant="my-logo-color-darker" @click="unlikeIt"></b-icon-arrow-down-circle-fill>
         </div>
+        <div class="post__dislikes col text-my-logo-color-darker">{{content.dislikesCount}}</div>
 
         <div class="post-ratings__toggleComments col">
-          <div class="my-button-container">
+          <div class="post-ratings__toggleCommentsButtonContainer">
             <b-button 
               variant="outline-primary" 
               aria-label="Activer l'affichage des commentaires" 
@@ -102,11 +91,8 @@
               type="button"
               ref="toggle-comments-button"
               :pressed="(displayComments)"
-              class="rounded-circle my-btn-round"
-            >
-              <font-awesome-icon :icon="['far', 'comment-dots']" class="thumb-icon"/>
-              <!-- <b-icon-chat-left-dots class="comments-icon" scale="1.2"></b-icon-chat-left-dots> -->
-            </b-button>
+              class="rounded-circle post-ratings__toggleCommentsButton"
+            ><b-icon-chat-left-dots></b-icon-chat-left-dots></b-button>
           </div>
         </div>
       </div>
@@ -277,23 +263,13 @@ export default {
       });
     },
     likeIt() {
-      if(this.hasRatedUp){
-        this.unlikeIt();
-      } else {
-        this.rateIt(1);
-      }
-      this.$refs["thumbUp-button"].blur();
+      this.rateIt(1);
     },
     unlikeIt() {
       this.rateIt(0);
     },
     dislikeIt() {
-      if(this.hasRatedDown){
-        this.unlikeIt();
-      } else {
-        this.rateIt(-1);
-      }
-      this.$refs["thumbDown-button"].blur();
+      this.rateIt(-1);
     },
     deleteMe() {
       apiConnection.delete("api/article/" + this.content.id)
@@ -407,10 +383,6 @@ export default {
 
   }
 
-  .comments-icon{
-    margin-top:4px;
-    margin-left:1px;
-  }
 
   .post-title__feedback{
     font-size:55%;
@@ -426,22 +398,22 @@ export default {
     }
   }
 
+  .post-ratings{
+    &__toggleCommentsButtonContainer, &__toggleCommentsButton{
+      width: 45px;
+      height: 45px;
+    }
+  }
+
   .post-newComment{
 
     &__imageContainer{
-       width: 40px;
+      width: 40px;
       height: 40px;
     }
 
   }
 
-
-  .my-btn-container, .my-btn-round{
-    width: 45px;
-    height: 45px;
-    border: 0px;
-  }
-  
 
   .post{
     border: 2px solid;
@@ -471,10 +443,6 @@ export default {
     height:1px;
     width: 100%;
     background-color: $primary;
-  }
-
-  .thumb-icon{
-    font-size: 1.5em;
   }
 
 </style>
