@@ -46,7 +46,7 @@
 
 
       <div class="row px-3">
-        <div class="col col-md-8 offset-md-2 col-xl-4 offset-xl-4 userdata-form border-tertiary mt-3 mb-2 shadow bg-my-light-grey">
+        <div class="col col-md-8 offset-md-2 col-lg-6 offset-lg-3 col-xl-4 offset-xl-4 userdata-form border-tertiary mt-3 mb-2 shadow bg-my-light-grey">
           <b-form @submit="onSubmit" >
 
             <b-form-group id="input-group-1" class="text-left">
@@ -190,6 +190,7 @@ export default {
     firstnameCheck() {
       if (!this.form.firstname){
         this.removeFieldError('input-1');
+        return true;
       } else if (! this.firstnameRegex.test(this.form.firstname) ) {
         this.setFieldError('input-1', "Format invalide : 2 à 30 caractères requis.");
       } else {
@@ -201,6 +202,7 @@ export default {
     lastnameCheck() {
       if (!this.form.lastname){
         this.removeFieldError('input-2');
+        return true;
       } else if (! this.lastnameRegex.test(this.form.lastname) ) {
         this.setFieldError('input-2', "Format invalide : 2 à 30 caractères requis.");
       } else {
@@ -280,7 +282,7 @@ export default {
 
   .userdata-form{
     border: 2px solid;
-    border-radius:5%;
+    border-radius:15px;
     padding: 15px;
   }
 

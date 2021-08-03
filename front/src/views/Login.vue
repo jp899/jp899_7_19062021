@@ -8,7 +8,7 @@
       <h1 align="center" class="h2">Connectez-vous !</h1>
 
       <div class="row px-3">
-        <div class="col col-md-8 offset-md-2 col-xl-4 offset-xl-4 userdata-form border-tertiary mt-3 mb-2 shadow bg-my-light-grey">
+        <div class="col col-md-8 offset-md-2 col-lg-6 offset-lg-3 col-xl-4 offset-xl-4 userdata-form border-tertiary mt-3 mb-2 shadow bg-my-light-grey">
           <b-form @submit="onSubmit" class="mt-3">
 
             <b-form-group id="input-group-1" label="Pseudo:" label-for="input-1" class="text-left">
@@ -157,7 +157,7 @@ export default {
 
   .userdata-form{
     border: 2px solid;
-    border-radius:5%;
+    border-radius:15px;
     padding: 15px;
   }
 

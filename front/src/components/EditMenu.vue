@@ -1,6 +1,10 @@
 <template>
   <div class="menu-container">
-    <b-dropdown id="dropdown-1" right text="..." class="m-2" variant="outline-tertiary" no-caret>
+    <b-dropdown class="dropdown" right toggle-class="border rounded-circle p-2" variant="outline-tertiary" no-caret>
+      <template #button-content >
+        <b-icon-pencil></b-icon-pencil>
+        <span class="d-none">Menu d'édition</span>
+      </template>
       <b-dropdown-item-button @click="onUpdateClick">Modifier le texte</b-dropdown-item-button>
       <b-dropdown-item-button @click="onDeleteClick">Supprimer</b-dropdown-item-button>
     </b-dropdown>
@@ -32,4 +36,11 @@
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
 
+
+  .menu-container, .dropdown{
+    width:45px;
+    height:45px;
+  }
+
+  
 </style>

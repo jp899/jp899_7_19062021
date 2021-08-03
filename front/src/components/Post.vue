@@ -1,20 +1,23 @@
 <template>
 
-  <div class="post container border mb-4 shadow bg-secondary">
+    <div class="row px-3 mb-3">
+        <div class="col col-md-10 offset-md-1 col-lg-8 offset-lg-2 post border-tertiary mb-4 shadow bg-my-light-grey">
 
     <div class="post-header d-flex align-items-center justify-content-between my-2">
       <div class="d-flex align-items-center">
         <div class="post-header__imageContainer">
           <ProfileImage :imageSrc="content.user.imageUrl" class="post-header__image"/>
         </div>
-        <div class="post-header__username h4">{{content.user.userName}}</div>
-        <div class="post-header__creationDate h4">{{toDisplayDate}}</div>
+        <div class="post-header__description text-left pl-2">
+          <div class="post-header__username h4 mb-0">{{content.user.userName}}</div>
+          <div class="post-header__creationDate font-weight-lighter">{{toDisplayDate}}</div>
+        </div>
       </div>
-      <EditMenu v-if="(hasEditRights)" @deleteMe="deleteMe" @updateMe="updateMe"/>
+      <EditMenu v-if="(hasEditRights)" @deleteMe="deleteMe" @updateMe="updateMe" class="align-self-start"/>
     </div>
 
-    <div class="post-title row">
-      <h2>
+    <div class="post-title">
+      <h2 class="h4">
         <span v-if="(!editMode)">{{content.title}}</span>
         <b-form @submit="newTitleSubmit" v-if="(editMode)" >
           <b-form-input
@@ -92,6 +95,8 @@
       </div>
 
   </div>
+  </div>
+  
 
 </template>
 
@@ -297,13 +302,13 @@ export default {
       height: 60px;
     }
 
-    &__username{
-      margin-left: 10px;
-    }
+    // &__description{
+    //   padding-left: 10px;
+    // }
 
-    &__creationDate{
-      margin-left: 20px;
-    }
+    // &__creationDate{
+    //   // margin-left: 20px;
+    // }
 
   }
 
@@ -322,6 +327,31 @@ export default {
       height: 40px;
     }
 
+  }
+
+
+  .post{
+    border: 2px solid;
+    border-radius:15px;
+    padding: 15px;
+
+    // &__textarea{
+    //   width:75%;
+    //   position: relative;
+    // }
+
+    // &__feedback{
+    //   position: absolute;
+    //   left:-30px;
+    //   top:-25px;
+    // }
+
+    // &__hz-bar{
+    //   height:1px;
+    //   width: 95%;
+    //   margin:auto;
+    //   background-color: $primary;
+    // }
   }
 
 </style>
