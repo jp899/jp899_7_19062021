@@ -9,7 +9,7 @@
           <ProfileImage :imageSrc="content.user.imageUrl" class="post-header__image"/>
         </div>
         <div class="post-header__description text-left pl-3">
-          <div class="post-header__username h5 mb-0">{{content.user.userName}}</div>
+          <div class="post-header__username mb-0 font-weight-bold">{{content.user.userName}}</div>
           <div class="post-header__creationDate font-italic">{{toDisplayDate}}</div>
         </div>
       </div>
@@ -21,38 +21,23 @@
     </div>
     
     <div class="post-title mt-3">
-      <h2 class="h4 ">
+      <h2 class="h5">
         <span v-if="(!editMode)">{{content.title}}</span>
 
-
-
-        <!-- <b-form @submit="newTitleSubmit" v-if="(editMode)" class="post-title__textarea">
-          <b-form-input
-            size="lg"
-            ref="my-title"
-            v-model="form.title"
-            type="text"
-            maxlength="50"
-            placeholder="Saisir un nouveau titre"
-            @input="titleCheck()"
-          ></b-form-input>
-        </b-form> -->
-
-
-        <b-form @submit="newTitleSubmit" v-if="(editMode)" class="post-title__textarea d-flex">
+        <b-form @submit="newTitleSubmit" v-if="(editMode)" class="post-title__form d-flex" v-bind:class="{ 'mt-4': titleFeedbackMessage }">
           <b-form-textarea
-            size="lg"
             ref="my-title"
             v-model="form.title"
             placeholder="Saisir un nouveau titre"
-            rows="2"
+            rows="1"
             max-rows="2"
             @input="titleCheck()"
             aria-label="Titre de la publication"
             maxlength="50"
+
           ></b-form-textarea>
-          <b-form-invalid-feedback ref="my-title-feedback" class="post-title__feedback">test</b-form-invalid-feedback>
-          <b-button type="submit" variant="primary"><b-icon-check></b-icon-check></b-button>
+          <b-button type="submit" variant="my-light-blue"><b-icon-check scale="1.7"></b-icon-check></b-button>
+          <b-form-invalid-feedback ref="my-title-feedback" class="post-title__feedback">{{titleFeedbackMessage}}</b-form-invalid-feedback>
         </b-form>
 
       </h2>
@@ -72,8 +57,8 @@
             ref="thumbUp-button"
             class="ratings-btn mr-2"
           >
-            <font-awesome-icon v-if="hasRatedUp" :icon="['fas', 'thumbs-down']" class="ratings-icon thumbs-up-icon"/>
-            <font-awesome-icon v-if="!hasRatedUp" :icon="['far', 'thumbs-down']" class="ratings-icon thumbs-up-icon"/>
+            <font-awesome-icon v-if="hasRatedUp" :icon="['fas', 'thumbs-up']" class="ratings-icon thumbs-up-icon"/>
+            <font-awesome-icon v-if="!hasRatedUp" :icon="['far', 'thumbs-up']" class="ratings-icon thumbs-up-icon"/>
           </b-button>
           <div class="post-ratings__thumbUpCounter h5 mb-0">{{content.likesCount}}</div>
         </div>
@@ -87,8 +72,8 @@
             ref="thumbDown-button"
             class="ratings-btn mr-2"
           >
-            <font-awesome-icon v-if="hasRatedDown" :icon="['fas', 'thumbs-up']" class="ratings-icon thumbs-down-icon"/>
-            <font-awesome-icon v-if="!hasRatedDown" :icon="['far', 'thumbs-up']" class="ratings-icon thumbs-down-icon"/>
+            <font-awesome-icon v-if="hasRatedDown" :icon="['fas', 'thumbs-down']" class="ratings-icon thumbs-down-icon"/>
+            <font-awesome-icon v-if="!hasRatedDown" :icon="['far', 'thumbs-down']" class="ratings-icon thumbs-down-icon"/>
           </b-button>
           <div class="post-ratings__thumbDownCounter text-my-logo-color-darker h5 mb-0">{{content.dislikesCount}}</div>
         </div>
@@ -191,6 +176,8 @@ export default {
       // TITLE : pas d'espace au début de la chaine
       titleRegex: /^[^\s].*$/,
       displayComments: false,
+      titleFeedbackMessage:"",
+      commentFeedbackMessage:"",
     }
   },
   computed: {
@@ -217,13 +204,17 @@ export default {
     },
     titleCheck(){
       if (!this.form.title){
-        this.setFieldError('my-title', "Titre obligatoire.");
+        this.setFieldError('my-title');
+        this.titleFeedbackMessage = "Titre obligatoire.";
       } else if (! this.titleRegex.test(this.form.title) ) {
-         this.setFieldError('my-title', "Format invalide.");
+        this.setFieldError('my-title');
+        this.titleFeedbackMessage = "Format invalide.";
       } else if (this.form.title.length > 50){
-        this.setFieldError('my-title', "Maximum 50 caractères.");
+        this.setFieldError('my-title');
+        this.titleFeedbackMessage = "Maximum 50 caractères.";
       } else {
         this.removeFieldError('my-title');
+        this.titleFeedbackMessage = "";
         return true;
       }
       return false;
@@ -308,34 +299,23 @@ export default {
       // Mettre le curseur/focus sur le champ de saisie que l'on vient de faire apparaitre
       setTimeout(() => {this.$nextTick(() => this.$refs["my-title"].$el.focus()) }, 250);
     },
-    setFieldError(fieldName, message){
+    setFieldError(fieldName){
       let field = this.$refs[fieldName].$el;
       field.classList.remove("is-valid");
       field.classList.add("is-invalid");
-      let feedbackMessage = this.$refs[fieldName + "-feedback"].$el;
-      feedbackMessage.innerHTML = message;
     },
     removeFieldError(fieldName){
       let field = this.$refs[fieldName].$el;
       field.classList.add("is-valid");
       field.classList.remove("is-invalid");
-      let feedbackMessage = this.$refs["my-title-feedback"].$el;
-      feedbackMessage.innerHTML = "";
     },
-    // titleCheck(){
-    //   if (!this.form.title){
-    //     this.setFieldError('my-title');
-    //   } else {
-    //     this.removeFieldError('my-title');
-    //     return true;
-    //   }
-    //   return false;
-    // },
     commentCheck(){
       if (!this.newCommentForm.content){
         this.setFieldError('my-comment');
+        this.commentFeedbackMessage = "Saisissez un commentaire.";
       } else {
         this.removeFieldError('my-comment');
+        this.commentFeedbackMessage = "";
         return true;
       }
       return false;
@@ -393,18 +373,23 @@ export default {
       height: 60px;
     }
 
-    // &__description{
-    //   padding-left: 10px;
-    // }
-
-    // &__creationDate{
-    //   // margin-left: 20px;
-    // }
+    &__username{
+      font-size: 1.1em;
+    }
 
   }
 
-  .post-title__feedback{
-    font-size:55%;
+  .post-title{
+
+    &__form{
+      position:relative;
+    }
+
+    &__feedback{
+      position: absolute;
+      top:-25px;
+      font-size: 0.8em;
+    }
   }
 
   .post-body{
@@ -443,12 +428,12 @@ export default {
     font-size: 1.5em;
   }
 
-  .thumbs-up-icon{
+  .thumbs-down-icon{
     margin-top:5px;
     margin-left:-1px;
   }
 
-  .thumbs-down-icon{
+  .thumbs-up-icon{
     margin-top:0px;
     margin-left:-1px;
   }
@@ -463,23 +448,6 @@ export default {
     border-radius:15px;
     padding: 15px;
 
-    // &__textarea{
-    //   width:75%;
-    //   position: relative;
-    // }
-
-    // &__feedback{
-    //   position: absolute;
-    //   left:-30px;
-    //   top:-25px;
-    // }
-
-    // &__hz-bar{
-    //   height:1px;
-    //   width: 95%;
-    //   margin:auto;
-    //   background-color: $primary;
-    // }
   }
 
   .hz-bar{
