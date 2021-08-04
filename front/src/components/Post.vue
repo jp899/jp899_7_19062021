@@ -62,52 +62,49 @@
 
     <div class="post-ratings mx-2 my-3">
       <div class="row">
-        <div class="post-ratings__thumbUp col d-flex align-items-center">
+
+        <div class="post-ratings__thumbUp col col-lg-3 col-xl-2 offset-xl-1 d-flex align-items-center  justify-content-center">
            <b-button 
             variant="outline-primary" 
             aria-label="Pouces en haut" 
             @click="likeIt"
             type="button"
             ref="thumbUp-button"
-            class="rounded-circle my-btn-round mr-2"
-            :pressed="(hasRatedUp)"
+            class="ratings-btn mr-2"
           >
-            <font-awesome-icon :icon="['far', 'thumbs-down']" class="thumb-icon"/>
-            <!-- <b-icon-hand-thumbs-up scale="1.5" ></b-icon-hand-thumbs-up> -->
+            <font-awesome-icon v-if="hasRatedUp" :icon="['fas', 'thumbs-down']" class="ratings-icon thumbs-up-icon"/>
+            <font-awesome-icon v-if="!hasRatedUp" :icon="['far', 'thumbs-down']" class="ratings-icon thumbs-up-icon"/>
           </b-button>
           <div class="post-ratings__thumbUpCounter h5 mb-0">{{content.likesCount}}</div>
         </div>
-        <div class="post-ratings__thumbDown col d-flex align-items-center">
+
+        <div class="post-ratings__thumbDown col col-lg-3 col-xl-2 d-flex align-items-center justify-content-center">
           <b-button 
             variant="outline-my-logo-color-darker" 
             aria-label="Pouces en bas" 
             @click="dislikeIt"
             type="button"
             ref="thumbDown-button"
-            class="rounded-circle my-btn-round mr-2"
-            :pressed="false"
+            class="ratings-btn mr-2"
           >
-            <font-awesome-icon :icon="['fas', 'thumbs-up']" class="thumb-icon"/>
-            <!-- <b-icon-hand-thumbs-down scale="1.5"></b-icon-hand-thumbs-down> -->
+            <font-awesome-icon v-if="hasRatedDown" :icon="['fas', 'thumbs-up']" class="ratings-icon thumbs-down-icon"/>
+            <font-awesome-icon v-if="!hasRatedDown" :icon="['far', 'thumbs-up']" class="ratings-icon thumbs-down-icon"/>
           </b-button>
           <div class="post-ratings__thumbDownCounter text-my-logo-color-darker h5 mb-0">{{content.dislikesCount}}</div>
         </div>
 
-        <div class="post-ratings__toggleComments col">
-          <div class="my-button-container">
+        <div class="post-ratings__toggleComments col col-lg-6 offset-xl-1">
             <b-button 
               variant="outline-primary" 
               aria-label="Activer l'affichage des commentaires" 
               @click="toggleComments"
               type="button"
               ref="toggle-comments-button"
-              :pressed="(displayComments)"
-              class="rounded-circle my-btn-round"
+              class="ratings-btn toggle-comments-button"
             >
-              <font-awesome-icon :icon="['far', 'comment-dots']" class="thumb-icon"/>
-              <!-- <b-icon-chat-left-dots class="comments-icon" scale="1.2"></b-icon-chat-left-dots> -->
+              <font-awesome-icon v-if="displayComments" :icon="['fas', 'comment-dots']" class="ratings-icon comment-dots-icon"/>
+              <font-awesome-icon v-if="!displayComments" :icon="['far', 'comment-dots']" class="ratings-icon comment-dots-icon"/>
             </b-button>
-          </div>
         </div>
       </div>
     </div>
@@ -391,7 +388,6 @@ export default {
 <style scoped lang="scss">
   .post-header{
 
-
     &__imageContainer{
       width: 60px;
       height: 60px;
@@ -407,17 +403,11 @@ export default {
 
   }
 
-  .comments-icon{
-    margin-top:4px;
-    margin-left:1px;
-  }
-
   .post-title__feedback{
     font-size:55%;
   }
 
   .post-body{
-    
     &__image{
       border: 0px;
       border-radius:7px;
@@ -427,21 +417,46 @@ export default {
   }
 
   .post-newComment{
-
     &__imageContainer{
        width: 40px;
       height: 40px;
     }
-
   }
 
-
-  .my-btn-container, .my-btn-round{
+  .ratings-btn{
     width: 45px;
     height: 45px;
     border: 0px;
+
+    @include media-breakpoint-up(sm) {
+        width: 60px;
+      }
+  }
+
+  .toggle-comments-button{
+    @include media-breakpoint-up(lg) {
+        width: 100px;
+      }
   }
   
+  .ratings-icon{
+    font-size: 1.5em;
+  }
+
+  .thumbs-up-icon{
+    margin-top:5px;
+    margin-left:-1px;
+  }
+
+  .thumbs-down-icon{
+    margin-top:0px;
+    margin-left:-1px;
+  }
+
+  .comment-dots-icon{
+    margin-top:2px;
+    margin-left:-1px;
+  }
 
   .post{
     border: 2px solid;
@@ -471,10 +486,6 @@ export default {
     height:1px;
     width: 100%;
     background-color: $primary;
-  }
-
-  .thumb-icon{
-    font-size: 1.5em;
   }
 
 </style>
