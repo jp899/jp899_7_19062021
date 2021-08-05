@@ -27,6 +27,7 @@
         <b-form @submit="newTitleSubmit" v-if="(editMode)" class="post-title__form d-flex" v-bind:class="{ 'mt-4': titleFeedbackMessage }">
           <b-form-textarea
             ref="my-title"
+            size="lg"
             v-model="form.title"
             placeholder="Saisir un nouveau titre"
             rows="1"
@@ -36,7 +37,10 @@
             maxlength="50"
 
           ></b-form-textarea>
-          <b-button type="submit" variant="my-light-blue"><b-icon-check scale="1.7"></b-icon-check></b-button>
+          <b-button type="submit" variant="my-light-blue" class="post-title__button" aria-label="Enregistrer le nouveau titre de la publication" 
+            v-bind:class="{ 'disabled': titleFeedbackMessage }">
+            <b-icon-check scale="1.7"></b-icon-check>
+          </b-button>
           <b-form-invalid-feedback ref="my-title-feedback" class="post-title__feedback">{{titleFeedbackMessage}}</b-form-invalid-feedback>
         </b-form>
 
@@ -94,37 +98,31 @@
       </div>
     </div>
 
-    <div class="post-newComment" v-if="displayComments">
-  
-      <b-form-group>
+    <div class="post-newComment d-flex" v-if="displayComments">
 
-        <div class="d-flex">  
+        <b-form @submit="commentArticle" class="post-newComment__form d-flex" v-bind:class="{ 'mt-2': commentFeedbackMessage }">
           <div class="post-newComment__imageContainer">
-            <ProfileImage :imageSrc="currentUser.imageUrl"/>
+            <ProfileImage :imageSrc="currentUser.imageUrl" class="post-newComment__image"/>
           </div>
-          
-          <b-form-input
-            class="post-newComment__input"
-            ref="my-comment"
-            v-model="newCommentForm.content" 
-            placeholder="Donnez votre avis!" 
-            maxlength="50"
-            type="text"
-            @input="commentCheck()"
-          ></b-form-input>
-        
-          <b-button
-            class="post-newComment__button"
-            variant="outline-primary"
-            @click="commentArticle"
-            type="button"
-            aria-label="Commenter"
-          >
-            <b-icon-plus-circle class="file-icon"></b-icon-plus-circle>
-          </b-button>
-        </div>
 
-      </b-form-group>      
+          <b-form-textarea
+            ref="my-comment"
+            size="lg"
+            v-model="newCommentForm.content"
+            placeholder="Qu'en pensez vous ?"
+            rows="2"
+            max-rows="5"
+            @input="commentCheck()"
+            aria-label="Votre commentaire sur la publication"
+            maxlength="250"
+          ></b-form-textarea>
+          <b-button type="submit" variant="my-light-blue" aria-label="Commenter la publication" v-bind:class="{ 'disabled': ( (!newCommentForm.content) || commentFeedbackMessage) }">
+            <b-icon-plus-circle scale="1.2"></b-icon-plus-circle>
+          </b-button>
+          <b-form-invalid-feedback ref="my-comment-feedback" class="post-newComment__feedback feedback-message">{{commentFeedbackMessage}}</b-form-invalid-feedback>
+
+        </b-form>
+
  
     </div>
 
@@ -173,8 +171,10 @@ export default {
       currentUser: JSON.parse(localStorage.getItem('user')),
       creationDate: new Date(this.content.createdAt),
       dateOptions: {  year: 'numeric', month: 'short', day: 'numeric', hour:'numeric', minute: 'numeric' },
-      // TITLE : pas d'espace au début de la chaine
+      // TITLE : pas d'espace au début de la chaine et pas de saut de ligne
       titleRegex: /^[^\s].*$/,
+      // Comment : pas d'espace au début de la chaine et pas de saut de ligne
+      commentRegex: /^[^\s].*$/,
       displayComments: false,
       titleFeedbackMessage:"",
       commentFeedbackMessage:"",
@@ -201,23 +201,6 @@ export default {
     toggleComments() {
       this.displayComments = !this.displayComments;
       this.$refs["toggle-comments-button"].blur();
-    },
-    titleCheck(){
-      if (!this.form.title){
-        this.setFieldError('my-title');
-        this.titleFeedbackMessage = "Titre obligatoire.";
-      } else if (! this.titleRegex.test(this.form.title) ) {
-        this.setFieldError('my-title');
-        this.titleFeedbackMessage = "Format invalide.";
-      } else if (this.form.title.length > 50){
-        this.setFieldError('my-title');
-        this.titleFeedbackMessage = "Maximum 50 caractères.";
-      } else {
-        this.removeFieldError('my-title');
-        this.titleFeedbackMessage = "";
-        return true;
-      }
-      return false;
     },
     setHasNotRated() {
       this.hasNotRated = (this.content.Likes.length === 0 || this.content.Likes[0].liked === 0 );
@@ -290,7 +273,7 @@ export default {
         // Propagation de l'évenement au parent pour suppression de l'affichage du post
         this.$emit('deleteMe');
       }).catch( error => {
-          console.log(error);
+        console.log(error);
           this.errorMessage = "Une erreur est survenue, veuillez réessayer plus tard.";
       });
     },
@@ -309,10 +292,34 @@ export default {
       field.classList.add("is-valid");
       field.classList.remove("is-invalid");
     },
+    titleCheck(){
+      if (!this.form.title){
+        this.setFieldError('my-title');
+        this.titleFeedbackMessage = "Titre obligatoire.";
+      } else if (! this.titleRegex.test(this.form.title) ) {
+        this.setFieldError('my-title');
+        this.titleFeedbackMessage = "Format invalide.";
+      } else if (this.form.title.length > 50){
+        this.setFieldError('my-title');
+        this.titleFeedbackMessage = "Maximum 50 caractères.";
+      } else {
+        this.removeFieldError('my-title');
+        this.titleFeedbackMessage = "";
+        return true;
+      }
+      return false;
+    },
     commentCheck(){
       if (!this.newCommentForm.content){
+        this.removeFieldError('my-comment');
+        this.commentFeedbackMessage = "";
+        this.clearFieldsColors("my-comment");
+       } else if (! this.commentRegex.test(this.newCommentForm.content) ) {
         this.setFieldError('my-comment');
-        this.commentFeedbackMessage = "Saisissez un commentaire.";
+        this.commentFeedbackMessage = "Format invalide.";
+      } else if (this.newCommentForm.content.length > 250){
+        this.setFieldError('my-comment');
+        this.newCommentForm.content = "Maximum 250 caractères.";
       } else {
         this.removeFieldError('my-comment');
         this.commentFeedbackMessage = "";
@@ -342,7 +349,7 @@ export default {
     },
     commentArticle(){
       // Post autorisé uniquement si une image a été chargée et un titre renseigné
-      if(this.commentCheck()){
+      if(this.newCommentForm.content && this.commentCheck()){
         const body = {comment: this.newCommentForm, userId: this.currentUser.id};
         apiConnection.post("api/article/" + this.content.id + "/comment/", body)
         .then( response => {
@@ -366,8 +373,18 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
-  .post-header{
 
+  .post{
+    border: 2px solid;
+    border-radius:15px;
+    padding: 15px;
+  }
+
+  .feedback-message{
+    font-size: 0.8em;
+  }
+
+  .post-header{
     &__imageContainer{
       width: 60px;
       height: 60px;
@@ -376,11 +393,9 @@ export default {
     &__username{
       font-size: 1.1em;
     }
-
   }
 
   .post-title{
-
     &__form{
       position:relative;
     }
@@ -388,8 +403,16 @@ export default {
     &__feedback{
       position: absolute;
       top:-25px;
-      font-size: 0.8em;
     }
+
+    // &__button{
+    //   margin-left:5px;
+    //   margin-top:5px;
+    //   margin-right:5px;
+    //   width: 45px;
+    //   height: 45px;
+    //   border-radius:8px;
+    // }
   }
 
   .post-body{
@@ -403,8 +426,17 @@ export default {
 
   .post-newComment{
     &__imageContainer{
-       width: 40px;
-      height: 40px;
+       width: 60px;
+      height: 60px;
+    }
+
+    &__form{
+      position:relative;
+    }
+
+    &__feedback{
+      position: absolute;
+      top:-25px;
     }
   }
 
@@ -441,13 +473,6 @@ export default {
   .comment-dots-icon{
     margin-top:2px;
     margin-left:-1px;
-  }
-
-  .post{
-    border: 2px solid;
-    border-radius:15px;
-    padding: 15px;
-
   }
 
   .hz-bar{

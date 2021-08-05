@@ -55,6 +55,7 @@
                 />
 
                 <b-button
+                  v-bind:class="{ 'disabled': (!(newPostForm.image && newPostForm.title)) || formError }"
                   variant="my-logo-color-darker"
                   @click="postArticle"
                   type="button"
@@ -111,6 +112,7 @@ export default {
         image: null,
         title: "",
       },
+      formError:false,
       // TITLE : pas d'espace au début de la chaine
       titleRegex: /^[^\s].*$/,
       user: JSON.parse(localStorage.getItem('user')),
@@ -131,6 +133,7 @@ export default {
       field.classList.add("is-invalid");
       let feedbackMessage = document.getElementById(fieldName + "-feedback");
       feedbackMessage.innerHTML = message;
+      this.formError = true;
     },
     removeFieldError(fieldName){
       let field = document.getElementById(fieldName);
@@ -138,6 +141,7 @@ export default {
       field.classList.remove("is-invalid");
       let feedbackMessage = document.getElementById(fieldName + "-feedback");
       feedbackMessage.innerHTML = "";
+      this.formError = false;
     },
     titleCheckLight(){
       if (!this.newPostForm.title){

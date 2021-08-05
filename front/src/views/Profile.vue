@@ -96,7 +96,11 @@
               
             <p class="text-danger my-2">{{ errorMessage }}</p>
             
-            <b-button type="submit" variant="my-logo-color-darker" class="my-3" ref="submit-button">Enregistrer les modifications</b-button>
+            <b-button type="submit" variant="my-logo-color-darker" class="my-3" ref="submit-button"
+              v-bind:class="{ 'disabled': !updateReady() }"
+            >
+              Enregistrer les modifications
+            </b-button>
           </b-form>
 
         </div>
@@ -139,6 +143,13 @@ export default {
       user: JSON.parse(localStorage.getItem('user')),
     }
   },
+  // computed: {
+  //   updateReady: function () {
+  //     return ( 
+  //       ( this.user.firstName !== this.form.firstname || this.user.lastName !== this.form.lastname || this.user.email !== this.form.email ) 
+  //       && this.lastnameCheck() && this.firstnameCheck() && this.emailCheck());
+  //   },
+  // },
   // Récupération des informations de l'utilisateur à la création de la vue
   created() {
     // Préremplir les champs de saisie avec les informations connues
@@ -147,6 +158,11 @@ export default {
     this.form.email = this.user.email;
   },
   methods: {
+    updateReady: function () {
+      return ( 
+        ( this.user.firstName !== this.form.firstname || this.user.lastName !== this.form.lastname || this.user.email !== this.form.email ) 
+        && this.lastnameCheck() && this.firstnameCheck() && this.emailCheck());
+    },
     clickInput () {
       this.$refs.fileInput.click();
       this.$refs["edit-image-button"].blur();
@@ -165,6 +181,11 @@ export default {
         localStorage.setItem('user', JSON.stringify(this.user));
         this.$forceUpdate();
       }).catch( error => {console.log(error)});
+    },
+    clearFieldColor(fieldName){
+      let field = document.getElementById(fieldName);
+      field.classList.remove("is-valid");
+      field.classList.remove("is-invalid");
     },
     clearFieldsColors(){
       for(let fieldName of ["input-1", "input-2", "input-3" ]){
@@ -188,7 +209,10 @@ export default {
       feedbackMessage.innerHTML = "";
     },
     firstnameCheck() {
-      if (!this.form.firstname){
+      if (this.user.firstName === this.form.firstname){
+        this.clearFieldColor('input-1');
+        return true;
+      }else if (!this.form.firstname){
         this.removeFieldError('input-1');
         return true;
       } else if (! this.firstnameRegex.test(this.form.firstname) ) {
@@ -200,7 +224,10 @@ export default {
       return false;
     },
     lastnameCheck() {
-      if (!this.form.lastname){
+      if (this.user.lastName === this.form.lastname){
+        this.clearFieldColor('input-2');
+        return true;
+      } else if (!this.form.lastname){
         this.removeFieldError('input-2');
         return true;
       } else if (! this.lastnameRegex.test(this.form.lastname) ) {
@@ -212,7 +239,10 @@ export default {
       return false;
     },
     emailCheck() {
-      if (!this.form.email){
+      if ( this.user.email === this.form.email){
+        this.clearFieldColor('input-3');
+        return true;
+      } else if (!this.form.email){
         this.setFieldError('input-3', "Email obligatoire");
       } else if (! this.emailRegex.test(this.form.email) ) {
         this.setFieldError('input-3', "Format invalide");
@@ -225,10 +255,7 @@ export default {
     onSubmit(event) {
       event.preventDefault();
       // contrôle du format en entrée et qu'une donnée a bien été modifiée par l'utilisateur
-      if ( ( this.user.firstName !== this.form.firstname 
-            || this.user.lastName !== this.form.lastname
-            || this.user.email !== this.form.email ) 
-        && this.lastnameCheck() && this.firstnameCheck() && this.emailCheck()){
+      if (this.updateReady()){
         const updatedUser = {
           firstName:this.form.firstname,
           lastName:this.form.lastname,
