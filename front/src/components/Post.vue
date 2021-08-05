@@ -1,153 +1,161 @@
 <template>
 
-    <div class="row px-3 mb-3">
-        <div class="col col-md-10 offset-md-1 col-lg-8 offset-lg-2 post border-tertiary mb-4 shadow bg-my-light-grey px-3">
+  <div class="row px-3 mb-3">
+    <div class="col col-md-10 offset-md-1 col-lg-8 offset-lg-2 post border-tertiary mb-4 shadow bg-my-light-grey px-3">
 
-    <div class="post-header d-flex align-items-center justify-content-between mt-1 mb-3">
-      <div class="d-flex align-items-center">
-        <div class="post-header__imageContainer">
-          <ProfileImage :imageSrc="content.user.imageUrl" class="post-header__image"/>
+      <div class="post-header d-flex align-items-center justify-content-between mt-1 mb-3">
+        <div class="d-flex align-items-center">
+          <div class="post-header__imageContainer">
+            <ProfileImage :imageSrc="content.user.imageUrl" class="post-header__image"/>
+          </div>
+          <div class="post-header__description text-left pl-3">
+            <div class="post-header__username mb-0 font-weight-bold">{{content.user.userName}}</div>
+            <div class="post-header__creationDate font-italic">{{toDisplayDate}}</div>
+          </div>
         </div>
-        <div class="post-header__description text-left pl-3">
-          <div class="post-header__username mb-0 font-weight-bold">{{content.user.userName}}</div>
-          <div class="post-header__creationDate font-italic">{{toDisplayDate}}</div>
-        </div>
+        <EditMenu v-if="(hasEditRights)" @deleteMe="deleteMe" @updateMe="updateMe" class="align-self-start"/>
       </div>
-      <EditMenu v-if="(hasEditRights)" @deleteMe="deleteMe" @updateMe="updateMe" class="align-self-start"/>
-    </div>
 
-    <div class="post-body">
-      <b-img class="post-body__image" :src="content.imageUrl" fluid alt="Image du post"></b-img>
-    </div>
-    
-    <div class="post-title mt-3">
-      <h2 class="h5">
-        <span v-if="(!editMode)">{{content.title}}</span>
+      <div class="post-body">
+        <b-img class="post-body__image" :src="content.imageUrl" fluid alt="Image du post"></b-img>
+      </div>
+      
+      <div class="post-title mt-3">
+        <h2 class="h5">
+          <span v-if="(!editMode)">{{content.title}}</span>
 
-        <b-form @submit="newTitleSubmit" v-if="(editMode)" class="post-title__form d-flex" v-bind:class="{ 'mt-4': titleFeedbackMessage }">
-          <b-form-textarea
-            ref="my-title"
-            size="lg"
-            v-model="form.title"
-            placeholder="Saisir un nouveau titre"
-            rows="1"
-            max-rows="2"
-            @input="titleCheck()"
-            aria-label="Titre de la publication"
-            maxlength="50"
+          <b-form @submit="newTitleSubmit" v-if="(editMode)" class="post-title__form d-flex" v-bind:class="{ 'mt-4': titleFeedbackMessage }">
+            <b-form-textarea
+              ref="my-title"
+              size="lg"
+              v-model="form.title"
+              placeholder="Saisir un nouveau titre"
+              rows="1"
+              max-rows="2"
+              @input="titleCheck()"
+              aria-label="Titre de la publication"
+              maxlength="50"
 
-          ></b-form-textarea>
-          <b-button type="submit" variant="outline-my-light-blue" class="post-title__button btn-no-border" aria-label="Enregistrer le nouveau titre de la publication" 
-            v-bind:class="{ 'disabled': titleFeedbackMessage }">
-            <b-icon-check-circle-fill scale="1.5"></b-icon-check-circle-fill>
-          </b-button>
-          <b-form-invalid-feedback ref="my-title-feedback" class="post-title__feedback">{{titleFeedbackMessage}}</b-form-invalid-feedback>
-        </b-form>
-
-      </h2>
-    </div>
-
-    <div class="hz-bar mt-2"></div>
-
-    <div class="post-ratings mx-3 mt-2">
-      <div class="row">
-        <div class="post-ratings__offset d-none d-xl-block col-xl-1 pb-2 pt-1"
-          v-bind:class="{ 'post-ratings-comments-on__offset': displayComments }">
-        </div>
-
-        <div class="post-ratings__thumbUp col col-lg-3 col-xl-2 d-flex align-items-center justify-content-center pb-2 pt-1"
-          v-bind:class="{ 'post-ratings-comments-on__thumbUp': displayComments }">
-           <b-button 
-            variant="outline-primary" 
-            aria-label="Pouces en haut" 
-            @click="likeIt"
-            type="button"
-            ref="thumbUp-button"
-            class="ratings-btn d-flex justify-content-center align-items-center"
-          >
-            <font-awesome-icon v-if="hasRatedUp" :icon="['fas', 'thumbs-up']" class="ratings-icon thumbs-up-icon"/>
-            <font-awesome-icon v-if="!hasRatedUp" :icon="['far', 'thumbs-up']" class="ratings-icon thumbs-up-icon"/>
-            <div class="post-ratings__thumbUpCounter h5 mb-0 ml-2">{{content.likesCount}}</div>
-          </b-button>
-        </div>
-
-        <div class="post-ratings__thumbDown col col-lg-3 col-xl-2 d-flex align-items-center justify-content-center pb-2 pt-1"
-          v-bind:class="{ 'post-ratings-comments-on__thumbDown': displayComments }">
-          <b-button 
-            variant="outline-my-logo-color-darker" 
-            aria-label="Pouces en bas" 
-            @click="dislikeIt"
-            type="button"
-            ref="thumbDown-button"
-            class="ratings-btn d-flex justify-content-center align-items-center"
-          >
-            <font-awesome-icon v-if="hasRatedDown" :icon="['fas', 'thumbs-down']" class="ratings-icon thumbs-down-icon"/>
-            <font-awesome-icon v-if="!hasRatedDown" :icon="['far', 'thumbs-down']" class="ratings-icon thumbs-down-icon"/>
-            <span class="post-ratings__thumbDownCounter h5 mb-0 ml-2">{{content.dislikesCount}}</span>
-          </b-button>
-        </div>
-
-        <div class="post-ratings__offset d-none d-xl-block col-xl-1 pb-2 pt-1"
-          v-bind:class="{ 'post-ratings-comments-on__offset': displayComments }">
-        </div>
-
-        <div class="post-ratings__toggleComments col col-lg-6 pb-2 pt-1"
-          v-bind:class="{ 'post-ratings-comments-on__toggleComments': displayComments }">
-            <b-button 
-              variant="outline-my-darker-grey" 
-              aria-label="Activer l'affichage des commentaires" 
-              @click="toggleComments"
-              type="button"
-              ref="toggle-comments-button"
-              class="ratings-btn toggle-comments-button d-flex justify-content-center align-items-center"
-            >
-              <font-awesome-icon v-if="displayComments" :icon="['fas', 'comment-dots']" class="ratings-icon comment-dots-icon"/>
-              <font-awesome-icon v-if="!displayComments" :icon="['far', 'comment-dots']" class="ratings-icon comment-dots-icon"/>
-              <span class="h5 mb-0 ml-2">{{commentsContent.length}}</span>
+            ></b-form-textarea>
+            <b-button type="submit" variant="outline-my-light-blue" class="post-title__button btn-no-border" aria-label="Enregistrer le nouveau titre de la publication" 
+              v-bind:class="{ 'disabled': titleFeedbackMessage }">
+              <b-icon-check-circle-fill scale="1.5"></b-icon-check-circle-fill>
             </b-button>
-        </div>
-      </div>
-    </div>
+            <b-form-invalid-feedback ref="my-title-feedback" class="post-title__feedback">{{titleFeedbackMessage}}</b-form-invalid-feedback>
+          </b-form>
 
-    <div class="post-newComment row mt-3" v-if="displayComments">
-
-        <div class="post-newComment__imageContainer col-3 col-sm-2 d-flex justify-content-end pr-2">
-          <ProfileImage :imageSrc="currentUser.imageUrl" class="post-newComment__image mt-1"/>
-        </div>
-   
-        <b-form @submit="commentArticle" class="post-newComment__form d-flex col-9 col-sm-10 pl-0" v-bind:class="{ 'mt-2': commentFeedbackMessage }">
-
-          <b-form-textarea
-            ref="my-comment"
-            v-model="newCommentForm.content"
-            placeholder="Qu'en pensez vous ?"
-            rows="2"
-            max-rows="5"
-            @input="commentCheck()"
-            aria-label="Votre commentaire sur la publication"
-            maxlength="250"
-            class="post-newComment__textarea mr-0 shadow"
-          ></b-form-textarea>
-          <b-form-invalid-feedback ref="my-comment-feedback" class="post-newComment__feedback">{{commentFeedbackMessage}}</b-form-invalid-feedback>
-
-          <b-button ref="new-comment-button" type="submit" variant="outline-my-light-blue" 
-            class="post-newComment__button btn-no-border"
-            aria-label="Commenter la publication" v-bind:class="{ 'disabled': ( (!newCommentForm.content) || commentFeedbackMessage) }">
-            <b-icon-plus-circle-fill scale="1.2"></b-icon-plus-circle-fill>
-          </b-button>
-        </b-form>
-  
-    </div>
-
-    <div class="post-comments row mt-4" v-if="displayComments">
-        <Comment v-for="(comment, index) in commentsContent" 
-          :content="comment" 
-          :key="comment.id" 
-          :index="index"
-          @deleteMe="commentsContent.splice(index,1)"/>
+        </h2>
       </div>
 
-  </div>
+      <div class="hz-bar mt-2"></div>
+
+      <div class="post-ratings mx-3 mt-2">
+        <div class="row">
+          <div class="post-ratings__offset d-none d-xl-block col-xl-1 pb-2 pt-1"
+            v-bind:class="{ 'post-ratings-comments-on__offset': displayComments }">
+          </div>
+
+          <div class="post-ratings__thumbUp col col-lg-3 col-xl-2 d-flex align-items-center justify-content-center pb-2 pt-1"
+            v-bind:class="{ 'post-ratings-comments-on__thumbUp': displayComments }">
+            <b-button 
+              variant="outline-primary" 
+              aria-label="Pouces en haut" 
+              @click="likeIt"
+              type="button"
+              ref="thumbUp-button"
+              class="ratings-btn d-flex justify-content-center align-items-center"
+            >
+              <font-awesome-icon v-if="hasRatedUp" :icon="['fas', 'thumbs-up']" class="ratings-icon thumbs-up-icon"/>
+              <font-awesome-icon v-if="!hasRatedUp" :icon="['far', 'thumbs-up']" class="ratings-icon thumbs-up-icon"/>
+              <div class="post-ratings__thumbUpCounter h4 mb-0 ml-2">{{content.likesCount}}</div>
+            </b-button>
+          </div>
+
+          <div class="post-ratings__thumbDown col col-lg-3 col-xl-2 d-flex align-items-center justify-content-center pb-2 pt-1"
+            v-bind:class="{ 'post-ratings-comments-on__thumbDown': displayComments }">
+            <b-button 
+              variant="outline-my-logo-color-darker" 
+              aria-label="Pouces en bas" 
+              @click="dislikeIt"
+              type="button"
+              ref="thumbDown-button"
+              class="ratings-btn d-flex justify-content-center align-items-center"
+            >
+              <font-awesome-icon v-if="hasRatedDown" :icon="['fas', 'thumbs-down']" class="ratings-icon thumbs-down-icon"/>
+              <font-awesome-icon v-if="!hasRatedDown" :icon="['far', 'thumbs-down']" class="ratings-icon thumbs-down-icon"/>
+              <span class="post-ratings__thumbDownCounter h4 mb-0 ml-2">{{content.dislikesCount}}</span>
+            </b-button>
+          </div>
+
+          <div class="post-ratings__offset d-none d-xl-block col-xl-1 pb-2 pt-1"
+            v-bind:class="{ 'post-ratings-comments-on__offset': displayComments }">
+          </div>
+
+          <div class="post-ratings__toggleComments col col-lg-6 pb-2 pt-1"
+            v-bind:class="{ 'post-ratings-comments-on__toggleComments': displayComments }">
+              <b-button 
+                variant="outline-my-darker-grey" 
+                aria-label="Activer l'affichage des commentaires" 
+                @click="toggleComments"
+                type="button"
+                ref="toggle-comments-button"
+                class="ratings-btn toggle-comments-button d-flex justify-content-center align-items-center"
+              >
+                <font-awesome-icon v-if="displayComments" :icon="['fas', 'comment-dots']" class="ratings-icon comment-dots-icon"/>
+                <font-awesome-icon v-if="!displayComments" :icon="['far', 'comment-dots']" class="ratings-icon comment-dots-icon"/>
+                <span class="h4 mb-0 ml-2">{{commentsContent.length}}</span>
+              </b-button>
+          </div>
+        </div>
+      </div>
+
+      <transition name="comments-transition">
+
+        <div v-if="displayComments">
+
+          <div class="post-newComment row mt-4">
+              <div class="post-newComment__imageContainer col-3 col-sm-2 d-flex justify-content-end pr-2">
+                <ProfileImage :imageSrc="currentUser.imageUrl" class="post-newComment__image mt-1"/>
+              </div>
+        
+              <b-form @submit="commentArticle" class="post-newComment__form d-flex col-9 col-sm-10 pl-0" v-bind:class="{ 'mt-2': commentFeedbackMessage }">
+
+                <b-form-textarea
+                  ref="my-comment"
+                  v-model="newCommentForm.content"
+                  placeholder="Qu'en pensez vous ?"
+                  rows="2"
+                  max-rows="5"
+                  @input="commentCheck()"
+                  aria-label="Votre commentaire sur la publication"
+                  maxlength="250"
+                  class="post-newComment__textarea mr-0 shadow"
+                ></b-form-textarea>
+                <b-form-invalid-feedback ref="my-comment-feedback" class="post-newComment__feedback">{{commentFeedbackMessage}}</b-form-invalid-feedback>
+
+                <b-button ref="new-comment-button" type="submit" variant="outline-my-light-blue" 
+                  class="post-newComment__button btn-no-border"
+                  aria-label="Commenter la publication" v-bind:class="{ 'disabled': ( (!newCommentForm.content) || commentFeedbackMessage) }">
+                  <b-icon-plus-circle-fill scale="1.2"></b-icon-plus-circle-fill>
+                </b-button>
+              </b-form>
+        
+          </div>
+
+          <div class="post-comments row mt-4">
+            <Comment v-for="(comment, index) in commentsContent" 
+              :content="comment" 
+              :key="comment.id" 
+              :index="index"
+              @deleteMe="commentsContent.splice(index,1)"/>
+          </div>
+
+        </div>
+
+      </transition>
+
+
+    </div>
   </div>
   
 
@@ -539,5 +547,18 @@ export default {
     width: 100%;
     background-color: $my-dark-grey;
   }
+
+  // Styles pour transition sur ouverture des commentaires (avec vue)
+  .comments-transition-enter-active {
+    transition: all .6s ease;
+  }
+  .comments-transition-leave-active {
+    transition: all .4s ease;
+  }
+  .comments-transition-enter, .comments-transition-leave-to {
+    opacity: 0;
+    transform: translateY(-15px);
+  }
+
 
 </style>

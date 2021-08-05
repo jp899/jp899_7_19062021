@@ -92,7 +92,7 @@ exports.getAll = (req, res, next) => {
       Article.findAll( {
         limit: nbOfItemsInOnePage,
         offset: (pageNumber -1) * nbOfItemsInOnePage,
-        order: [['createdAt','DESC']],
+        order: [['createdAt','DESC'], [{model: Comment, as: 'Comments'}, 'createdAt','DESC']],
         attributes: { exclude: ['userId'] },
         include: [{ 
           model: User,
@@ -102,7 +102,6 @@ exports.getAll = (req, res, next) => {
         { model: Comment,
           as: 'Comments',
           attributes: ["id", "content", "createdAt"],
-          order:[[['createdAt','DESC']]],
           include: [{
             model: User,
             as: 'user',

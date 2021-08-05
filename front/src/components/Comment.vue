@@ -1,16 +1,14 @@
 <template>
 
-  <div class="comment container border mb-3 px-sm-4 px-md-5">
+  <div class="comment container border mb-3 pl-5 px-sm-5">
 
-    <div class="comment-body d-flex align-items-start my-2 justify-content-sm-center">
-
-        <div class="comment-body__offset flex-fill" v-bind:class="{ 'd-none': (index % 2 === 1) }"></div>
+    <div class="comment-body d-flex align-items-start my-2 pl-sm-5 px-sm-3 ml-xl-4">
 
         <div class="comment-body__imageContainer mt-1 mr-2">
           <ProfileImage :imageSrc="content.user.imageUrl" class="comment-body__image"/>
         </div>
 
-        <div class="comment-body__body bg-white shadow rounded">
+        <div class="comment-body__body bg-white shadow rounded flex-fill">
 
           <div class="comment-body__header d-flex justify-content-between">
             <div class="pl-2 pt-1 text-left">
@@ -173,10 +171,6 @@ export default {
   }
 
   .comment-body{
-    &__body{
-      width: 70%; 
-    }
-
     &__creationDate{
       font-size:0.9em;
       margin-top:-5px;
