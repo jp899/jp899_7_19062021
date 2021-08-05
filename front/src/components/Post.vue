@@ -37,9 +37,9 @@
             maxlength="50"
 
           ></b-form-textarea>
-          <b-button type="submit" variant="my-light-blue" class="post-title__button" aria-label="Enregistrer le nouveau titre de la publication" 
+          <b-button type="submit" variant="outline-my-light-blue" class="post-title__button btn-no-border" aria-label="Enregistrer le nouveau titre de la publication" 
             v-bind:class="{ 'disabled': titleFeedbackMessage }">
-            <b-icon-check scale="1.7"></b-icon-check>
+            <b-icon-check-circle-fill scale="1.7"></b-icon-check-circle-fill>
           </b-button>
           <b-form-invalid-feedback ref="my-title-feedback" class="post-title__feedback">{{titleFeedbackMessage}}</b-form-invalid-feedback>
         </b-form>
@@ -98,16 +98,16 @@
       </div>
     </div>
 
-    <div class="post-newComment d-flex" v-if="displayComments">
+    <div class="post-newComment row" v-if="displayComments">
 
-        <b-form @submit="commentArticle" class="post-newComment__form d-flex" v-bind:class="{ 'mt-2': commentFeedbackMessage }">
-          <div class="post-newComment__imageContainer">
-            <ProfileImage :imageSrc="currentUser.imageUrl" class="post-newComment__image"/>
-          </div>
+        <div class="post-newComment__imageContainer col-3 col-sm-2 pr-0">
+          <ProfileImage :imageSrc="currentUser.imageUrl" class="post-newComment__image ml-2 ml-lg-4 ml-xl-5 mt-1"/>
+        </div>
+   
+        <b-form @submit="commentArticle" class="post-newComment__form d-flex col-9 col-sm-10 mr-0 pl-0" v-bind:class="{ 'mt-2': commentFeedbackMessage }">
 
           <b-form-textarea
             ref="my-comment"
-            size="lg"
             v-model="newCommentForm.content"
             placeholder="Qu'en pensez vous ?"
             rows="2"
@@ -115,14 +115,17 @@
             @input="commentCheck()"
             aria-label="Votre commentaire sur la publication"
             maxlength="250"
+            class="post-newComment__textarea mr-0"
           ></b-form-textarea>
-          <b-button type="submit" variant="my-light-blue" aria-label="Commenter la publication" v-bind:class="{ 'disabled': ( (!newCommentForm.content) || commentFeedbackMessage) }">
-            <b-icon-plus-circle scale="1.2"></b-icon-plus-circle>
-          </b-button>
           <b-form-invalid-feedback ref="my-comment-feedback" class="post-newComment__feedback feedback-message">{{commentFeedbackMessage}}</b-form-invalid-feedback>
 
+          <b-button ref="new-comment-button" type="submit" variant="outline-my-light-blue" 
+            class="post-newComment__button btn-no-border"
+            aria-label="Commenter la publication" v-bind:class="{ 'disabled': ( (!newCommentForm.content) || commentFeedbackMessage) }">
+            <b-icon-plus-circle-fill scale="1.2"></b-icon-plus-circle-fill>
+          </b-button>
         </b-form>
-
+  
  
     </div>
 
@@ -364,6 +367,7 @@ export default {
           // Vider le formulaire et les données d'image
           this.newCommentForm.content = "";
           this.clearFieldsColors("my-comment");
+          this.$refs["new-comment-button"].blur();
         }).catch( error => {console.log(error)});
       }
     },
@@ -382,6 +386,10 @@ export default {
 
   .feedback-message{
     font-size: 0.8em;
+  }
+
+  .btn-no-border{
+    border:0;
   }
 
   .post-header{
@@ -425,9 +433,9 @@ export default {
   }
 
   .post-newComment{
-    &__imageContainer{
-       width: 60px;
-      height: 60px;
+    &__imageContainer, &__image{
+      width: 50px;
+      height: 50px;
     }
 
     &__form{
@@ -438,6 +446,7 @@ export default {
       position: absolute;
       top:-25px;
     }
+
   }
 
   .ratings-btn{
