@@ -266,7 +266,7 @@ export default {
       height:1px;
       width: 95%;
       margin:auto;
-      background-color: $primary;
+      background-color: $my-dark-grey;
     }
   }
 

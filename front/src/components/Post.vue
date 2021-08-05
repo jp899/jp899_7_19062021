@@ -39,7 +39,7 @@
           ></b-form-textarea>
           <b-button type="submit" variant="outline-my-light-blue" class="post-title__button btn-no-border" aria-label="Enregistrer le nouveau titre de la publication" 
             v-bind:class="{ 'disabled': titleFeedbackMessage }">
-            <b-icon-check-circle-fill scale="1.7"></b-icon-check-circle-fill>
+            <b-icon-check-circle-fill scale="1.5"></b-icon-check-circle-fill>
           </b-button>
           <b-form-invalid-feedback ref="my-title-feedback" class="post-title__feedback">{{titleFeedbackMessage}}</b-form-invalid-feedback>
         </b-form>
@@ -49,10 +49,14 @@
 
     <div class="hz-bar mt-2"></div>
 
-    <div class="post-ratings mx-2 my-3">
+    <div class="post-ratings mx-3 mt-2">
       <div class="row">
+        <div class="post-ratings__offset d-none d-xl-block col-xl-1 pb-2 pt-1"
+          v-bind:class="{ 'post-ratings-comments-on__offset': displayComments }">
+        </div>
 
-        <div class="post-ratings__thumbUp col col-lg-3 col-xl-2 offset-xl-1 d-flex align-items-center  justify-content-center">
+        <div class="post-ratings__thumbUp col col-lg-3 col-xl-2 d-flex align-items-center justify-content-center pb-2 pt-1"
+          v-bind:class="{ 'post-ratings-comments-on__thumbUp': displayComments }">
            <b-button 
             variant="outline-primary" 
             aria-label="Pouces en haut" 
@@ -67,7 +71,8 @@
           <div class="post-ratings__thumbUpCounter h5 mb-0">{{content.likesCount}}</div>
         </div>
 
-        <div class="post-ratings__thumbDown col col-lg-3 col-xl-2 d-flex align-items-center justify-content-center">
+        <div class="post-ratings__thumbDown col col-lg-3 col-xl-2 d-flex align-items-center justify-content-center pb-2 pt-1"
+          v-bind:class="{ 'post-ratings-comments-on__thumbDown': displayComments }">
           <b-button 
             variant="outline-my-logo-color-darker" 
             aria-label="Pouces en bas" 
@@ -82,7 +87,12 @@
           <div class="post-ratings__thumbDownCounter text-my-logo-color-darker h5 mb-0">{{content.dislikesCount}}</div>
         </div>
 
-        <div class="post-ratings__toggleComments col col-lg-6 offset-xl-1">
+        <div class="post-ratings__offset d-none d-xl-block col-xl-1 pb-2 pt-1"
+          v-bind:class="{ 'post-ratings-comments-on__offset': displayComments }">
+        </div>
+
+        <div class="post-ratings__toggleComments col col-lg-6 pb-2 pt-1"
+          v-bind:class="{ 'post-ratings-comments-on__toggleComments': displayComments }">
             <b-button 
               variant="outline-primary" 
               aria-label="Activer l'affichage des commentaires" 
@@ -98,13 +108,13 @@
       </div>
     </div>
 
-    <div class="post-newComment row" v-if="displayComments">
+    <div class="post-newComment row mt-3" v-if="displayComments">
 
-        <div class="post-newComment__imageContainer col-3 col-sm-2 pr-0">
-          <ProfileImage :imageSrc="currentUser.imageUrl" class="post-newComment__image ml-2 ml-lg-4 ml-xl-5 mt-1"/>
+        <div class="post-newComment__imageContainer col-3 col-sm-2 d-flex justify-content-end pr-2">
+          <ProfileImage :imageSrc="currentUser.imageUrl" class="post-newComment__image mt-1"/>
         </div>
    
-        <b-form @submit="commentArticle" class="post-newComment__form d-flex col-9 col-sm-10 mr-0 pl-0" v-bind:class="{ 'mt-2': commentFeedbackMessage }">
+        <b-form @submit="commentArticle" class="post-newComment__form d-flex col-9 col-sm-10 pl-0" v-bind:class="{ 'mt-2': commentFeedbackMessage }">
 
           <b-form-textarea
             ref="my-comment"
@@ -117,7 +127,7 @@
             maxlength="250"
             class="post-newComment__textarea mr-0"
           ></b-form-textarea>
-          <b-form-invalid-feedback ref="my-comment-feedback" class="post-newComment__feedback feedback-message">{{commentFeedbackMessage}}</b-form-invalid-feedback>
+          <b-form-invalid-feedback ref="my-comment-feedback" class="post-newComment__feedback">{{commentFeedbackMessage}}</b-form-invalid-feedback>
 
           <b-button ref="new-comment-button" type="submit" variant="outline-my-light-blue" 
             class="post-newComment__button btn-no-border"
@@ -126,7 +136,6 @@
           </b-button>
         </b-form>
   
- 
     </div>
 
     <div class="post-comments row" v-if="displayComments">
@@ -413,14 +422,10 @@ export default {
       top:-25px;
     }
 
-    // &__button{
-    //   margin-left:5px;
-    //   margin-top:5px;
-    //   margin-right:5px;
-    //   width: 45px;
-    //   height: 45px;
-    //   border-radius:8px;
-    // }
+    &__button{
+      margin-left:3px;
+      width: 45px;
+    }
   }
 
   .post-body{
@@ -433,20 +438,61 @@ export default {
   }
 
   .post-newComment{
-    &__imageContainer, &__image{
-      width: 50px;
-      height: 50px;
-    }
 
     &__form{
+      margin-top:0 !important;
+    }
+
+    &__textarea{
       position:relative;
     }
 
     &__feedback{
       position: absolute;
-      top:-25px;
+      top:-23px;
+      left:20px;
+      text-align:left;
+      font-size: 0.9em;
     }
 
+    &__image{
+      width: 50px;
+      height: 50px;
+      @include media-breakpoint-up(xl) {
+        width: 60px;
+        height: 60px;
+      }
+    }
+  }
+
+  .post-ratings{
+
+    &__thumbDown, &__thumbUp, &__offset{
+      border-bottom:1px solid transparent;
+    }
+    
+    &__toggleComments{
+      border-left:1px solid transparent;
+      border-right:1px solid transparent;
+      border-top:1px solid transparent;
+      border-top-left-radius: 5px;
+      border-top-right-radius: 5px;
+    }
+
+    &-comments-on{
+        
+        &__thumbDown, &__thumbUp, &__offset{
+          border-bottom:1px solid $my-dark-grey;
+      }
+      
+      &__toggleComments{
+        border-left:1px solid $my-dark-grey;
+        border-right:1px solid $my-dark-grey;
+        border-top:1px solid $my-dark-grey;
+        border-top-left-radius: 5px;
+        border-top-right-radius: 5px;
+      }
+    }
   }
 
   .ratings-btn{
@@ -455,14 +501,15 @@ export default {
     border: 0px;
 
     @include media-breakpoint-up(sm) {
-        width: 60px;
-      }
+      width: 60px;
+    }
   }
 
   .toggle-comments-button{
-    @include media-breakpoint-up(lg) {
-        width: 100px;
-      }
+    width:100%;
+    // @include media-breakpoint-up(lg) {
+    //     width: 100px;
+    //   }
   }
   
   .ratings-icon{
@@ -487,7 +534,7 @@ export default {
   .hz-bar{
     height:1px;
     width: 100%;
-    background-color: $primary;
+    background-color: $my-dark-grey;
   }
 
 </style>
