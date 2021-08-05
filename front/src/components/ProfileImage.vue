@@ -1,6 +1,6 @@
 <template>
   <div class="rect-img-container">
-    <b-img class="rect-img" :src="imageSrc || defaultSrc" fluid alt="Image de l'utilisateur" rounded="circle"></b-img>
+    <b-img class="rect-img shadow" :src="imageSrc || defaultSrc" fluid alt="Image de l'utilisateur" rounded="circle"></b-img>
   </div>
 </template>
 

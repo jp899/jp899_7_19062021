@@ -63,12 +63,12 @@
             @click="likeIt"
             type="button"
             ref="thumbUp-button"
-            class="ratings-btn mr-2"
+            class="ratings-btn d-flex justify-content-center align-items-center"
           >
             <font-awesome-icon v-if="hasRatedUp" :icon="['fas', 'thumbs-up']" class="ratings-icon thumbs-up-icon"/>
             <font-awesome-icon v-if="!hasRatedUp" :icon="['far', 'thumbs-up']" class="ratings-icon thumbs-up-icon"/>
+            <div class="post-ratings__thumbUpCounter h5 mb-0 ml-2">{{content.likesCount}}</div>
           </b-button>
-          <div class="post-ratings__thumbUpCounter h5 mb-0">{{content.likesCount}}</div>
         </div>
 
         <div class="post-ratings__thumbDown col col-lg-3 col-xl-2 d-flex align-items-center justify-content-center pb-2 pt-1"
@@ -79,12 +79,12 @@
             @click="dislikeIt"
             type="button"
             ref="thumbDown-button"
-            class="ratings-btn mr-2"
+            class="ratings-btn d-flex justify-content-center align-items-center"
           >
             <font-awesome-icon v-if="hasRatedDown" :icon="['fas', 'thumbs-down']" class="ratings-icon thumbs-down-icon"/>
             <font-awesome-icon v-if="!hasRatedDown" :icon="['far', 'thumbs-down']" class="ratings-icon thumbs-down-icon"/>
+            <span class="post-ratings__thumbDownCounter h5 mb-0 ml-2">{{content.dislikesCount}}</span>
           </b-button>
-          <div class="post-ratings__thumbDownCounter text-my-logo-color-darker h5 mb-0">{{content.dislikesCount}}</div>
         </div>
 
         <div class="post-ratings__offset d-none d-xl-block col-xl-1 pb-2 pt-1"
@@ -94,15 +94,16 @@
         <div class="post-ratings__toggleComments col col-lg-6 pb-2 pt-1"
           v-bind:class="{ 'post-ratings-comments-on__toggleComments': displayComments }">
             <b-button 
-              variant="outline-primary" 
+              variant="outline-my-darker-grey" 
               aria-label="Activer l'affichage des commentaires" 
               @click="toggleComments"
               type="button"
               ref="toggle-comments-button"
-              class="ratings-btn toggle-comments-button"
+              class="ratings-btn toggle-comments-button d-flex justify-content-center align-items-center"
             >
               <font-awesome-icon v-if="displayComments" :icon="['fas', 'comment-dots']" class="ratings-icon comment-dots-icon"/>
               <font-awesome-icon v-if="!displayComments" :icon="['far', 'comment-dots']" class="ratings-icon comment-dots-icon"/>
+              <span class="h5 mb-0 ml-2">{{commentsContent.length}}</span>
             </b-button>
         </div>
       </div>
@@ -125,7 +126,7 @@
             @input="commentCheck()"
             aria-label="Votre commentaire sur la publication"
             maxlength="250"
-            class="post-newComment__textarea mr-0"
+            class="post-newComment__textarea mr-0 shadow"
           ></b-form-textarea>
           <b-form-invalid-feedback ref="my-comment-feedback" class="post-newComment__feedback">{{commentFeedbackMessage}}</b-form-invalid-feedback>
 
@@ -138,7 +139,7 @@
   
     </div>
 
-    <div class="post-comments row" v-if="displayComments">
+    <div class="post-comments row mt-4" v-if="displayComments">
         <Comment v-for="(comment, index) in commentsContent" 
           :content="comment" 
           :key="comment.id" 
@@ -463,6 +464,11 @@ export default {
         height: 60px;
       }
     }
+
+    &__button{
+      margin-left:3px;
+      width: 45px;
+    }
   }
 
   .post-ratings{
@@ -496,20 +502,17 @@ export default {
   }
 
   .ratings-btn{
-    width: 45px;
+    width: 60px;
     height: 45px;
     border: 0px;
 
     @include media-breakpoint-up(sm) {
-      width: 60px;
+      width: 100%;
     }
   }
 
   .toggle-comments-button{
     width:100%;
-    // @include media-breakpoint-up(lg) {
-    //     width: 100px;
-    //   }
   }
   
   .ratings-icon{

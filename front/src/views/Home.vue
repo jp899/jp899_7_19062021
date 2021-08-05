@@ -41,6 +41,7 @@
                   type="button"
                   aria-label="Choisir une image"
                   ref="choose-image-button"
+                  class="shadow-sm"
                 >
                   <span>Choisir une image</span>
                   <b-icon-image class="file-icon"></b-icon-image>
@@ -61,6 +62,7 @@
                   type="button"
                   aria-label="Partager"
                   ref="share-button"
+                  class="shadow"
                 >
                   <span>Partager</span>
                 </b-button>

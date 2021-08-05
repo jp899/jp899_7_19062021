@@ -37,7 +37,7 @@
 
             <p class="text-danger my-2">{{ errorMessage }}</p>
 
-            <b-button type="submit" variant="my-logo-color-darker" class="my-3">Se connecter</b-button>
+            <b-button type="submit" variant="my-logo-color-darker" class="my-3 shadow">Se connecter</b-button>
           </b-form>
 
         </div>

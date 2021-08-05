@@ -1,6 +1,6 @@
 <template>
   <div class="menu-container">
-    <b-dropdown class="dropdown" right toggle-class="border rounded-lg  p-2" variant="outline-my-logo-color-darker" no-caret>
+    <b-dropdown class="dropdown" right toggle-class="border-0 rounded-lg p-2" variant="outline-my-logo-color-darker" no-caret>
       <template #button-content >
         <b-icon-pencil class="pencil-icon"></b-icon-pencil>
         <span class="d-none">Menu d'édition</span>

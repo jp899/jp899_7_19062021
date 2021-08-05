@@ -1,29 +1,54 @@
 <template>
 
-  <div class="comment container border mb-4 shadow bg-white">
+  <div class="comment container border mb-3 px-sm-4 px-md-5">
 
-    <div class="comment-body d-flex align-items-center justify-content-between my-2">
-      <div class="d-flex align-items-center">
-        <div class="comment-body__imageContainer">
+    <div class="comment-body d-flex align-items-start my-2 justify-content-sm-center">
+
+        <div class="comment-body__offset flex-fill" v-bind:class="{ 'd-none': (index % 2 === 1) }"></div>
+
+        <div class="comment-body__imageContainer mt-1 mr-2">
           <ProfileImage :imageSrc="content.user.imageUrl" class="comment-body__image"/>
         </div>
-        <div class="comment-body__creationDate h4">{{toDisplayDate}}</div>
-        <div class="comment-body__content h5">
-          <span v-if="(!editMode)">{{content.content}}</span>
-          <b-form @submit="newTextSubmit" v-if="(editMode)" >
-              <b-form-input
-              size="lg"
-              ref="my-text"
-              v-model="form.content"
-              type="text"
-              maxlength="50"
-              placeholder="Saisir un nouveau contenu"
-              @input="textCheck()"
-              ></b-form-input>
-          </b-form>
+
+        <div class="comment-body__body bg-white shadow rounded">
+
+          <div class="comment-body__header d-flex justify-content-between">
+            <div class="pl-2 pt-1 text-left">
+              <div class="comment-body__userName font-weight-bold text-my-dark-grey">{{content.user.userName}}</div>
+              <div class="comment-body__creationDate font-italic text-my-dark-grey">{{toDisplayDate}}</div>
+            </div>
+            <EditMenu v-if="(hasEditRights)" @deleteMe="deleteMe" @updateMe="updateMe"/>
+          </div>
+
+          <div class="comment-body__content">
+            <div v-if="(!editMode)" class="text-left text-break pl-2 pt-1 pr-1 pb-2">{{content.content}}</div>
+
+            <!-- <b-form @submit="newTextSubmit" v-if="(editMode)" class="comment-body__form d-flex col-9 col-sm-10 pl-0" v-bind:class="{ 'mt-2': contentFeedbackMessage }"> -->
+            <b-form @submit="newTextSubmit" v-if="(editMode)" class="comment-body__form d-flex" v-bind:class="{ 'pt-3': contentFeedbackMessage }">
+
+              <b-form-textarea
+                ref="my-text"
+                v-model="form.content"
+                placeholder="Qu'en pensez vous ?"
+                rows="2"
+                max-rows="10"
+                @input="textCheck()"
+                aria-label="Saisir un nouveau contenu"
+                maxlength="250"
+                class="comment-body__textarea mr-0 shadow"
+              ></b-form-textarea>
+              <b-form-invalid-feedback ref="my-comment-feedback" class="comment-body__feedback">{{contentFeedbackMessage}}</b-form-invalid-feedback>
+
+              <b-button ref="update-button" type="submit" variant="outline-my-light-blue" 
+                class="comment-body__button btn-no-border"
+                aria-label="Enregistrer la modification du commentaire" v-bind:class="{ 'disabled': ( (!form.content) || contentFeedbackMessage) }">
+                <b-icon-check-circle-fill scale="1.2"></b-icon-check-circle-fill>
+              </b-button>
+            </b-form>
+
+          </div>
         </div>
-      </div>
-      <EditMenu v-if="(hasEditRights)" @deleteMe="deleteMe" @updateMe="updateMe"/>
+
     </div>
 
   </div>
@@ -51,7 +76,10 @@ export default {
       editMode: false,
       currentUser: JSON.parse(localStorage.getItem('user')),
       creationDate: new Date(this.content.createdAt),
-      dateOptions: {  year: 'numeric', month: 'short', day: 'numeric', hour:'numeric', minute: 'numeric' }
+      dateOptions: {  year: 'numeric', month: 'short', day: 'numeric', hour:'numeric', minute: 'numeric' },
+      contentFeedbackMessage: "",
+      // Comment : pas d'espace au début de la chaine et pas de saut de ligne
+      commentRegex: /^[^\s].*$/,
     }
   },
   computed: {
@@ -59,7 +87,7 @@ export default {
       return (this.content.user.id == this.currentUser.id || this.currentUser.isAdmin );
     },
     toDisplayDate:  function () {
-      return "Le " + this.creationDate.toLocaleDateString('fr-FR', this.dateOptions);
+      return this.creationDate.toLocaleDateString('fr-FR', this.dateOptions);
     },
   },
   props: {
@@ -95,9 +123,18 @@ export default {
     },
     textCheck(){
       if (!this.form.content){
+        this.removeFieldError('my-text');
+        this.contentFeedbackMessage = "";
+        this.clearFieldsColors("my-text");
+       } else if (! this.commentRegex.test(this.form.content) ) {
         this.setFieldError('my-text');
+        this.contentFeedbackMessage = "Format invalide.";
+      } else if (this.form.content.length > 250){
+        this.setFieldError('my-text');
+        this.newCommentForm.content = "Maximum 250 caractères.";
       } else {
         this.removeFieldError('my-text');
+        this.contentFeedbackMessage = "";
         return true;
       }
       return false;
@@ -111,7 +148,7 @@ export default {
     },
     newTextSubmit(event){
       event.preventDefault();
-      if (this.form.content){
+      if (this.form.content && this.textCheck()){
         // Demander la mise à jour au back
         apiConnection.put("api/article/" + this.content.articleId + "/comment/" + this.content.id, {comment: this.form})
         .then( response => {
@@ -131,11 +168,41 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
  
-   .comment-body{
+  .btn-no-border{
+    border:0;
+  }
 
-    &__imageContainer{
-       width: 35px;
+  .comment-body{
+    &__body{
+      width: 70%; 
+    }
+
+    &__creationDate{
+      font-size:0.9em;
+      margin-top:-5px;
+    }
+
+    &__image{
+      width: 35px;
       height: 35px;
+    }
+
+    &__form{
+      margin-top:0 !important;
+      position:relative;
+    }
+    
+    &__feedback{
+      position: absolute;
+      top:-7px;
+      left:9px;
+      text-align:left;
+      font-size: 0.9em;
+    }
+
+    &__button{
+      margin-left:3px;
+      width: 45px;
     }
 
   }
