@@ -25,15 +25,16 @@
      inkscape:pageopacity="0.0"
      inkscape:pagecheckerboard="0"
      showgrid="false"
-     inkscape:zoom="1.455"
-     inkscape:cx="259.45017"
-     inkscape:cy="300"
-     inkscape:window-width="2560"
-     inkscape:window-height="1377"
-     inkscape:window-x="-8"
-     inkscape:window-y="-8"
+     inkscape:zoom="1.0288404"
+     inkscape:cx="213.34699"
+     inkscape:cy="297.90822"
+     inkscape:window-width="1920"
+     inkscape:window-height="1017"
+     inkscape:window-x="2552"
+     inkscape:window-y="352"
      inkscape:window-maximized="1"
-     inkscape:current-layer="svg18" />
+     inkscape:current-layer="svg18"
+     inkscape:lockguides="false" />
   <title
      id="title2">Abstract user icon</title>
   <defs
@@ -55,12 +56,12 @@
     </clipPath>
   </defs>
   <ellipse
-     style="fill:#ff9494;fill-opacity:1;stroke-width:1.13894"
+     style="fill:#ff9494;fill-opacity:1;stroke-width:1.30085"
      id="path882"
-     cx="300.34369"
-     cy="297.93817"
-     rx="298.28201"
-     ry="296.56357" />
+     cx="294.5119"
+     cy="307.65784"
+     rx="339.10464"
+     ry="340.30215" />
   <circle
      cx="301.31271"
      cy="227.25087"
