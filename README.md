@@ -28,7 +28,7 @@ cp .env.example .env
 ```
 
 Then specify the value you want for all the variables listed.
-**For a quick test of this project, you can only set DB_USER and DB_PASSWORD**, and leave the other variables whith the default values.
+**For a quick test of this project, you can only set DB_USER and DB_PASSWORD**, and leave the other variables with the default values.
 
 #### Install and launch
 ```
