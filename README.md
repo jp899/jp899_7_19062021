@@ -1,34 +1,44 @@
 # Jean-PaulNavailles_7_19062021
 Project n°7 of OpenClassrooms Web Developer training : Building of an enterprise social network
 
+
 ## Getting started
 
-### Back-end : Install and launch the back-end server
+git clone https://github.com/jpnavailles/Jean-PaulNavailles_7_19062021.git
 
-This project has been developped/tested with node version v16.2.0.
+This project has been developped/tested under node version v16.3.0.
+
+### BACK-END
 
 #### Configure environment variables
 
-Create a .env file in the root directory of the repository. 
-The required variables are listed in the file .env.example .
+First create a .env file in the Jean-PaulNavailles_7_19062021/back/ directory. 
+The required variables are listed in the .env.example file.
 
-#### Install and launch the server
+#### Install and launch
 ```
-cd Jean-PaulNavailles_6_02062021
+cd Jean-PaulNavailles_7_19062021/back/
 npm install
 npm start
 ```
 
-### Front-end
+### FRONT-END
 
-The Front-end part is not included in this repository. 
-You need to clone [this repository](https://github.com/OpenClassrooms-Student-Center/dwj-projet6) and follow its installation and launch instructions.
+#### Install and launch
+```
+cd Jean-PaulNavailles_7_19062021/front/
+npm install
+npm run serve
+```
 
 
 ## Modules used
+
+### BACK-END
+
 - **express**, to build the HTTP API server.
-- **mysql2**, to interact with the mysql Database.
-- **sequelize**, to interact with the mysql Database.
+- **mysql2**, mysql client.
+- **sequelize**, ORM to interact with the Database.
 - **dotenv**, to manage environment variables.
 - **winston**, to manage logs.
 - **multer**, to handle file uploading.
@@ -38,28 +48,11 @@ You need to clone [this repository](https://github.com/OpenClassrooms-Student-Ce
 - **helmet**, to ensure protection against various threats, inculding XSS vulnerabilities.
 - **epress-rate-limit**, to block login requests after 5 failed atempts.
 
+### FRONT-END
 
-# front
+- **vue2**, Single Page Application (SPA) front-end framework.
+- **vue-router**, to handle navigation inside the SPA.
+- **bootstrap-vue**, to use bootstrap's Grid and responsive components.
+- **fontawesome**, for the nice icons.
+- **sass**, CSS preprocessor.
 
-## Project setup
-```
-npm install
-```
-
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
-
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
