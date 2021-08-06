@@ -1,13 +1,20 @@
 # Jean-PaulNavailles_7_19062021
 Project n°7 of OpenClassrooms Web Developer training : Building of an enterprise social network
 
-
 ## Getting started
 ```
 git clone https://github.com/jpnavailles/Jean-PaulNavailles_7_19062021.git
 ```
 
 This project has been developped/tested under **node version v16.3.0**.
+
+
+### DATABASE
+
+First, run this script in mysql client to create a new database (named groupomania):
+```
+source Jean-PaulNavailles_7_19062021/back/database/database_creation.sql
+```
 
 
 ### BACK-END
