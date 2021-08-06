@@ -9,7 +9,7 @@
             <ProfileImage :imageSrc="content.user.imageUrl" class="post-header__image"/>
           </div>
           <div class="post-header__description text-left pl-3">
-            <div class="post-header__username mb-0 font-weight-bold">{{content.user.userName}}</div>
+            <div class="post-header__username mb-0 font-weight-bold">{{this.capitalizeFirstLetter(content.user.userName)}}</div>
             <div class="post-header__creationDate font-italic">{{toDisplayDate}}</div>
           </div>
         </div>
@@ -168,6 +168,8 @@ import ProfileImage from '@/components/ProfileImage.vue'
 import Comment from '@/components/Comment.vue'
 import EditMenu from '@/components/EditMenu.vue'
 
+import Mixins from "@/services/Mixins.js";
+
 
 export default {
   name: "Post",
@@ -176,6 +178,7 @@ export default {
     Comment,
     EditMenu,
   },
+  mixins:[Mixins],
   data() {
     return {
       form: {

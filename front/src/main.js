@@ -43,5 +43,5 @@ new Vue({
   created(){
     const html = document.documentElement;
     html.setAttribute('lang', 'fr');
-  }
+  },
 }).$mount('#app')

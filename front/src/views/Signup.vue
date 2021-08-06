@@ -72,12 +72,14 @@
 
 import Header from '@/components/Header.vue'
 import apiConnection from '../services/APIConnection.js'
+import Mixins from "@/services/Mixins.js";
 
 export default {
   name: 'Signup',
   components: {
     Header,
   },
+  mixins:[Mixins],
   data() {
     return {
       form: {
@@ -148,7 +150,7 @@ export default {
       && this.passwordCheck()
       && this.emailCheck()){
         const newUser = {
-          userName: this.form.username,
+          userName: this.capitalizeFirstLetter(this.form.username),
           firstName:"",
           lastName:"",
           email: this.form.email,

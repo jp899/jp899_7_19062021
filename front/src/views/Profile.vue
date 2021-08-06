@@ -32,7 +32,7 @@
             <b-icon-pencil class="m-0"></b-icon-pencil>
           </b-button>
       </div>
-      <h1 align="center" class="mt-3">{{user.userName}}</h1>
+      <h1 align="center" class="mt-3">{{this.capitalizeFirstLetter(user.userName)}}</h1>
 
       <form class="mt-2 d-none">
 
@@ -120,12 +120,15 @@ import Header from '@/components/Header.vue'
 import ProfileImage from '@/components/ProfileImage.vue'
 import apiConnection from '../services/APIConnection.js'
 
+import Mixins from "@/services/Mixins.js";
+
 export default {
   name: 'Profile',
   components: {
     Header,
     ProfileImage,
   },
+  mixins:[Mixins],
   data() {
     return {
       form: {

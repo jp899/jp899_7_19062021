@@ -18,7 +18,7 @@
                   <b-form-textarea
                     id="input-title"
                     v-model="newPostForm.title"
-                    :placeholder='"Bonjour " + user.userName + ", que voulez-vous partager ?"'
+                    :placeholder='"Bonjour " + this.capitalizeFirstLetter(user.userName) + ", que voulez-vous partager ?"'
                     rows="2"
                     max-rows="2"
                     maxlength="50"
@@ -41,7 +41,7 @@
                   type="button"
                   aria-label="Choisir une image"
                   ref="choose-image-button"
-                  class="shadow-sm"
+                  class="shadow-sm choose-image-button"
                 >
                   <span>Choisir une image</span>
                   <b-icon-image class="file-icon"></b-icon-image>
@@ -62,7 +62,7 @@
                   type="button"
                   aria-label="Partager"
                   ref="share-button"
-                  class="shadow"
+                  class="shadow share-button"
                 >
                   <span>Partager</span>
                 </b-button>
@@ -99,6 +99,8 @@ import Header from '@/components/Header.vue'
 import ProfileImage from '@/components/ProfileImage.vue'
 import Post from '@/components/Post.vue'
 
+import Mixins from "@/services/Mixins.js";
+
 
 export default {
   name: 'Home',
@@ -107,6 +109,7 @@ export default {
     ProfileImage,
     Post,
   },
+  mixins:[Mixins],
   data() {
     return {
       tempImage: null,
@@ -269,6 +272,18 @@ export default {
       width: 95%;
       margin:auto;
       background-color: $my-dark-grey;
+    }
+  }
+
+  .choose-image-button{
+    &:focus{
+      color:$my-light-grey;
+      background-color: $primary;
+    }
+  }
+  .share-button{
+    &:focus{
+      border:2px solid $primary;
     }
   }
 

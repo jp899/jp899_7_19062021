@@ -12,7 +12,7 @@
 
           <div class="comment-body__header d-flex justify-content-between">
             <div class="pl-2 pt-1 text-left">
-              <div class="comment-body__userName font-weight-bold text-my-dark-grey">{{content.user.userName}}</div>
+              <div class="comment-body__userName font-weight-bold text-my-dark-grey">{{this.capitalizeFirstLetter(content.user.userName)}}</div>
               <div class="comment-body__creationDate font-italic text-my-dark-grey">{{toDisplayDate}}</div>
             </div>
             <EditMenu v-if="(hasEditRights)" @deleteMe="deleteMe" @updateMe="updateMe"/>
@@ -59,6 +59,7 @@ import apiConnection from '../services/APIConnection.js'
 import ProfileImage from '@/components/ProfileImage.vue'
 import EditMenu from '@/components/EditMenu.vue'
 
+import Mixins from "@/services/Mixins.js";
 
 export default {
   name: "Comment",
@@ -66,6 +67,7 @@ export default {
     ProfileImage,
     EditMenu,
   },
+  mixins:[Mixins],
   data() {
     return {
       form: {
