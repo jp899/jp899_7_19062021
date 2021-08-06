@@ -11,7 +11,7 @@ This project has been developped/tested under **node version v16.3.0**.
 
 ### DATABASE
 
-First, run this script in mysql client to create a new database (named groupomania):
+Run this script in mysql client to create a new database (named groupomania):
 ```
 source Jean-PaulNavailles_7_19062021/back/database/database_creation.sql
 ```
@@ -21,8 +21,14 @@ source Jean-PaulNavailles_7_19062021/back/database/database_creation.sql
 
 #### Configure environment variables
 
-First create a .env file in the Jean-PaulNavailles_7_19062021/back/ directory. 
-The required variables are listed in the .env.example file.
+First create a .env file by copying the .env.example (which lists the required variables). 
+```
+cd Jean-PaulNavailles_7_19062021/back/
+cp .env.example .env
+```
+
+Then specify the value you want for all the variables listed.
+**For a quick test of this project, you can only set DB_USER and DB_PASSWORD**, and leave the other variables whith the default values.
 
 #### Install and launch
 ```
