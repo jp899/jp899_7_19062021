@@ -83,7 +83,9 @@ exports.getAll = (req, res, next) => {
 
     const numberOfPages = Math.ceil(numberOfItem / nbOfItemsInOnePage);
 
-    if (pageNumber < 1 || pageNumber > numberOfPages){
+    if(numberOfItem == 0){
+      res.status(200).json({articlesWithLikesCount: [], pages: 0});
+    } else if (pageNumber < 1 || pageNumber > numberOfPages){
       throw new Error("Page demandée inexistante");
     } else {
       // récupération de la liste des articles, avec les infos sur l'user créateur
