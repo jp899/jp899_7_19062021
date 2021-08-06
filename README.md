@@ -3,10 +3,12 @@ Project n°7 of OpenClassrooms Web Developer training : Building of an enterpris
 
 
 ## Getting started
-
+```
 git clone https://github.com/jpnavailles/Jean-PaulNavailles_7_19062021.git
+```
 
-This project has been developped/tested under node version v16.3.0.
+This project has been developped/tested under **node version v16.3.0**.
+
 
 ### BACK-END
 
@@ -21,6 +23,7 @@ cd Jean-PaulNavailles_7_19062021/back/
 npm install
 npm start
 ```
+
 
 ### FRONT-END
 
