@@ -21,7 +21,6 @@
           <div class="comment-body__content">
             <div v-if="(!editMode)" class="text-left text-break pl-2 pt-1 pr-1 pb-2">{{content.content}}</div>
 
-            <!-- <b-form @submit="newTextSubmit" v-if="(editMode)" class="comment-body__form d-flex col-9 col-sm-10 pl-0" v-bind:class="{ 'mt-2': contentFeedbackMessage }"> -->
             <b-form @submit="newTextSubmit" v-if="(editMode)" class="comment-body__form d-flex" v-bind:class="{ 'pt-3': contentFeedbackMessage }">
 
               <b-form-textarea

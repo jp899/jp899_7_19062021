@@ -146,13 +146,6 @@ export default {
       user: JSON.parse(localStorage.getItem('user')),
     }
   },
-  // computed: {
-  //   updateReady: function () {
-  //     return ( 
-  //       ( this.user.firstName !== this.form.firstname || this.user.lastName !== this.form.lastname || this.user.email !== this.form.email ) 
-  //       && this.lastnameCheck() && this.firstnameCheck() && this.emailCheck());
-  //   },
-  // },
   // Récupération des informations de l'utilisateur à la création de la vue
   created() {
     // Préremplir les champs de saisie avec les informations connues

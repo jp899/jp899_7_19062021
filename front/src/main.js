@@ -28,6 +28,7 @@ import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
 // Import Bootstrap an BootstrapVue CSS files (order is important)
 // import 'bootstrap/dist/css/bootstrap.css'
 // import 'bootstrap-vue/dist/bootstrap-vue.css'
+// Import d'un scss perso qui définit des couleurs et modifie le thème bootstrap avant d'en charger le CSS
 import './assets/styles/custom.scss'
 
 Vue.config.productionTip = false

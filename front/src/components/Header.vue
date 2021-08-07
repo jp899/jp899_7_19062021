@@ -16,13 +16,9 @@
             <b-navbar-nav >
                 <b-nav-item v-show="!withProfile"><router-link to="/login">Se connecter</router-link></b-nav-item>
                 <b-nav-item v-show="!withProfile"><router-link to="/signup">S'inscrire</router-link></b-nav-item>
-                <!-- <b-nav-item-dropdown v-show="withProfile" text="User" right>
-                  <b-dropdown-item v-show="withProfile"><router-link to="/profile">Mon profil</router-link></b-dropdown-item>
-                  <b-dropdown-item v-show="withProfile" @click="logout">Se déconnecter</b-dropdown-item>
-                </b-nav-item-dropdown> -->
-                  <b-nav-item v-show="withProfile"><router-link to="/">Accueil</router-link></b-nav-item>
-                  <b-nav-item v-show="withProfile"><router-link to="/profile">Mon profil</router-link></b-nav-item>
-                  <b-nav-item v-show="withProfile" @click="logout" id="logout-link">Se déconnecter</b-nav-item>
+                <b-nav-item v-show="withProfile"><router-link to="/">Accueil</router-link></b-nav-item>
+                <b-nav-item v-show="withProfile"><router-link to="/profile">Mon profil</router-link></b-nav-item>
+                <b-nav-item v-show="withProfile" @click="logout" id="logout-link">Se déconnecter</b-nav-item>
             </b-navbar-nav>
           </b-collapse>
 
