@@ -133,7 +133,7 @@
                 ></b-form-textarea>
                 <b-form-invalid-feedback ref="my-comment-feedback" class="post-newComment__feedback">{{commentFeedbackMessage}}</b-form-invalid-feedback>
 
-                <b-button ref="new-comment-button" type="submit" variant="outline-my-light-blue" 
+                <b-button ref="new-comment-button" type="button" @click="commentArticle" variant="outline-my-light-blue" 
                   class="post-newComment__button btn-no-border"
                   aria-label="Commenter la publication" v-bind:class="{ 'disabled': ( (!newCommentForm.content) || commentFeedbackMessage) }">
                   <b-icon-plus-circle-fill scale="1.2"></b-icon-plus-circle-fill>
